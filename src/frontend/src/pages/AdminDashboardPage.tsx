@@ -23,7 +23,7 @@ function AdminDashboardContent() {
               </h1>
             </div>
             <p className="text-lg text-muted-foreground">
-              Manage your organization's content and review membership applications
+              Manage all content and features for The Youth And Friends Organization
             </p>
           </div>
           <Button variant="outline" onClick={logout}>
@@ -56,7 +56,7 @@ function AdminDashboardContent() {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
                 <Home className="h-6 w-6" />
               </div>
-              <CardTitle className="text-2xl">Home Page</CardTitle>
+              <CardTitle className="text-2xl">Home Page Editor</CardTitle>
               <CardDescription className="text-base">
                 Customize the home page "What We Do" section with your own content and images.
               </CardDescription>
@@ -73,7 +73,7 @@ function AdminDashboardContent() {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
                 <Info className="h-6 w-6" />
               </div>
-              <CardTitle className="text-2xl">About</CardTitle>
+              <CardTitle className="text-2xl">About Editor</CardTitle>
               <CardDescription className="text-base">
                 Manage About content including Community Building, Skill Development, Events & Activities, and links.
               </CardDescription>
@@ -124,9 +124,9 @@ function AdminDashboardContent() {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
                 <Sparkles className="h-6 w-6" />
               </div>
-              <CardTitle className="text-2xl">Minor Clubs Manager</CardTitle>
+              <CardTitle className="text-2xl">Clubs Manager</CardTitle>
               <CardDescription className="text-base">
-                Create, edit, and manage information about each minor club including aims, motto, and activities.
+                Create, edit, and manage information about each club including aims, motto, and activities.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -141,7 +141,7 @@ function AdminDashboardContent() {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
                 <Share2 className="h-6 w-6" />
               </div>
-              <CardTitle className="text-2xl">Social Media Links</CardTitle>
+              <CardTitle className="text-2xl">Social Links</CardTitle>
               <CardDescription className="text-base">
                 Manage your organization's social media accounts and update links displayed on the website.
               </CardDescription>

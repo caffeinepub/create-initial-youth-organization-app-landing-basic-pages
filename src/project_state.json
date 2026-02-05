@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 49,
+  "projectStateVersion": 53,
   "summary": "Project scope includes UI/navigation refinements for the web app (move main menu to a bottom button on the main/home interface, repurpose the hamburger/three-lines menu to settings/close/logout, and add a theme toggle), plus sharing/accessibility requests (shareable link for colleagues and improved add-to-home-screen/PWA access), alongside existing deployment/SEO goals and potential APK distribution goals, with an added request to support Google Ads/AdSense readiness for monetization/advertising.",
   "architectural_notes": [
     "Frontend uses React + Vite with Tailwind CSS and shadcn/ui component primitives.",
@@ -18,9 +18,10 @@
     "Google Search Console verification failing with \"site not found\" because the production site HTML does not currently expose the expected google-site-verification meta tag; requires publishing the latest (v9) deployment to production and re-verifying.",
     "Production deployment is showing an incorrect logo/image (not the user-provided asset), including within the admin interface.",
     "Share link feature is reportedly not live/visible on the production site (needs verification of production deployment/version and UI entry points).",
-    "An \"Install app\" option is appearing in the Share menu; may be unintended UX placement or mislabeled entry and should be reviewed."
+    "An \"Install app\" option is appearing in the Share menu; may be unintended UX placement or mislabeled entry and should be reviewed.",
+    "On Version 21 production, the user cannot find the “Me” feature/button that should provide access to the admin login interface (admin entry point appears missing or not discoverable)."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "generatedImages": [
     {
       "filename": "frontend/public/assets/generated/yfo-logo.dim_512x512.png",
@@ -587,6 +588,22 @@
         "REQ-66"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-ensure-there-is-a-clearly-visible-me-entry-point-on-the-main-public-ui-that-routes-to-the-admin-login-interface-at-me-or-to-me-dashboard-when-an-admin-session-is-already-active-so-users-can-reliably-find-the-admin-login-from-the-home-main-interface",
+      "title": "Ensure there is a clearly visible “Me” entry point on the main/public UI that routes to the admin login interface at `/me` (or to `/me/dashboard` when an admin session is already active), so users can reliably find the admin login from the home/main interface.",
+      "reqIds": [
+        "REQ-67"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-admin-area-after-logging-in-provides-a-single-obvious-place-to-manage-edit-all-editable-site-features-events-membership-review-clubs-history-about-content-home-page-content-social-links-branding-logo-android-apk-url-by-linking-to-each-existing-admin-editor-manager-from-the-admin-dashboard",
+      "title": "Ensure the admin area (after logging in) provides a single, obvious place to manage/edit all editable site features (Events, Membership review, Clubs, History, About content, Home page content, Social links, Branding/logo, Android APK URL) by linking to each existing admin editor/manager from the Admin Dashboard.",
+      "reqIds": [
+        "REQ-68"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -847,6 +864,26 @@
       "summary": "Add backend support for Events as admin-managed content, including stable storage and public read access with admin-only create/update/delete operations.",
       "reqIds": [
         "REQ-63"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-48",
+      "summary": "Restore/ensure the “Me” feature entry point is visible in the primary navigation and routes to the admin login interface (so the user can access the admin area from the main UI).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-49",
+      "summary": "Consolidate all editing capabilities (events, membership, clubs, history, and other editable features) so they are available only inside the admin login interface, with no public/non-admin editing options anywhere else; ensure admin edits reflect on the main/home interface.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-52",
+      "summary": "Audit the public-facing pages and UI to ensure there are no edit/create/update/delete controls available outside the admin area; all content editing must be possible only within the admin-gated interface, while public pages remain read-only (except for allowed public actions like submitting a membership registration form).",
+      "reqIds": [
+        "REQ-69"
       ],
       "status": "pending"
     }

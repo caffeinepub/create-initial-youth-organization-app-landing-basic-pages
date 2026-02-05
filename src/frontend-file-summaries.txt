@@ -1,7 +1,7 @@
 {
   "frontend/src/App.tsx": "Main application component with TanStack Router setup including all routes (now with /me/events and /me/android-apk), SEO URL updates on navigation, and AdSense script injection on initial mount.",
   "frontend/src/layouts/AppLayout.tsx": "Shared layout component that renders the persistent TopNav header, main content area with Outlet for page routing, and Footer on all pages.",
-  "frontend/src/components/TopNav.tsx": "Responsive navigation header with desktop nav links and mobile hamburger menu containing Settings, Share link (with native share/clipboard fallback and inline feedback), Close, and Logout actions, integrating SettingsSheet and handling logout for both Internet Identity and admin session.",
+  "frontend/src/components/TopNav.tsx": "Responsive navigation header with desktop nav links and mobile hamburger menu now including all primary nav links plus the \"Me\" link, Settings, Share link (with native share/clipboard fallback and inline feedback), Close, and Logout actions, integrating SettingsSheet and handling logout for both Internet Identity and admin session.",
   "frontend/src/components/Footer.tsx": "Footer component with organization branding, quick links including Privacy Policy and Terms of Service, dynamically loaded social media icons from backend, prominent public site link section with native share/clipboard fallback functionality, and caffeine.ai attribution.",
   "frontend/src/pages/HomePage.tsx": "Home page with hero section, backend-managed content sections, About sections with media support, call-to-action, and the new HomeBottomNavMenu component for mobile navigation.",
   "frontend/src/pages/AboutPage.tsx": "About page presenting The Youth And Friends Organization's story, mission/vision/values cards, and impact statistics.",
@@ -16,7 +16,7 @@
   "frontend/src/pages/HistoryPage.tsx": "Public history page that displays organization history content with optional media (image/video) from backend with proper loading/error/empty states.",
   "frontend/src/pages/MembershipRegistrationPage.tsx": "Public membership registration form with an added \"Admin Login\" button linking to the admin area for easy admin access.",
   "frontend/src/pages/AdminLoginPage.tsx": "Admin login page with username/password form (credentials: yfo26/yfo2016) that validates and redirects to dashboard on success.",
-  "frontend/src/pages/AdminDashboardPage.tsx": "Admin dashboard with navigation cards to all admin tools including the new Events Manager and Android APK configuration, protected by AdminGuard.",
+  "frontend/src/pages/AdminDashboardPage.tsx": "Admin dashboard with navigation cards to all admin tools (Branding, Home Page Editor, About Editor, History Editor, Membership Review, Clubs Manager, Social Links, Events Manager, Android APK) using correct English labels, protected by AdminGuard.",
   "frontend/src/pages/AdminHistoryEditorPage.tsx": "Admin-only history editor with textarea for text content and MediaPicker for adding images/videos, with save functionality and backend persistence, protected by AdminGuard.",
   "frontend/src/pages/AdminMembershipReviewPage.tsx": "Admin-only page displaying all submitted membership registrations with detailed contact information, protected by AdminGuard.",
   "frontend/src/hooks/useAdminSession.ts": "Zustand store managing admin session state with login/logout functions, credential validation (yfo26/yfo2016), and sessionStorage persistence.",

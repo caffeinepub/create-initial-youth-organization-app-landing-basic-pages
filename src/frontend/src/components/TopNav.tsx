@@ -1,5 +1,5 @@
 import { Link, useRouterState, useNavigate } from '@tanstack/react-router';
-import { Menu, Settings, X, LogOut, Share2, Check } from 'lucide-react';
+import { Menu, Settings, X, LogOut, Share2, Check, User } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -62,6 +62,11 @@ export default function TopNav() {
     
     // Navigate to home
     navigate({ to: '/' });
+  };
+
+  const handleMeNavigation = () => {
+    setIsOpen(false);
+    navigate({ to: meLink });
   };
 
   return (
@@ -132,6 +137,33 @@ export default function TopNav() {
               </div>
               
               <nav className="flex flex-col gap-2">
+                {/* Primary Navigation Links */}
+                {primaryNavLinks.map((link) => (
+                  <Button
+                    key={link.path}
+                    variant={currentPath === link.path ? 'default' : 'ghost'}
+                    className="w-full justify-start text-base h-12"
+                    onClick={() => {
+                      setIsOpen(false);
+                      navigate({ to: link.path });
+                    }}
+                  >
+                    {link.label}
+                  </Button>
+                ))}
+                
+                {/* Me Navigation Link */}
+                <Button
+                  variant={currentPath.startsWith('/me') ? 'default' : 'ghost'}
+                  className="w-full justify-start text-base h-12"
+                  onClick={handleMeNavigation}
+                >
+                  <User className="mr-3 h-5 w-5" />
+                  Me
+                </Button>
+                
+                <Separator className="my-2" />
+                
                 <Button
                   variant="ghost"
                   className="w-full justify-start text-base h-12"

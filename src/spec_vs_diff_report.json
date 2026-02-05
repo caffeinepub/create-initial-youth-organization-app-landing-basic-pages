@@ -1,82 +1,35 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T21:45:25.896Z",
-  "summary": "REQ-61 share link behavior appears implemented across Settings plus (per file summaries) TopNav mobile menu and Footer using a shared Web Share API + clipboard fallback utility with English feedback. REQ-62 adds backend APK URL getters/setters and Settings integration, plus an admin configuration page/route. Events are wired end-to-end (hooks, public Events page, admin manager), but backend Events schema and persistence do not meet REQ-63 minimum fields and stable storage requirements, and the public Events page does not render the required event \"type\" field.",
-  "missing_requirements": [
-    {
-      "id": "REQ-62",
-      "requirement": "If the APK URL is not set, Settings shows an English message such as \"Android APK is not available yet. Please check back later.\"",
-      "reason": "SettingsSheet.tsx shows fetching apkUrl and a handler to open it, but the provided diff snippet does not show any explicit empty-state message when apkUrl is unset.",
-      "evidence": [
-        "frontend/src/components/SettingsSheet.tsx"
-      ]
-    },
-    {
-      "id": "REQ-63",
-      "requirement": "Backend defines an Event record type with a unique id and fields sufficient to render the current Events page content (title, date, time, location, description, type at minimum).",
-      "reason": "The backend Event type includes id/title/description/dateTime/location/media/organizer, but no explicit \"type\" field, and date/time are not represented as separate fields (only a combined dateTime).",
-      "evidence": [
-        "backend/main.mo",
-        "backend/migration.mo"
-      ]
-    },
-    {
-      "id": "REQ-63",
-      "requirement": "Events data persists in stable storage across upgrades (using conditional migration if required by the current stable state).",
-      "reason": "eventsMap is declared as a non-stable `let` map in backend/main.mo, and no stable variable is shown for events storage; therefore events would not persist across upgrades based on the diff snippet. A migration file is added, but main.mo does not show eventsMap being stored in stable state.",
-      "evidence": [
-        "backend/main.mo",
-        "backend/migration.mo"
-      ]
-    },
-    {
-      "id": "REQ-65",
-      "requirement": "For each event, the page renders title, description, date, time, location, and type.",
-      "reason": "EventsPage.tsx renders title, description, date, time (parsed from dateTime), location, and organizer badge, but no \"type\" field is shown in the snippet.",
-      "evidence": [
-        "frontend/src/pages/EventsPage.tsx"
-      ]
-    }
-  ],
+  "generatedAt": "2026-02-05T23:09:52.949Z",
+  "summary": "No explicit requirements or acceptance criteria were provided in the BuildRequest. The diff modifies the Motoko backend (adding/expanding data types and admin/user-gated endpoints such as Android APK URL management and events CRUD) and updates project_state.json summary/metadata, but with no stated requirements there is nothing to verify against.",
+  "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Added a dedicated admin page and route for configuring the Android APK URL (/me/android-apk).",
-      "reason": "REQ-62 requires an admin-configurable APK URL and Settings exposure for users, but does not explicitly require a new admin UI page/route to manage it.",
-      "evidence": [
-        "frontend/src/pages/AdminAndroidApkPage.tsx",
-        "frontend/src/App.tsx",
-        "frontend/src/pages/AdminDashboardPage.tsx"
-      ]
-    },
-    {
-      "description": "Added a backend query to fetch a single event by id (getEvent).",
-      "reason": "REQ-63 only calls for a public query to list events plus admin-only create/update/delete; a single-event query is extra.",
+      "description": "Added/expanded backend functionality for Android APK URL management with admin permission checks (getAndroidApkUrl/setAndroidApkUrl).",
+      "reason": "BuildRequest lists no requirements; this functionality is new behavior not tied to any requested item.",
       "evidence": [
         "backend/main.mo"
       ]
     },
     {
-      "description": "Added an \"Admin Login\" button on the public Membership Registration page.",
-      "reason": "No requirement requests changes to the membership registration page or adding an admin login shortcut there.",
+      "description": "Added/expanded backend events management API (getEvents/getEvent/createOrUpdateEvent/deleteEvent) with admin permission checks for mutations.",
+      "reason": "BuildRequest lists no requirements; this functionality is new behavior not tied to any requested item.",
       "evidence": [
-        "frontend-file-summaries.txt"
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Updated project scope/summary metadata to include UI/navigation refinements, sharing/accessibility, APK distribution goals, and Google Ads/AdSense readiness.",
+      "reason": "BuildRequest contains no requirements; this changes stated scope/intent beyond any provided request.",
+      "evidence": [
+        "project_state.json"
       ]
     }
   ],
-  "confidence": 0.72,
+  "confidence": 0.74,
   "changed_files": [
     "backend/main.mo",
-    "backend/migration.mo",
-    "frontend-file-summaries.txt",
-    "frontend/src/App.tsx",
-    "frontend/src/components/SettingsSheet.tsx",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/pages/AdminAndroidApkPage.tsx",
-    "frontend/src/pages/AdminDashboardPage.tsx",
-    "frontend/src/pages/AdminEventsManagerPage.tsx",
-    "frontend/src/pages/EventsPage.tsx",
-    "frontend/src/utils/share.ts",
     "project_state.json"
   ]
 }
