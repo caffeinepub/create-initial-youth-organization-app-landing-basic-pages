@@ -2,60 +2,55 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-create-a-responsive-multi-page-frontend-scaffold-for-a-youth-organization-app-with-a-top-navigation-and-the-following-pages-home-about-programs-events-contact",
-      "featureTitle": "Create a responsive, multi-page frontend scaffold for a youth organization app with a top navigation and the following pages: Home, About, Programs, Events, Contact.",
+      "featureId": "feature-make-the-site-s-seo-indexing-configuration-work-with-the-actual-deployed-production-url-instead-of-hardcoded-placeholders-including-updating-parameterizing-canonical-url-and-sitemap-robots-urls-so-google-can-correctly-crawl-and-index-the-deployed-site",
+      "featureTitle": "Make the site’s SEO/indexing configuration work with the actual deployed production URL (instead of hardcoded placeholders), including updating/parameterizing canonical URL and sitemap/robots URLs so Google can correctly crawl and index the deployed site.",
       "files": [
+        "frontend/index.html",
+        "frontend/public/robots.txt",
+        "frontend/public/sitemap.xml",
         "frontend/src/App.tsx",
-        "frontend/src/components/TopNav.tsx",
-        "frontend/src/layouts/AppLayout.tsx",
-        "frontend/src/main.tsx",
-        "frontend/src/pages/AboutPage.tsx",
-        "frontend/src/pages/ContactPage.tsx",
-        "frontend/src/pages/EventsPage.tsx",
-        "frontend/src/pages/HomePage.tsx",
-        "frontend/src/pages/ProgramsPage.tsx"
+        "frontend/src/utils/seo.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-1"
+        "REQ-21"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-apply-a-coherent-visual-theme-appropriate-for-a-youth-organization-colors-typography-spacing-components-and-use-it-consistently-across-all-pages",
-      "featureTitle": "Apply a coherent visual theme appropriate for a youth organization (colors, typography, spacing, components) and use it consistently across all pages.",
+      "featureId": "feature-add-pwa-support-so-visitors-on-android-can-install-the-site-including-a-web-app-manifest-required-pwa-icons-and-service-worker-registration-compatible-with-the-current-vite-react-setup",
+      "featureTitle": "Add PWA support so visitors on Android can install the site, including a web app manifest, required PWA icons, and service worker registration compatible with the current Vite + React setup.",
       "files": [
-        "frontend/src/index.css",
-        "frontend/src/layouts/AppLayout.tsx",
-        "frontend/src/pages/AboutPage.tsx",
-        "frontend/src/pages/ContactPage.tsx",
-        "frontend/src/pages/EventsPage.tsx",
-        "frontend/src/pages/ProgramsPage.tsx",
-        "frontend/tailwind.config.js"
+        "frontend/index.html",
+        "frontend/public/manifest.webmanifest",
+        "frontend/public/sw.js"
       ],
       "components": [
         "core-infrastructure@1.0.2",
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-2"
+        "REQ-22"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-home-page-hero-section-that-uses-a-generated-hero-image-and-includes-an-english-headline-and-short-description-suitable-for-a-youth-organization",
-      "featureTitle": "Add a Home page hero section that uses a generated hero image and includes an English headline and short description suitable for a youth organization.",
+      "featureId": "feature-add-an-install-prompt-ui-on-the-public-home-page-that-encourages-android-users-to-install-the-app-using-english-user-facing-text-and-only-showing-the-prompt-when-installation-is-supported-and-the-app-is-not-already-installed",
+      "featureTitle": "Add an install prompt UI on the public Home page that encourages Android users to install the app, using English user-facing text and only showing the prompt when installation is supported and the app is not already installed.",
       "files": [
-        "frontend/src/layouts/AppLayout.tsx",
+        "frontend/src/components/InstallPromptBanner.tsx",
+        "frontend/src/hooks/usePwaInstallPrompt.ts",
         "frontend/src/pages/HomePage.tsx"
       ],
       "components": [
@@ -63,29 +58,30 @@
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-3"
+        "REQ-23"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-generated-static-image-assets-to-the-project-under-frontend-public-assets-generated-and-render-them-in-the-ui-where-appropriate-e-g-hero-and-logo",
-      "featureTitle": "Add generated static image assets to the project under frontend/public/assets/generated and render them in the UI where appropriate (e.g., hero and logo).",
+      "featureId": "feature-provide-project-documentation-for-producing-an-android-apk-from-the-deployed-pwa-e-g-via-trusted-web-activity-including-clear-prerequisites-and-step-by-step-instructions-without-introducing-unsupported-backend-services",
+      "featureTitle": "Provide project documentation for producing an Android APK from the deployed PWA (e.g., via Trusted Web Activity), including clear prerequisites and step-by-step instructions, without introducing unsupported backend services.",
       "files": [
-        "frontend/src/components/TopNav.tsx",
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/docs/android-apk-from-pwa.md"
       ],
       "components": [
         "core-infrastructure@1.0.2",
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-24"
       ],
       "confidence": "high"
     }

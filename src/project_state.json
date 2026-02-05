@@ -1,67 +1,417 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
-  "summary": "App for a youth organization",
+  "projectStateVersion": 21,
+  "summary": "Project scope expands beyond admin-managed clubs/social links to include admin-editable homepage/about content blocks (e.g., community building, skill development, events/activities, “our program”, “upcoming events”, “what we do/explore program”), homepage customization, club profile pictures, and deployment/distribution goals (public hosting + Google indexing, potential APK build).",
+  "architectural_notes": [
+    "Frontend uses React + Vite with Tailwind CSS and shadcn/ui component primitives.",
+    "ICP backend is a Motoko canister with Candid bindings generated for the frontend.",
+    "Authentication is designed around Internet Identity; frontend provides hooks for login state and actor creation.",
+    "Project includes a build/deploy template (Docker/deploy script/canister configs) to support reproducible ICP builds.",
+    "Build template now includes custom ESLint rules (e.g., bigint query key guard, required Internet Identity provider) and additional shadcn/ui primitives.",
+    "Build tooling includes image maintenance scripts (resize/prune) alongside Docker/deploy configuration to keep frontend assets optimized.",
+    "Backend includes reusable authorization/access-control modules to enable permission-checked operations.",
+    "Frontend adds an admin area with route guarding (AdminGuard) and a dedicated admin session hook (useAdminSession) layered on top of Internet Identity/actor utilities.",
+    "Frontend introduces additional domain pages (Clubs/Club Detail/History/Membership Registration) and admin workflow pages (Membership Review/History Editor) integrated into App routing/layout.",
+    "Public/main pages should render club data fetched from the backend as read-only; mutations (create/update/delete) are only available via admin-gated UI."
+  ],
+  "known_issues": [
+    "Build attempt failed with error: \"AI couldn't process your request successfully. Try simplifying or rewording it.\" User requested to retry the build with the latest update."
+  ],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Square PWA app icon derived from the YFO logo (yfo-pwa-icon.dim_192x192.png)\n- Square PWA app icon derived from the YFO logo (yfo-pwa-icon.dim_512x512.png)\n- Maskable square PWA icon derived from the YFO logo with safe padding (yfo-pwa-icon-maskable.dim_512x512.png)\n- Apple touch icon derived from the YFO logo (yfo-apple-touch-icon.dim_180x180.png)",
+  "generatedImages": [
+    {
+      "filename": "frontend/public/assets/generated/yfo-logo.dim_512x512.png",
+      "description": "Generated/updated logo asset (YFO).",
+      "targetWidth": 512,
+      "targetHeight": 512
+    }
+  ],
   "existing_features": [
     {
-      "id": "feature-create-a-responsive-multi-page-frontend-scaffold-for-a-youth-organization-app-with-a-top-navigation-and-the-following-pages-home-about-programs-events-contact",
-      "title": "Create a responsive, multi-page frontend scaffold for a youth organization app with a top navigation and the following pages: Home, About, Programs, Events, Contact.",
-      "reqIds": [
-        "REQ-1"
+      "id": "IF-1",
+      "title": "Motoko backend canister scaffold",
+      "synonyms": [
+        "ICP backend",
+        "Motoko canister"
       ],
+      "description": "Backend canister implemented in Motoko with generated Candid interface and frontend declarations wired for local/dev builds.",
+      "reqIds": [],
       "version": 1
     },
     {
-      "id": "feature-apply-a-coherent-visual-theme-appropriate-for-a-youth-organization-colors-typography-spacing-components-and-use-it-consistently-across-all-pages",
-      "title": "Apply a coherent visual theme appropriate for a youth organization (colors, typography, spacing, components) and use it consistently across all pages.",
-      "reqIds": [
-        "REQ-2"
+      "id": "IF-2",
+      "title": "React + Vite + Tailwind frontend scaffold",
+      "synonyms": [
+        "Vite frontend",
+        "Tailwind UI"
       ],
+      "description": "Frontend app bootstrapped with Vite/React, Tailwind CSS, shared layout, and app entry wiring.",
+      "reqIds": [],
       "version": 1
     },
     {
-      "id": "feature-add-a-home-page-hero-section-that-uses-a-generated-hero-image-and-includes-an-english-headline-and-short-description-suitable-for-a-youth-organization",
-      "title": "Add a Home page hero section that uses a generated hero image and includes an English headline and short description suitable for a youth organization.",
+      "id": "IF-3",
+      "title": "Multi-page site structure with core pages",
+      "synonyms": [
+        "Pages",
+        "Routes"
+      ],
+      "description": "Implemented core pages: Home, Programs, Events, About, and Contact, with shared AppLayout and top navigation/footer components.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-4",
+      "title": "Internet Identity authentication integration (hooks)",
+      "synonyms": [
+        "II auth",
+        "Internet Identity"
+      ],
+      "description": "Client-side hooks for Internet Identity login state and actor creation (useInternetIdentity/useActor) integrated into the frontend infrastructure.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-5",
+      "title": "Backend actor/query utilities",
+      "synonyms": [
+        "Actor utilities",
+        "Query hooks"
+      ],
+      "description": "Typed backend bindings and query/actor helper hooks/utilities (e.g., backend.ts, backend.d.ts, useQueries) set up for calling the canister from the frontend.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-6",
+      "title": "shadcn/ui component library included",
+      "synonyms": [
+        "UI kit",
+        "shadcn components"
+      ],
+      "description": "shadcn/ui component set and related configs (eslint rules, components registry, UI primitives) added to the project/template.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-7",
+      "title": "Build/deploy template and tooling for ICP project",
+      "synonyms": [
+        "build template",
+        "deployment scripts"
+      ],
+      "description": "Build template assets added (Dockerfile, deploy script, canister yaml configs, workspace/package configs, and image processing scripts) to support reproducible builds and deployment.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-8",
+      "title": "Generated brand/hero image assets",
+      "synonyms": [
+        "Generated images",
+        "Brand assets"
+      ],
+      "description": "Generated and included branded image assets for hero, icons, and logo in the frontend public assets.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-9",
+      "title": "Backend authorization/access-control utilities (Motoko)",
+      "synonyms": [
+        "Authorization mixin",
+        "Access control"
+      ],
+      "description": "Motoko backend updated with reusable authorization mixin/access-control module(s) to support permission checks for protected operations.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-10",
+      "title": "Admin section with guarded routes and admin session hooks",
+      "synonyms": [
+        "Admin dashboard",
+        "Admin login",
+        "AdminGuard"
+      ],
+      "description": "Frontend includes admin login and protected admin routes/pages with AdminGuard and admin session utilities (useAdminSession) integrated alongside existing Internet Identity actor/auth hooks.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-11",
+      "title": "Expanded site pages: Clubs, Club Detail, History, and Membership Registration",
+      "synonyms": [
+        "Clubs pages",
+        "Membership flow",
+        "History page"
+      ],
+      "description": "Added additional public/feature pages beyond the initial core set, including Clubs listing, Club detail, History page, and Membership registration page wired into the app routing/layout.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-12",
+      "title": "Admin workflows pages: Membership Review and History Editor",
+      "synonyms": [
+        "Admin membership review",
+        "Admin history editor"
+      ],
+      "description": "Added admin-facing workflow pages for reviewing memberships and editing history content, accessible via the admin section.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "feature-add-react-query-hooks-to-read-write-minor-club-records-via-the-backend-actor-list-clubs-get-club-by-id-upsert-club-delete-club-following-the-existing-patterns-used-for-history-and-membership-registrations",
+      "title": "Add React Query hooks to read/write minor club records via the backend actor (list clubs, get club by id, upsert club, delete club), following the existing patterns used for history and membership registrations.",
       "reqIds": [
         "REQ-3"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-generated-static-image-assets-to-the-project-under-frontend-public-assets-generated-and-render-them-in-the-ui-where-appropriate-e-g-hero-and-logo",
-      "title": "Add generated static image assets to the project under frontend/public/assets/generated and render them in the UI where appropriate (e.g., hero and logo).",
+      "id": "feature-replace-the-current-static-club-data-used-by-the-public-clubs-page-and-club-detail-page-with-data-fetched-from-the-backend-club-apis-and-display-the-new-club-fields-aims-motto-slogan-achievements-program-activities-history-on-the-club-detail-view",
+      "title": "Replace the current static club data used by the public Clubs page and Club Detail page with data fetched from the backend club APIs, and display the new club fields (aims, motto, slogan, achievements, program, activities, history) on the club detail view.",
       "reqIds": [
         "REQ-4"
       ],
       "version": 1
-    }
-  ],
-  "new_feature_requests": [],
-  "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Friendly youth-organization logo mark, flat vector style (youth-logo.dim_512x512.png)\n- Warm, energetic hero banner illustration/photo-collage style with diverse youths, no text (youth-hero.dim_1600x900.png)\n- Small set of 3 simple flat icons representing activities/learning/community (youth-icons.dim_768x256.png)",
-  "generatedImages": [
-    {
-      "filename": "youth-logo.dim_512x512.png",
-      "description": "Friendly youth-organization logo mark, flat vector style",
-      "targetWidth": 512,
-      "targetHeight": 512
     },
     {
-      "filename": "youth-hero.dim_1600x900.png",
-      "description": "Warm, energetic hero banner illustration/photo-collage style with diverse youths, no text",
-      "targetWidth": 1600,
-      "targetHeight": 900
+      "id": "feature-add-an-admin-gated-minor-clubs-manager-ui-that-allows-admins-to-create-update-and-delete-clubs-and-edit-the-fields-aims-motto-slogan-achievements-program-activities-and-history",
+      "title": "Add an admin-gated “Minor Clubs Manager” UI that allows admins to create, update, and delete clubs and edit the fields: aims, motto, slogan, achievements, program, activities, and history.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
     },
     {
-      "filename": "youth-icons.dim_768x256.png",
-      "description": "Small set of 3 simple flat icons representing activities/learning/community",
-      "targetWidth": 768,
-      "targetHeight": 256
+      "id": "feature-connect-the-club-management-interface-to-the-existing-admin-login-dashboard-and-the-membership-interface-so-it-is-easy-for-an-admin-to-reach-club-editing-from-those-entry-points",
+      "title": "Connect the club management interface to the existing admin login/dashboard and the membership interface, so it is easy for an admin to reach club editing from those entry points.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-ui-within-the-existing-admin-area-that-allows-admins-to-add-edit-and-remove-social-media-accounts-links-using-english-user-facing-text",
+      "title": "Add an admin UI (within the existing admin area) that allows admins to add, edit, and remove social media accounts/links, using English user-facing text.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-admin-managed-social-media-links-on-the-public-facing-site-e-g-footer-and-or-main-home-page-as-read-only-content-with-no-public-editing-controls-all-edits-must-happen-only-in-the-admin-interface",
+      "title": "Display admin-managed social media links on the public-facing site (e.g., footer and/or main/home page) as read-only content with no public editing controls; all edits must happen only in the admin interface.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-new-admin-page-reachable-from-the-admin-area-as-a-sub-navigation-item-labeled-about-that-lets-admins-add-edit-update-the-about-content-community-building-skill-development-events-activities-and-the-links-our-programs-and-upcoming-events",
+      "title": "Create a new admin page reachable from the admin area as a sub-navigation item labeled “About” that lets admins add/edit/update the About content (Community Building, Skill Development, Events & Activities, and the links “Our Programs” and “Upcoming Events”).",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-new-admin-page-in-the-admin-area-to-customize-home-page-content-including-editing-the-what-we-do-explore-programs-section-and-ensure-all-saved-changes-appear-on-the-public-home-page",
+      "title": "Create a new admin page in the admin area to customize Home page content, including editing the “What We Do / Explore Programs” section, and ensure all saved changes appear on the public Home page.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-render-the-admin-managed-about-content-on-the-public-home-page-so-that-updates-made-in-the-admin-about-page-appear-on-the-home-page",
+      "title": "Render the admin-managed About content on the public Home page so that updates made in the admin “About” page appear on the Home page.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-existing-minor-clubs-manager-admin-ui-to-include-a-profile-picture-control-for-each-club-and-display-the-profile-picture-on-public-club-views-clubs-list-and-club-detail-with-a-fallback-when-none-is-set",
+      "title": "Update the existing Minor Clubs Manager admin UI to include a “Profile Picture” control for each club, and display the profile picture on public club views (Clubs list and Club Detail) with a fallback when none is set.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-react-query-hooks-or-extend-existing-hooks-to-fetch-and-update-the-new-about-content-and-home-page-configuration-via-the-backend-actor-following-the-patterns-used-by-existing-history-social-links-hooks",
+      "title": "Add React Query hooks (or extend existing hooks) to fetch and update the new About content and Home page configuration via the backend actor, following the patterns used by existing history/social links hooks.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-seo-indexing-readiness-for-google-by-adding-standard-metadata-and-crawlable-static-files-for-the-deployed-site",
+      "title": "Improve SEO/indexing readiness for Google by adding standard metadata and crawlable static files for the deployed site.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-site-s-seo-indexing-configuration-work-with-the-actual-deployed-production-url-instead-of-hardcoded-placeholders-including-updating-parameterizing-canonical-url-and-sitemap-robots-urls-so-google-can-correctly-crawl-and-index-the-deployed-site",
+      "title": "Make the site’s SEO/indexing configuration work with the actual deployed production URL (instead of hardcoded placeholders), including updating/parameterizing canonical URL and sitemap/robots URLs so Google can correctly crawl and index the deployed site.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-pwa-support-so-visitors-on-android-can-install-the-site-including-a-web-app-manifest-required-pwa-icons-and-service-worker-registration-compatible-with-the-current-vite-react-setup",
+      "title": "Add PWA support so visitors on Android can install the site, including a web app manifest, required PWA icons, and service worker registration compatible with the current Vite + React setup.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-install-prompt-ui-on-the-public-home-page-that-encourages-android-users-to-install-the-app-using-english-user-facing-text-and-only-showing-the-prompt-when-installation-is-supported-and-the-app-is-not-already-installed",
+      "title": "Add an install prompt UI on the public Home page that encourages Android users to install the app, using English user-facing text and only showing the prompt when installation is supported and the app is not already installed.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-project-documentation-for-producing-an-android-apk-from-the-deployed-pwa-e-g-via-trusted-web-activity-including-clear-prerequisites-and-step-by-step-instructions-without-introducing-unsupported-backend-services",
+      "title": "Provide project documentation for producing an Android APK from the deployed PWA (e.g., via Trusted Web Activity), including clear prerequisites and step-by-step instructions, without introducing unsupported backend services.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
     }
   ],
-  "projectName": "Create initial youth organization app (landing + basic pages)",
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Add admin-gated interface (linked from membership button/admin login area) to create/update/edit minor club details: aims, motto, slogan, achievements, programs, activities, and history.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Extend the Motoko backend to persist and serve “minor club” records including: id, name, aims, motto, slogan, achievements, program, activities, and history, with public query access for reading and admin-only access for create/update/delete.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add a conditional Motoko stable-state migration for the newly introduced stable club storage so the canister can upgrade safely from the current deployed state.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Extend the admin minor-clubs manager so admins can add/update social media account links (e.g., Facebook/Instagram/X/Website/etc.) for clubs, and ensure all admin-edited club data is displayed on the public/main pages as read-only (no public editing outside the admin interface).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add backend support for storing and serving organization social media links that can be created/updated only by admins and read publicly.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Add a conditional Motoko stable-state migration for the newly introduced social media links state so the canister can upgrade safely from the currently deployed state.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Add an admin “About” sub-button/page under the admin interface where admins can add/edit/update About content and related links (e.g., community building, skill development, events/activities, “our program”, “upcoming events”) and have it render on the public homepage.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Add admin-editable homepage section(s) for “Explore program / What we do” so admins can add/edit/update the content and have changes appear on the public homepage.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Add a homepage customization interface in the admin area to control what content/sections appear on the homepage and ensure all admin edits are reflected on the homepage.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Extend club management so admins can add/update a profile picture for each minor club (upload/select image) and display it on public club views.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add production hosting/public deployment plan so the site is accessible to anyone and is indexable on Google Search (SEO + indexing readiness).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Provide an APK build/distribution option for the site/app (e.g., Android wrapper/PWA-to-APK), if feasible.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Add backend data models and APIs to store and serve admin-managed “About” content that includes the items: Community Building, Skill Development, Events & Activities, plus link-style items for “Our Programs” and “Upcoming Events”, and make this content publicly readable and admin-writable.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Add backend data models and APIs to store and serve an admin-managed Home page configuration so that the “Explore Programs / What we do” section content can be added/edited/updated by admins and reflected on the public Home page.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Extend the backend Club record and club create/update APIs to support an admin-set “profile picture” value for each minor club, and ensure it is returned in public club queries.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Implement any required conditional stable-state migration(s) in Motoko so existing deployed state can upgrade safely while adding the new About content, Home page configuration, and club profile picture field.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Add an install prompt on the homepage for Android users (PWA install banner / prompt visitors to install the app).",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Add admin-managed minor club information (CRUD) and connect it to membership/admin UI",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

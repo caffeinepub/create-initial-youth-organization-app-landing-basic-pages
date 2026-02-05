@@ -1,7 +1,22 @@
-import { SiFacebook, SiInstagram, SiX } from 'react-icons/si';
+import { SiFacebook, SiInstagram, SiX, SiLinkedin, SiYoutube, SiTiktok, SiWhatsapp } from 'react-icons/si';
 import { Heart } from 'lucide-react';
+import { useGetSocialMediaLinks } from '@/hooks/useQueries';
 
 export default function Footer() {
+  const { data: socialLinks } = useGetSocialMediaLinks();
+
+  const socialPlatforms = [
+    { name: 'Facebook', icon: SiFacebook, url: socialLinks?.facebook, label: 'Facebook' },
+    { name: 'Instagram', icon: SiInstagram, url: socialLinks?.instagram, label: 'Instagram' },
+    { name: 'X', icon: SiX, url: socialLinks?.twitter, label: 'X (Twitter)' },
+    { name: 'LinkedIn', icon: SiLinkedin, url: socialLinks?.linkedin, label: 'LinkedIn' },
+    { name: 'YouTube', icon: SiYoutube, url: socialLinks?.youtube, label: 'YouTube' },
+    { name: 'TikTok', icon: SiTiktok, url: socialLinks?.tiktok, label: 'TikTok' },
+    { name: 'WhatsApp', icon: SiWhatsapp, url: socialLinks?.whatsapp, label: 'WhatsApp' },
+  ];
+
+  const activeSocialLinks = socialPlatforms.filter((platform) => platform.url && platform.url.trim() !== '');
+
   return (
     <footer className="border-t border-border/40 bg-muted/30">
       <div className="container py-12">
@@ -9,11 +24,11 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="/assets/generated/youth-logo.dim_512x512.png"
-                alt="Youth Organization Logo"
+                src="/assets/generated/yfo-logo.dim_512x512.png"
+                alt="The Youth And Friends Organization Logo"
                 className="h-10 w-10 rounded-lg"
               />
-              <span className="text-xl font-bold text-primary">YouthHub</span>
+              <span className="text-xl font-bold text-primary">YFO</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Empowering young people to reach their full potential through
@@ -35,6 +50,21 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="/clubs" className="hover:text-primary transition-colors">
+                  Clubs
+                </a>
+              </li>
+              <li>
+                <a href="/history" className="hover:text-primary transition-colors">
+                  History
+                </a>
+              </li>
+              <li>
+                <a href="/membership" className="hover:text-primary transition-colors">
+                  Membership
+                </a>
+              </li>
+              <li>
                 <a href="/events" className="hover:text-primary transition-colors">
                   Upcoming Events
                 </a>
@@ -49,29 +79,29 @@ export default function Footer() {
 
           <div>
             <h3 className="font-semibold mb-4">Connect With Us</h3>
-            <div className="flex gap-3">
-              <a
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-                aria-label="Facebook"
-              >
-                <SiFacebook className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-                aria-label="Instagram"
-              >
-                <SiInstagram className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-                aria-label="X (Twitter)"
-              >
-                <SiX className="h-5 w-5" />
-              </a>
-            </div>
+            {activeSocialLinks.length > 0 ? (
+              <div className="flex gap-3 flex-wrap">
+                {activeSocialLinks.map((platform) => {
+                  const Icon = platform.icon;
+                  return (
+                    <a
+                      key={platform.name}
+                      href={platform.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                      aria-label={platform.label}
+                    >
+                      <Icon className="h-5 w-5" />
+                    </a>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Social media links will appear here once configured.
+              </p>
+            )}
           </div>
         </div>
 

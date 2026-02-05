@@ -1,111 +1,104 @@
 {
   "kind": "build_request",
-  "title": "Create initial youth organization app (landing + basic pages)",
+  "title": "Rebuild with latest updates + public indexing readiness and Android install prompt",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Create a responsive, multi-page frontend scaffold for a youth organization app with a top navigation and the following pages: Home, About, Programs, Events, Contact.",
+      "id": "REQ-21",
+      "text": "Make the site’s SEO/indexing configuration work with the actual deployed production URL (instead of hardcoded placeholders), including updating/parameterizing canonical URL and sitemap/robots URLs so Google can correctly crawl and index the deployed site.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4",
+          "msg-8"
         ],
         "quotes": [
-          "An app for a youth organization"
+          "Host it online and make it visible on Google for people to visit it worldwide",
+          "Build it again with the latest update"
         ]
       },
       "acceptanceCriteria": [
-        "App loads successfully from the template and shows a consistent top navigation on all pages.",
-        "Each page renders distinct placeholder content in English that can be edited later.",
-        "Navigation works without full page reloads.",
-        "Layout is mobile-first and remains usable on common breakpoints (mobile/tablet/desktop)."
+        "The canonical URL is not hardcoded to a placeholder domain (e.g., not fixed to https://yfo.org/) and matches the deployed site URL.",
+        "frontend/public/robots.txt and frontend/public/sitemap.xml do not reference an incorrect domain for the deployed site.",
+        "Admin routes remain excluded from crawling (e.g., /me/* disallowed) while public routes are crawlable.",
+        "Build output still includes robots.txt and sitemap.xml at the expected public paths."
       ]
     },
     {
-      "id": "REQ-2",
-      "text": "Apply a coherent visual theme appropriate for a youth organization (colors, typography, spacing, components) and use it consistently across all pages.",
+      "id": "REQ-22",
+      "text": "Add PWA support so visitors on Android can install the site, including a web app manifest, required PWA icons, and service worker registration compatible with the current Vite + React setup.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4"
         ],
         "quotes": [
-          "An app for a youth organization"
+          "And make it an android apk and prompt people that visit it to install it at the homepage."
         ]
       },
       "acceptanceCriteria": [
-        "Theme is consistent across pages (buttons, headings, cards, links).",
-        "Theme does not use a blue/purple primary palette.",
-        "Typography hierarchy is clear (H1/H2/body)."
+        "The app includes a valid web app manifest linked from the HTML entrypoint.",
+        "The manifest references local icon assets in the frontend public directory (no backend image routing).",
+        "A service worker is registered in production builds and the app is installable as a PWA on Android Chrome (meeting basic installability requirements)."
       ]
     },
     {
-      "id": "REQ-3",
-      "text": "Add a Home page hero section that uses a generated hero image and includes an English headline and short description suitable for a youth organization.",
+      "id": "REQ-23",
+      "text": "Add an install prompt UI on the public Home page that encourages Android users to install the app, using English user-facing text and only showing the prompt when installation is supported and the app is not already installed.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4"
         ],
         "quotes": [
-          "An app for a youth organization"
+          "...prompt people that visit it to install it at the homepage."
         ]
       },
       "acceptanceCriteria": [
-        "Home page displays the hero image from frontend/public/assets/generated.",
-        "Hero includes an English headline and supporting text.",
-        "Hero section remains readable and well-laid-out on mobile."
+        "Home page displays an install prompt/banner only when the browser provides an install event (or equivalent installability signal) and the app is not already installed.",
+        "Clicking the prompt’s primary action triggers the browser’s install flow (where supported).",
+        "All user-facing strings in the install prompt are in English (e.g., title, description, button text, dismiss text).",
+        "The prompt can be dismissed and does not reappear excessively during the same session (reasonable UX persistence)."
       ]
     },
     {
-      "id": "REQ-4",
-      "text": "Add generated static image assets to the project under frontend/public/assets/generated and render them in the UI where appropriate (e.g., hero and logo).",
-      "target": "frontend",
+      "id": "REQ-24",
+      "text": "Provide project documentation for producing an Android APK from the deployed PWA (e.g., via Trusted Web Activity), including clear prerequisites and step-by-step instructions, without introducing unsupported backend services.",
+      "target": "unknown",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4"
         ],
         "quotes": [
-          "An app for a youth organization"
+          "And make it an android apk..."
         ]
       },
       "acceptanceCriteria": [
-        "Generated images exist in frontend/public/assets/generated with the specified filenames.",
-        "At least the logo and hero image are displayed in the UI.",
-        "No backend is used to serve or transform these images."
+        "Repository includes a written guide explaining how to generate an Android APK wrapper for the deployed URL (PWA-to-APK approach).",
+        "The guide includes: required tools, where to put the deployed URL, build/sign steps at a high level, and limitations (e.g., Play Store requirements).",
+        "The guide does not require adding non-supported backend technologies or third-party auth providers."
       ]
     }
   ],
   "constraints": [
-    "Use English for all user-facing text.",
-    "Do not modify files under frontend/src/components/ui or other immutable paths listed in SYSTEM_CONTEXT.",
-    "Keep backend changes minimal unless required; do not introduce additional backend services beyond the single Motoko actor."
+    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
+    "Do not modify files under frontend/src/components/ui or any other immutable paths listed in SYSTEM_CONTEXT.",
+    "Use English for any user-facing text.",
+    "Do not add third-party authentication providers (only Internet Identity is supported)."
   ],
   "nonGoals": [
-    "Member management features (sign-up, roles, permissions).",
-    "Event registration, ticketing, or payments.",
-    "Messaging/chat or real-time features.",
-    "External integrations (social media APIs, maps, email providers)."
+    "Automating publication to Google Search Console or guaranteeing search ranking/instant indexing.",
+    "Deploying to non-ICP hosting providers (e.g., AWS/GCP/Azure/Vercel/Netlify).",
+    "Building and shipping a native Android application with custom native features beyond wrapping the PWA.",
+    "Adding real-time features (WebSockets/push notifications) as part of the install prompt work."
   ],
   "imageRequirements": {
     "required": [
-      "Friendly youth-organization logo mark, flat vector style (youth-logo.dim_512x512.png)",
-      "Warm, energetic hero banner illustration/photo-collage style with diverse youths, no text (youth-hero.dim_1600x900.png)",
-      "Small set of 3 simple flat icons representing activities/learning/community (youth-icons.dim_768x256.png)"
+      "Square PWA app icon derived from the YFO logo (yfo-pwa-icon.dim_192x192.png)",
+      "Square PWA app icon derived from the YFO logo (yfo-pwa-icon.dim_512x512.png)",
+      "Maskable square PWA icon derived from the YFO logo with safe padding (yfo-pwa-icon-maskable.dim_512x512.png)",
+      "Apple touch icon derived from the YFO logo (yfo-apple-touch-icon.dim_180x180.png)"
     ],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [
-      "Use English for all user-facing text."
-    ],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

@@ -10,7 +10,104 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface _SERVICE {}
+export interface AboutSection {
+  'title' : string,
+  'content' : string,
+  'link' : boolean,
+}
+export interface Club {
+  'id' : bigint,
+  'motto' : string,
+  'aims' : string,
+  'name' : string,
+  'activities' : string,
+  'history' : string,
+  'slogan' : string,
+  'achievements' : string,
+  'profilePicture' : [] | [string],
+  'program' : string,
+}
+export interface HomePageSection {
+  'title' : string,
+  'description' : string,
+  'imageUrl' : string,
+}
+export interface MembershipRegistration {
+  'additionalInfo' : string,
+  'name' : string,
+  'email' : string,
+  'address' : string,
+  'phone' : string,
+}
+export interface SocialMediaLinks {
+  'linkedin' : string,
+  'tiktok' : string,
+  'twitter' : string,
+  'instagram' : string,
+  'whatsapp' : string,
+  'facebook' : string,
+  'youtube' : string,
+}
+export interface UserProfile { 'name' : string }
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
+export interface _SERVICE {
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'createClub' : ActorMethod<
+    [
+      string,
+      [] | [string],
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+    ],
+    bigint
+  >,
+  'deleteClub' : ActorMethod<[bigint], undefined>,
+  'getAboutSections' : ActorMethod<[], Array<AboutSection>>,
+  'getAllMembershipRegistrations' : ActorMethod<
+    [],
+    Array<MembershipRegistration>
+  >,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getClubs' : ActorMethod<[], Array<Club>>,
+  'getHistoryContent' : ActorMethod<[], string>,
+  'getHomePageSections' : ActorMethod<[], Array<HomePageSection>>,
+  'getSocialMediaLinks' : ActorMethod<[], [] | [SocialMediaLinks]>,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'setSocialMediaLinks' : ActorMethod<[SocialMediaLinks], undefined>,
+  'submitMembershipRegistration' : ActorMethod<
+    [MembershipRegistration],
+    undefined
+  >,
+  'updateAboutSections' : ActorMethod<[Array<AboutSection>], undefined>,
+  'updateClub' : ActorMethod<
+    [
+      bigint,
+      string,
+      [] | [string],
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+    ],
+    undefined
+  >,
+  'updateHistoryContent' : ActorMethod<[string], undefined>,
+  'updateHomePageSections' : ActorMethod<[Array<HomePageSection>], undefined>,
+}
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
 export declare const idlFactory: IDL.InterfaceFactory;

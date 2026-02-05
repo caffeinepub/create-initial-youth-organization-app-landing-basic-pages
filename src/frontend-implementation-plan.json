@@ -1,165 +1,136 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Youth organization app (landing + basic pages) — frontend scaffold + theme + generated images",
+  "title": "SEO deployment URL readiness, PWA installability, and Android install prompt",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Create a responsive multi-page React scaffold with top navigation and pages: Home, About, Programs, Events, Contact.",
+      "id": "REQ-21",
+      "summary": "Make canonical/robots/sitemap reflect the deployed production URL (no placeholder domains) while keeping admin routes excluded from crawling.",
       "acceptanceCriteria": [
-        "App loads successfully from the template and shows a consistent top navigation on all pages.",
-        "Each page renders distinct placeholder content in English that can be edited later.",
-        "Navigation works without full page reloads.",
-        "Layout is mobile-first and remains usable on common breakpoints (mobile/tablet/desktop)."
+        "The canonical URL is not hardcoded to a placeholder domain (e.g., not fixed to https://yfo.org/) and matches the deployed site URL.",
+        "frontend/public/robots.txt and frontend/public/sitemap.xml do not reference an incorrect domain for the deployed site.",
+        "Admin routes remain excluded from crawling (e.g., /me/* disallowed) while public routes are crawlable.",
+        "Build output still includes robots.txt and sitemap.xml at the expected public paths."
       ],
       "file_operations": [
         {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Remove the hardcoded canonical domain and adjust SEO tags to be compatible with runtime canonical URL setting (e.g., keep canonical tag present but not fixed to a placeholder, and/or allow it to be set from client code)."
+        },
+        {
+          "path": "frontend/src/utils/seo.ts",
+          "operation": "create",
+          "description": "Add small SEO helpers to set/update the canonical URL to the current deployed origin + current route path (and optionally keep related share/meta URL fields consistent) at runtime."
+        },
+        {
           "path": "frontend/src/App.tsx",
-          "operation": "create",
-          "description": "Create the root app component that wires client-side routing for Home, About, Programs, Events, and Contact, ensuring navigation happens without full page reloads. Use the shadcn-ui component library (e.g., layout primitives like Card/Button where helpful) for consistent UI; verify the component's usage instructions before implementing."
+          "operation": "modify",
+          "description": "Wire SEO helpers into routing so canonical updates on navigation (e.g., subscribe to TanStack Router navigation changes and update canonical accordingly)."
         },
         {
-          "path": "frontend/src/layouts/AppLayout.tsx",
-          "operation": "create",
-          "description": "Create a shared layout that renders a persistent top navigation (visible on every page) and a responsive content container. Use the shadcn-ui component library for consistent header/nav styling; verify the component's usage instructions before implementing."
+          "path": "frontend/public/robots.txt",
+          "operation": "modify",
+          "description": "Update robots.txt to avoid any incorrect hardcoded domain by using a non-placeholder sitemap location (e.g., a relative sitemap reference) while keeping /me/ and /me/* disallowed and public routes crawlable."
         },
         {
-          "path": "frontend/src/components/TopNav.tsx",
-          "operation": "create",
-          "description": "Implement the top navigation with links to Home, About, Programs, Events, Contact, including mobile-friendly behavior (e.g., collapsible menu) and active link styling. Use the shadcn-ui component library components (e.g., Button, Sheet/Dropdown if available) to support responsive navigation; verify the component's usage instructions before implementing."
+          "path": "frontend/public/sitemap.xml",
+          "operation": "modify",
+          "description": "Update sitemap.xml to remove any incorrect hardcoded domain (e.g., use non-placeholder URL forms compatible with the deployed origin) and keep only public routes listed (no /me/*)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "summary": "Add PWA support (manifest, icons, service worker) compatible with the current Vite + React setup.",
+      "acceptanceCriteria": [
+        "The app includes a valid web app manifest linked from the HTML entrypoint.",
+        "The manifest references local icon assets in the frontend public directory (no backend image routing).",
+        "A service worker is registered in production builds and the app is installable as a PWA on Android Chrome (meeting basic installability requirements)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Link the web app manifest from the HTML entrypoint and add any required PWA meta tags (e.g., theme-color) for installability."
         },
         {
-          "path": "frontend/src/pages/HomePage.tsx",
+          "path": "frontend/public/manifest.webmanifest",
           "operation": "create",
-          "description": "Create the Home page with distinct editable English placeholder content and sections to be expanded later (hero is handled in REQ-3). Use the shadcn-ui component library for section structure (e.g., Card) where helpful; verify the component's usage instructions before implementing."
+          "description": "Add a valid web app manifest configured for the deployed SPA, referencing local icon assets under frontend/public/assets/generated/ and using appropriate start_url/scope/display settings."
         },
         {
-          "path": "frontend/src/pages/AboutPage.tsx",
+          "path": "frontend/public/sw.js",
           "operation": "create",
-          "description": "Create the About page with distinct editable English placeholder content. Use the shadcn-ui component library for consistent typography/cards; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/ProgramsPage.tsx",
-          "operation": "create",
-          "description": "Create the Programs page with distinct editable English placeholder content and room for program listings. Use the shadcn-ui component library for consistent cards/lists; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/EventsPage.tsx",
-          "operation": "create",
-          "description": "Create the Events page with distinct editable English placeholder content and room for upcoming events. Use the shadcn-ui component library for consistent cards/lists; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/ContactPage.tsx",
-          "operation": "create",
-          "description": "Create the Contact page with distinct editable English placeholder content (no external integrations). Use the shadcn-ui component library for consistent form-like layout (static/placeholder only) if needed; verify the component's usage instructions before implementing."
+          "description": "Add a service worker suitable for Vite static builds (basic offline caching strategy for app shell/static assets; avoid push/websocket features per non-goals)."
         },
         {
           "path": "frontend/src/main.tsx",
           "operation": "modify",
-          "description": "Ensure the root render continues to mount the new App component and global styles for the multi-page scaffold (no full reload navigation via client routing)."
+          "description": "Register the service worker only for production builds (and handle update/reload behavior safely) so PWA installability works on Android Chrome."
+        },
+        {
+          "path": "frontend/public/assets/generated/yfo-pwa-icon.dim_192x192.png",
+          "operation": "create",
+          "description": "Add the required generated PWA icon asset at frontend/public/assets/generated/yfo-pwa-icon.dim_192x192.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/yfo-pwa-icon.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the required generated PWA icon asset at frontend/public/assets/generated/yfo-pwa-icon.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/yfo-pwa-icon-maskable.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the required generated maskable PWA icon asset at frontend/public/assets/generated/yfo-pwa-icon-maskable.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/yfo-apple-touch-icon.dim_180x180.png",
+          "operation": "create",
+          "description": "Add the required generated Apple touch icon asset at frontend/public/assets/generated/yfo-apple-touch-icon.dim_180x180.png."
         }
       ]
     },
     {
-      "id": "REQ-2",
-      "summary": "Apply a consistent youth-appropriate visual theme (non blue/purple primary) with clear typography hierarchy and reusable UI styling across pages.",
+      "id": "REQ-23",
+      "summary": "Add an install prompt banner on the public Home page that appears only when PWA installation is supported and the app is not already installed.",
       "acceptanceCriteria": [
-        "Theme is consistent across pages (buttons, headings, cards, links).",
-        "Theme does not use a blue/purple primary palette.",
-        "Typography hierarchy is clear (H1/H2/body)."
+        "Home page displays an install prompt/banner only when the browser provides an install event (or equivalent installability signal) and the app is not already installed.",
+        "Clicking the prompt’s primary action triggers the browser’s install flow (where supported).",
+        "All user-facing strings in the install prompt are in English (e.g., title, description, button text, dismiss text).",
+        "The prompt can be dismissed and does not reappear excessively during the same session (reasonable UX persistence)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/index.css",
+          "path": "frontend/src/hooks/usePwaInstallPrompt.ts",
           "operation": "create",
-          "description": "Create global styles including Tailwind directives and theme CSS variables (primary palette must not be blue/purple), plus base typography defaults (H1/H2/body) and spacing rhythm used across all pages."
+          "description": "Implement a hook that listens for the browser install prompt signal (e.g., beforeinstallprompt), tracks whether the app is already installed (display-mode/standalone checks), and exposes actions to trigger the install flow and to dismiss with session-scoped persistence."
         },
         {
-          "path": "frontend/tailwind.config.js",
-          "operation": "modify",
-          "description": "Adjust Tailwind theme extension as needed to support the chosen youth-appropriate palette and typography scale (ensure the primary palette is not blue/purple) and keep usage consistent across the app."
-        },
-        {
-          "path": "frontend/src/layouts/AppLayout.tsx",
-          "operation": "modify",
-          "description": "Apply consistent layout spacing, typography wrappers, and shared components (header/footer/container) so pages visually match. Use the shadcn-ui component library for consistent theming across cards/buttons/links; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/AboutPage.tsx",
-          "operation": "modify",
-          "description": "Align About page headings, body text, and section spacing to the global theme (typography hierarchy and consistent components). Use the shadcn-ui component library where appropriate; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/ProgramsPage.tsx",
-          "operation": "modify",
-          "description": "Align Programs page UI (cards/sections/buttons) to the global theme for consistent look and feel. Use the shadcn-ui component library where appropriate; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/EventsPage.tsx",
-          "operation": "modify",
-          "description": "Align Events page UI (cards/sections/buttons) to the global theme for consistent look and feel. Use the shadcn-ui component library where appropriate; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/ContactPage.tsx",
-          "operation": "modify",
-          "description": "Align Contact page UI (sections/buttons/links) to the global theme for consistent look and feel. Use the shadcn-ui component library where appropriate; verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Add a Home page hero section using the generated hero image with an English headline and short description, optimized for mobile readability.",
-      "acceptanceCriteria": [
-        "Home page displays the hero image from frontend/public/assets/generated.",
-        "Hero includes an English headline and supporting text.",
-        "Hero section remains readable and well-laid-out on mobile."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/HomePage.tsx",
-          "operation": "modify",
-          "description": "Implement a hero section on the Home page that renders the generated hero image from frontend/public/assets/generated/youth-hero.dim_1600x900.png and overlays/places an English headline + short supporting description with mobile-first layout. Use the shadcn-ui component library (e.g., Card/Button for a call-to-action placeholder) if helpful; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/layouts/AppLayout.tsx",
-          "operation": "modify",
-          "description": "Ensure layout/container rules support full-width hero presentation while keeping text readable on mobile and scaling appropriately at tablet/desktop breakpoints."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Add specified generated image assets under frontend/public/assets/generated and render at least the logo and hero in the UI (no backend involvement).",
-      "acceptanceCriteria": [
-        "Generated images exist in frontend/public/assets/generated with the specified filenames.",
-        "At least the logo and hero image are displayed in the UI.",
-        "No backend is used to serve or transform these images."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/youth-logo.dim_512x512.png",
+          "path": "frontend/src/components/InstallPromptBanner.tsx",
           "operation": "create",
-          "description": "Add the generated static logo asset at the exact path frontend/public/assets/generated/youth-logo.dim_512x512.png (static file served by the frontend build)."
-        },
-        {
-          "path": "frontend/public/assets/generated/youth-hero.dim_1600x900.png",
-          "operation": "create",
-          "description": "Add the generated static hero asset at the exact path frontend/public/assets/generated/youth-hero.dim_1600x900.png (static file served by the frontend build)."
-        },
-        {
-          "path": "frontend/public/assets/generated/youth-icons.dim_768x256.png",
-          "operation": "create",
-          "description": "Add the generated static icons asset at the exact path frontend/public/assets/generated/youth-icons.dim_768x256.png (static file served by the frontend build)."
-        },
-        {
-          "path": "frontend/src/components/TopNav.tsx",
-          "operation": "modify",
-          "description": "Render the logo image in the top navigation using frontend/public/assets/generated/youth-logo.dim_512x512.png, sized appropriately for mobile/desktop. Use the shadcn-ui component library for consistent header styling; verify the component's usage instructions before implementing."
+          "description": "Create a Home-page-friendly install prompt/banner UI component with English text and primary/secondary actions. Use the shadcn-ui components already available in the project (e.g., Card/Button) to match the app design. Verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/HomePage.tsx",
           "operation": "modify",
-          "description": "Ensure the Home page displays the hero image from frontend/public/assets/generated/youth-hero.dim_1600x900.png and optionally uses frontend/public/assets/generated/youth-icons.dim_768x256.png in a simple 'What we do' section (static, no backend). Use the shadcn-ui component library for consistent cards/sections; verify the component's usage instructions before implementing."
+          "description": "Wire the InstallPromptBanner into the public Home page (no new route), ensuring it only renders when install is supported and the app is not already installed, and that dismiss state behaves reasonably within the same session."
+        }
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "summary": "Add documentation explaining how to wrap the deployed PWA URL into an Android APK (Trusted Web Activity) without adding unsupported backend services.",
+      "acceptanceCriteria": [
+        "Repository includes a written guide explaining how to generate an Android APK wrapper for the deployed URL (PWA-to-APK approach).",
+        "The guide includes: required tools, where to put the deployed URL, build/sign steps at a high level, and limitations (e.g., Play Store requirements).",
+        "The guide does not require adding non-supported backend technologies or third-party auth providers."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/docs/android-apk-from-pwa.md",
+          "operation": "create",
+          "description": "Write a step-by-step guide for generating an Android APK wrapper for the deployed URL (e.g., using Bubblewrap/Trusted Web Activity), including prerequisites, where to configure the deployed URL, high-level build/sign steps, and limitations/Play Store considerations. Avoid requiring any unsupported backend services or third-party auth providers."
         }
       ]
     }

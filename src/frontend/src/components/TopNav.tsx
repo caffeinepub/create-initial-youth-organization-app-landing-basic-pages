@@ -3,12 +3,16 @@ import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useAdminSession } from '@/hooks/useAdminSession';
 
 const navLinks = [
   { path: '/', label: 'Home' },
   { path: '/about', label: 'About' },
   { path: '/programs', label: 'Programs' },
   { path: '/events', label: 'Events' },
+  { path: '/clubs', label: 'Clubs' },
+  { path: '/history', label: 'History' },
+  { path: '/membership', label: 'Membership' },
   { path: '/contact', label: 'Contact' },
 ];
 
@@ -16,17 +20,25 @@ export default function TopNav() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouterState();
   const currentPath = router.location.pathname;
+  const { isAdmin } = useAdminSession();
+
+  const meLink = isAdmin ? '/me/dashboard' : '/me';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
           <img
-            src="/assets/generated/youth-logo.dim_512x512.png"
-            alt="Youth Organization Logo"
+            src="/assets/generated/yfo-logo.dim_512x512.png"
+            alt="The Youth And Friends Organization Logo"
             className="h-10 w-10 rounded-lg"
           />
-          <span className="text-xl font-bold text-primary">YouthHub</span>
+          <span className="text-xl font-bold text-primary hidden sm:inline">
+            The Youth And Friends Organization
+          </span>
+          <span className="text-xl font-bold text-primary sm:hidden">
+            YFO
+          </span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -41,6 +53,14 @@ export default function TopNav() {
               </Button>
             </Link>
           ))}
+          <Link to={meLink}>
+            <Button
+              variant={currentPath.startsWith('/me') ? 'default' : 'ghost'}
+              className="font-medium"
+            >
+              Me
+            </Button>
+          </Link>
         </nav>
 
         {/* Mobile Navigation */}
@@ -55,11 +75,11 @@ export default function TopNav() {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <img
-                  src="/assets/generated/youth-logo.dim_512x512.png"
-                  alt="Youth Organization Logo"
+                  src="/assets/generated/yfo-logo.dim_512x512.png"
+                  alt="The Youth And Friends Organization Logo"
                   className="h-10 w-10 rounded-lg"
                 />
-                <span className="text-xl font-bold text-primary">YouthHub</span>
+                <span className="text-xl font-bold text-primary">YFO</span>
               </div>
               <Button
                 variant="ghost"
@@ -80,6 +100,14 @@ export default function TopNav() {
                   </Button>
                 </Link>
               ))}
+              <Link to={meLink} onClick={() => setIsOpen(false)}>
+                <Button
+                  variant={currentPath.startsWith('/me') ? 'default' : 'ghost'}
+                  className="w-full justify-start font-medium"
+                >
+                  Me
+                </Button>
+              </Link>
             </nav>
           </SheetContent>
         </Sheet>

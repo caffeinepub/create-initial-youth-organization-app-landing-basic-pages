@@ -30,10 +30,10 @@ export default function ContactPage() {
             </CardHeader>
             <CardContent>
               <a
-                href="mailto:info@youthhub.org"
+                href="mailto:theyouthandfriendsorganization@gmail.com"
                 className="text-primary hover:underline font-medium"
               >
-                info@youthhub.org
+                theyouthandfriendsorganization@gmail.com
               </a>
             </CardContent>
           </Card>
@@ -50,10 +50,10 @@ export default function ContactPage() {
             </CardHeader>
             <CardContent>
               <a
-                href="tel:+15551234567"
+                href="tel:0537190229"
                 className="text-primary hover:underline font-medium"
               >
-                (555) 123-4567
+                0537190229
               </a>
             </CardContent>
           </Card>

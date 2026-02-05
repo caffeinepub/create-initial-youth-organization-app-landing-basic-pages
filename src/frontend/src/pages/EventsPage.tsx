@@ -130,7 +130,7 @@ export default function EventsPage() {
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Contact us to join our mailing list and never miss an event or
-            opportunity to get involved with YouthHub.
+            opportunity to get involved with The Youth And Friends Organization.
           </p>
           <Link to="/contact">
             <Button size="lg">Contact Us</Button>

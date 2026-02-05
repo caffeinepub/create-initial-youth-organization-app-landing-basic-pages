@@ -8,7 +8,7 @@ export default function AboutPage() {
         {/* Header */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            About <span className="text-primary">YouthHub</span>
+            About <span className="text-primary">The Youth And Friends Organization</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             We're dedicated to creating opportunities for young people to learn,
@@ -21,7 +21,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold tracking-tight">Our Story</h2>
           <div className="prose prose-lg max-w-none text-muted-foreground">
             <p>
-              YouthHub was founded with a simple yet powerful vision: to create a
+              The Youth And Friends Organization was founded with a simple yet powerful vision: to create a
               space where every young person feels valued, supported, and empowered
               to reach their full potential. What started as a small community
               initiative has grown into a thriving organization serving hundreds of

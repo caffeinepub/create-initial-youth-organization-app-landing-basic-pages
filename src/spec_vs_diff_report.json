@@ -1,75 +1,52 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T14:01:54.119Z",
-  "summary": "Core multi-page scaffold with TanStack Router, shared layout (TopNav + Footer), and youth-oriented theme/typography is implemented. Home hero section references the requested generated hero image and the logo is referenced in nav/footer. However, the diff summary does not show the required generated image files under frontend/public/assets/generated, and some navigation links (in Footer) use plain anchors which likely cause full page reloads, conflicting with SPA navigation requirements. Several authentication/actor hooks and Internet Identity integration appear added but were not requested.",
+  "generatedAt": "2026-02-05T15:59:48.159Z",
+  "summary": "REQ-21 appears largely addressed via dynamic canonical/OG URL updates and robots/sitemap using relative URLs with /me/* disallowed. REQ-22 is partially addressed (manifest + SW file), but the diff does not show service worker registration. REQ-23 adds a Home-page install banner, but the hook does not gate display on “not already installed”. REQ-24 adds an Android APK-from-PWA guide, but the provided diff is truncated/incomplete, so step-by-step completeness cannot be verified.",
   "missing_requirements": [
     {
-      "id": "REQ-1",
-      "requirement": "Navigation works without full page reloads.",
-      "reason": "Footer 'Quick Links' uses plain <a href=\"/...\"> anchors rather than router Links, which typically triggers full page reloads in an SPA.",
+      "id": "REQ-22",
+      "requirement": "A service worker is registered in production builds and the app is installable as a PWA on Android Chrome.",
+      "reason": "A service worker file (frontend/public/sw.js) is added, but the diff does not show any client-side registration code (e.g., navigator.serviceWorker.register) in the app entrypoint or elsewhere, so installability criteria cannot be confirmed from the provided changes.",
       "evidence": [
-        "frontend/src/components/Footer.tsx"
+        "frontend/public/sw.js",
+        "frontend/index.html"
       ]
     },
     {
-      "id": "REQ-4",
-      "requirement": "Generated images exist in frontend/public/assets/generated with the specified filenames (youth-logo.dim_512x512.png, youth-hero.dim_1600x900.png, youth-icons.dim_768x256.png).",
-      "reason": "The UI references /assets/generated/youth-logo.dim_512x512.png and /assets/generated/youth-hero.dim_1600x900.png, but the diff summary does not show any files added under frontend/public/assets/generated, nor evidence of the specified filenames being added as static assets. (One added file was omitted due to limits, but no path/filename evidence is provided.)",
+      "id": "REQ-23",
+      "requirement": "Only show the install prompt when installation is supported and the app is not already installed.",
+      "reason": "The hook computes `isInstallable` as `!!deferredPrompt && !isDismissed` and does not include `!isInstalled` in that condition. Therefore, the banner may still render even when `isInstalled` is true (depending on whether a deferred prompt exists).",
       "evidence": [
-        "frontend/src/components/TopNav.tsx",
-        "frontend/src/components/Footer.tsx",
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/src/hooks/usePwaInstallPrompt.ts",
+        "frontend/src/components/InstallPromptBanner.tsx"
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "requirement": "Provide a written guide with clear prerequisites and step-by-step instructions (tools, where to put deployed URL, build/sign steps at a high level, limitations).",
+      "reason": "The added documentation file is truncated in the diff summary and stops at the beginning of Step 1 (Bubblewrap), so it is not verifiable that the guide includes the required step-by-step instructions, URL placement, signing/build steps, and limitations.",
+      "evidence": [
+        "frontend/docs/android-apk-from-pwa.md"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Internet Identity authentication provider/hook and identity-aware actor creation via React Query.",
-      "reason": "BuildRequest did not ask for authentication, Internet Identity integration, or actor/identity hooks; non-goals include member management features.",
-      "evidence": [
-        "frontend/src/hooks/useInternetIdentity.ts",
-        "frontend/src/hooks/useActor.ts",
-        "frontend/src/main.tsx"
-      ]
-    },
-    {
-      "description": "Backend Motoko actor added (empty).",
-      "reason": "BuildRequest focuses on frontend pages and static assets; backend changes should be minimal unless required. An empty actor file is added without an evident need from the requirements.",
-      "evidence": [
-        "backend/main.mo"
-      ]
-    },
-    {
-      "description": "Social media icon buttons/links in the footer (Facebook/Instagram/X).",
-      "reason": "External integrations were listed as non-goals; while these are only placeholder links (#), they implement social media UI that was not requested.",
-      "evidence": [
-        "frontend/src/components/Footer.tsx"
-      ]
-    }
-  ],
-  "confidence": 0.74,
+  "hallucinated_features": [],
+  "confidence": 0.68,
   "changed_files": [
-    "all_files_summary.json",
     "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/index.css",
+    "frontend/docs/android-apk-from-pwa.md",
     "frontend/index.html",
+    "frontend/public/manifest.webmanifest",
+    "frontend/public/robots.txt",
+    "frontend/public/sitemap.xml",
+    "frontend/public/sw.js",
     "frontend/src/App.tsx",
-    "frontend/src/components/Footer.tsx",
-    "frontend/src/components/TopNav.tsx",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/index.css",
-    "frontend/src/layouts/AppLayout.tsx",
-    "frontend/src/main.tsx",
-    "frontend/src/pages/AboutPage.tsx",
-    "frontend/src/pages/ContactPage.tsx",
-    "frontend/src/pages/EventsPage.tsx",
+    "frontend/src/components/InstallPromptBanner.tsx",
+    "frontend/src/hooks/usePwaInstallPrompt.ts",
     "frontend/src/pages/HomePage.tsx",
-    "frontend/src/pages/ProgramsPage.tsx",
-    "frontend/tailwind.config.js",
+    "frontend/src/utils/seo.ts",
     "project_state.json"
   ]
 }

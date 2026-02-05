@@ -2,8 +2,46 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, BookOpen, Calendar, Heart } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { useGetAboutSections, useGetHomePageSections } from '@/hooks/useQueries';
+import InstallPromptBanner from '@/components/InstallPromptBanner';
 
 export default function HomePage() {
+  const { data: aboutSections } = useGetAboutSections();
+  const { data: homePageSections } = useGetHomePageSections();
+
+  // Use backend data if available, otherwise use defaults
+  const whatWeDoSections = homePageSections && homePageSections.length > 0
+    ? homePageSections
+    : [
+        {
+          title: 'Community Building',
+          description: 'Connect with peers, build friendships, and develop a strong sense of belonging in a welcoming environment.',
+          imageUrl: '',
+        },
+        {
+          title: 'Skill Development',
+          description: 'Learn new skills through workshops, mentorship programs, and hands-on activities that prepare you for the future.',
+          imageUrl: '',
+        },
+        {
+          title: 'Events & Activities',
+          description: 'Participate in exciting events, social gatherings, and community service projects throughout the year.',
+          imageUrl: '',
+        },
+      ];
+
+  const getIconForSection = (title: string) => {
+    const lowerTitle = title.toLowerCase();
+    if (lowerTitle.includes('community')) return Users;
+    if (lowerTitle.includes('skill')) return BookOpen;
+    if (lowerTitle.includes('event') || lowerTitle.includes('activit')) return Calendar;
+    return Users;
+  };
+
+  // Filter About sections into content and links
+  const aboutContentSections = aboutSections?.filter((s) => !s.link) || [];
+  const aboutLinkSections = aboutSections?.filter((s) => s.link) || [];
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -46,6 +84,11 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Install Prompt Banner */}
+      <section className="container py-6">
+        <InstallPromptBanner />
+      </section>
+
       {/* What We Do Section */}
       <section className="container py-16 md:py-24">
         <div className="text-center mb-12">
@@ -59,46 +102,62 @@ export default function HomePage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <Card className="border-2 hover:border-primary/50 transition-colors">
-            <CardHeader>
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
-                <Users className="h-6 w-6" />
-              </div>
-              <CardTitle>Community Building</CardTitle>
-              <CardDescription>
-                Connect with peers, build friendships, and develop a strong sense
-                of belonging in a welcoming environment.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="border-2 hover:border-primary/50 transition-colors">
-            <CardHeader>
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
-                <BookOpen className="h-6 w-6" />
-              </div>
-              <CardTitle>Skill Development</CardTitle>
-              <CardDescription>
-                Learn new skills through workshops, mentorship programs, and
-                hands-on activities that prepare you for the future.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="border-2 hover:border-primary/50 transition-colors">
-            <CardHeader>
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
-                <Calendar className="h-6 w-6" />
-              </div>
-              <CardTitle>Events & Activities</CardTitle>
-              <CardDescription>
-                Participate in exciting events, social gatherings, and community
-                service projects throughout the year.
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          {whatWeDoSections.map((section, index) => {
+            const IconComponent = getIconForSection(section.title);
+            return (
+              <Card key={index} className="border-2 hover:border-primary/50 transition-colors">
+                <CardHeader>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
+                    <IconComponent className="h-6 w-6" />
+                  </div>
+                  <CardTitle>{section.title}</CardTitle>
+                  <CardDescription>{section.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            );
+          })}
         </div>
       </section>
+
+      {/* About Content Section (if configured) */}
+      {aboutContentSections.length > 0 && (
+        <section className="bg-muted/30 border-y border-border/40">
+          <div className="container py-16 md:py-24">
+            <div className="max-w-5xl mx-auto space-y-8">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+                  About Our Organization
+                </h2>
+              </div>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {aboutContentSections.map((section, index) => (
+                  <Card key={index} className="border-2">
+                    <CardHeader>
+                      <CardTitle className="text-xl">{section.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground whitespace-pre-wrap">
+                        {section.content}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              {aboutLinkSections.length > 0 && (
+                <div className="flex flex-wrap gap-4 justify-center pt-6">
+                  {aboutLinkSections.map((section, index) => (
+                    <Link key={index} to={section.content}>
+                      <Button size="lg" variant="outline">
+                        {section.title}
+                      </Button>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Call to Action */}
       <section className="bg-primary/5 border-y border-border/40">
@@ -110,7 +169,7 @@ export default function HomePage() {
             </h2>
             <p className="text-lg text-muted-foreground">
               Whether you're looking to join our programs, volunteer, or support
-              our mission, there are many ways to get involved with YouthHub.
+              our mission, there are many ways to get involved with The Youth And Friends Organization.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/programs">

@@ -89,10 +89,456 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface backendInterface {
+export interface AboutSection {
+    title: string;
+    content: string;
+    link: boolean;
 }
+export interface SocialMediaLinks {
+    linkedin: string;
+    tiktok: string;
+    twitter: string;
+    instagram: string;
+    whatsapp: string;
+    facebook: string;
+    youtube: string;
+}
+export interface MembershipRegistration {
+    additionalInfo: string;
+    name: string;
+    email: string;
+    address: string;
+    phone: string;
+}
+export interface Club {
+    id: bigint;
+    motto: string;
+    aims: string;
+    name: string;
+    activities: string;
+    history: string;
+    slogan: string;
+    achievements: string;
+    profilePicture?: string;
+    program: string;
+}
+export interface UserProfile {
+    name: string;
+}
+export interface HomePageSection {
+    title: string;
+    description: string;
+    imageUrl: string;
+}
+export enum UserRole {
+    admin = "admin",
+    user = "user",
+    guest = "guest"
+}
+export interface backendInterface {
+    _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    createClub(name: string, profilePicture: string | null, aims: string, motto: string, slogan: string, achievements: string, program: string, activities: string, history: string): Promise<bigint>;
+    deleteClub(id: bigint): Promise<void>;
+    getAboutSections(): Promise<Array<AboutSection>>;
+    getAllMembershipRegistrations(): Promise<Array<MembershipRegistration>>;
+    getCallerUserProfile(): Promise<UserProfile | null>;
+    getCallerUserRole(): Promise<UserRole>;
+    getClubs(): Promise<Array<Club>>;
+    getHistoryContent(): Promise<string>;
+    getHomePageSections(): Promise<Array<HomePageSection>>;
+    getSocialMediaLinks(): Promise<SocialMediaLinks | null>;
+    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    isCallerAdmin(): Promise<boolean>;
+    saveCallerUserProfile(_profile: UserProfile): Promise<void>;
+    setSocialMediaLinks(links: SocialMediaLinks): Promise<void>;
+    submitMembershipRegistration(registration: MembershipRegistration): Promise<void>;
+    updateAboutSections(sections: Array<AboutSection>): Promise<void>;
+    updateClub(id: bigint, name: string, profilePicture: string | null, aims: string, motto: string, slogan: string, achievements: string, program: string, activities: string, history: string): Promise<void>;
+    updateHistoryContent(newContent: string): Promise<void>;
+    updateHomePageSections(sections: Array<HomePageSection>): Promise<void>;
+}
+import type { Club as _Club, SocialMediaLinks as _SocialMediaLinks, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor._initializeAccessControlWithSecret(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor._initializeAccessControlWithSecret(arg0);
+            return result;
+        }
+    }
+    async assignCallerUserRole(arg0: Principal, arg1: UserRole): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async createClub(arg0: string, arg1: string | null, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string, arg7: string, arg8: string): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createClub(arg0, to_candid_opt_n3(this._uploadFile, this._downloadFile, arg1), arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createClub(arg0, to_candid_opt_n3(this._uploadFile, this._downloadFile, arg1), arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+            return result;
+        }
+    }
+    async deleteClub(arg0: bigint): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteClub(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteClub(arg0);
+            return result;
+        }
+    }
+    async getAboutSections(): Promise<Array<AboutSection>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAboutSections();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAboutSections();
+            return result;
+        }
+    }
+    async getAllMembershipRegistrations(): Promise<Array<MembershipRegistration>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllMembershipRegistrations();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllMembershipRegistrations();
+            return result;
+        }
+    }
+    async getCallerUserProfile(): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserProfile();
+                return from_candid_opt_n4(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserProfile();
+            return from_candid_opt_n4(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerUserRole(): Promise<UserRole> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserRole();
+                return from_candid_UserRole_n5(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserRole();
+            return from_candid_UserRole_n5(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getClubs(): Promise<Array<Club>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getClubs();
+                return from_candid_vec_n7(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getClubs();
+            return from_candid_vec_n7(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getHistoryContent(): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getHistoryContent();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getHistoryContent();
+            return result;
+        }
+    }
+    async getHomePageSections(): Promise<Array<HomePageSection>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getHomePageSections();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getHomePageSections();
+            return result;
+        }
+    }
+    async getSocialMediaLinks(): Promise<SocialMediaLinks | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getSocialMediaLinks();
+                return from_candid_opt_n11(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getSocialMediaLinks();
+            return from_candid_opt_n11(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getUserProfile(arg0);
+                return from_candid_opt_n4(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getUserProfile(arg0);
+            return from_candid_opt_n4(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async isCallerAdmin(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isCallerAdmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.saveCallerUserProfile(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.saveCallerUserProfile(arg0);
+            return result;
+        }
+    }
+    async setSocialMediaLinks(arg0: SocialMediaLinks): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setSocialMediaLinks(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setSocialMediaLinks(arg0);
+            return result;
+        }
+    }
+    async submitMembershipRegistration(arg0: MembershipRegistration): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.submitMembershipRegistration(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.submitMembershipRegistration(arg0);
+            return result;
+        }
+    }
+    async updateAboutSections(arg0: Array<AboutSection>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateAboutSections(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateAboutSections(arg0);
+            return result;
+        }
+    }
+    async updateClub(arg0: bigint, arg1: string, arg2: string | null, arg3: string, arg4: string, arg5: string, arg6: string, arg7: string, arg8: string, arg9: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateClub(arg0, arg1, to_candid_opt_n3(this._uploadFile, this._downloadFile, arg2), arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateClub(arg0, arg1, to_candid_opt_n3(this._uploadFile, this._downloadFile, arg2), arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            return result;
+        }
+    }
+    async updateHistoryContent(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateHistoryContent(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateHistoryContent(arg0);
+            return result;
+        }
+    }
+    async updateHomePageSections(arg0: Array<HomePageSection>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateHomePageSections(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateHomePageSections(arg0);
+            return result;
+        }
+    }
+}
+function from_candid_Club_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Club): Club {
+    return from_candid_record_n9(_uploadFile, _downloadFile, value);
+}
+function from_candid_UserRole_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
+    return from_candid_variant_n6(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_SocialMediaLinks]): SocialMediaLinks | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    id: bigint;
+    motto: string;
+    aims: string;
+    name: string;
+    activities: string;
+    history: string;
+    slogan: string;
+    achievements: string;
+    profilePicture: [] | [string];
+    program: string;
+}): {
+    id: bigint;
+    motto: string;
+    aims: string;
+    name: string;
+    activities: string;
+    history: string;
+    slogan: string;
+    achievements: string;
+    profilePicture?: string;
+    program: string;
+} {
+    return {
+        id: value.id,
+        motto: value.motto,
+        aims: value.aims,
+        name: value.name,
+        activities: value.activities,
+        history: value.history,
+        slogan: value.slogan,
+        achievements: value.achievements,
+        profilePicture: record_opt_to_undefined(from_candid_opt_n10(_uploadFile, _downloadFile, value.profilePicture)),
+        program: value.program
+    };
+}
+function from_candid_variant_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+}): UserRole {
+    return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
+}
+function from_candid_vec_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Club>): Array<Club> {
+    return value.map((x)=>from_candid_Club_n8(_uploadFile, _downloadFile, x));
+}
+function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
+    return to_candid_variant_n2(_uploadFile, _downloadFile, value);
+}
+function to_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: string | null): [] | [string] {
+    return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+} {
+    return value == UserRole.admin ? {
+        admin: null
+    } : value == UserRole.user ? {
+        user: null
+    } : value == UserRole.guest ? {
+        guest: null
+    } : value;
 }
 export interface CreateActorOptions {
     agent?: Agent;

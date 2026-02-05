@@ -8,10 +8,224 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const idlService = IDL.Service({});
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
+export const AboutSection = IDL.Record({
+  'title' : IDL.Text,
+  'content' : IDL.Text,
+  'link' : IDL.Bool,
+});
+export const MembershipRegistration = IDL.Record({
+  'additionalInfo' : IDL.Text,
+  'name' : IDL.Text,
+  'email' : IDL.Text,
+  'address' : IDL.Text,
+  'phone' : IDL.Text,
+});
+export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+export const Club = IDL.Record({
+  'id' : IDL.Nat,
+  'motto' : IDL.Text,
+  'aims' : IDL.Text,
+  'name' : IDL.Text,
+  'activities' : IDL.Text,
+  'history' : IDL.Text,
+  'slogan' : IDL.Text,
+  'achievements' : IDL.Text,
+  'profilePicture' : IDL.Opt(IDL.Text),
+  'program' : IDL.Text,
+});
+export const HomePageSection = IDL.Record({
+  'title' : IDL.Text,
+  'description' : IDL.Text,
+  'imageUrl' : IDL.Text,
+});
+export const SocialMediaLinks = IDL.Record({
+  'linkedin' : IDL.Text,
+  'tiktok' : IDL.Text,
+  'twitter' : IDL.Text,
+  'instagram' : IDL.Text,
+  'whatsapp' : IDL.Text,
+  'facebook' : IDL.Text,
+  'youtube' : IDL.Text,
+});
+
+export const idlService = IDL.Service({
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'createClub' : IDL.Func(
+      [
+        IDL.Text,
+        IDL.Opt(IDL.Text),
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+      ],
+      [IDL.Nat],
+      [],
+    ),
+  'deleteClub' : IDL.Func([IDL.Nat], [], []),
+  'getAboutSections' : IDL.Func([], [IDL.Vec(AboutSection)], ['query']),
+  'getAllMembershipRegistrations' : IDL.Func(
+      [],
+      [IDL.Vec(MembershipRegistration)],
+      ['query'],
+    ),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getClubs' : IDL.Func([], [IDL.Vec(Club)], ['query']),
+  'getHistoryContent' : IDL.Func([], [IDL.Text], ['query']),
+  'getHomePageSections' : IDL.Func([], [IDL.Vec(HomePageSection)], ['query']),
+  'getSocialMediaLinks' : IDL.Func([], [IDL.Opt(SocialMediaLinks)], ['query']),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'setSocialMediaLinks' : IDL.Func([SocialMediaLinks], [], []),
+  'submitMembershipRegistration' : IDL.Func([MembershipRegistration], [], []),
+  'updateAboutSections' : IDL.Func([IDL.Vec(AboutSection)], [], []),
+  'updateClub' : IDL.Func(
+      [
+        IDL.Nat,
+        IDL.Text,
+        IDL.Opt(IDL.Text),
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+      ],
+      [],
+      [],
+    ),
+  'updateHistoryContent' : IDL.Func([IDL.Text], [], []),
+  'updateHomePageSections' : IDL.Func([IDL.Vec(HomePageSection)], [], []),
+});
 
 export const idlInitArgs = [];
 
-export const idlFactory = ({ IDL }) => { return IDL.Service({}); };
+export const idlFactory = ({ IDL }) => {
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
+  const AboutSection = IDL.Record({
+    'title' : IDL.Text,
+    'content' : IDL.Text,
+    'link' : IDL.Bool,
+  });
+  const MembershipRegistration = IDL.Record({
+    'additionalInfo' : IDL.Text,
+    'name' : IDL.Text,
+    'email' : IDL.Text,
+    'address' : IDL.Text,
+    'phone' : IDL.Text,
+  });
+  const UserProfile = IDL.Record({ 'name' : IDL.Text });
+  const Club = IDL.Record({
+    'id' : IDL.Nat,
+    'motto' : IDL.Text,
+    'aims' : IDL.Text,
+    'name' : IDL.Text,
+    'activities' : IDL.Text,
+    'history' : IDL.Text,
+    'slogan' : IDL.Text,
+    'achievements' : IDL.Text,
+    'profilePicture' : IDL.Opt(IDL.Text),
+    'program' : IDL.Text,
+  });
+  const HomePageSection = IDL.Record({
+    'title' : IDL.Text,
+    'description' : IDL.Text,
+    'imageUrl' : IDL.Text,
+  });
+  const SocialMediaLinks = IDL.Record({
+    'linkedin' : IDL.Text,
+    'tiktok' : IDL.Text,
+    'twitter' : IDL.Text,
+    'instagram' : IDL.Text,
+    'whatsapp' : IDL.Text,
+    'facebook' : IDL.Text,
+    'youtube' : IDL.Text,
+  });
+  
+  return IDL.Service({
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'createClub' : IDL.Func(
+        [
+          IDL.Text,
+          IDL.Opt(IDL.Text),
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+        ],
+        [IDL.Nat],
+        [],
+      ),
+    'deleteClub' : IDL.Func([IDL.Nat], [], []),
+    'getAboutSections' : IDL.Func([], [IDL.Vec(AboutSection)], ['query']),
+    'getAllMembershipRegistrations' : IDL.Func(
+        [],
+        [IDL.Vec(MembershipRegistration)],
+        ['query'],
+      ),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getClubs' : IDL.Func([], [IDL.Vec(Club)], ['query']),
+    'getHistoryContent' : IDL.Func([], [IDL.Text], ['query']),
+    'getHomePageSections' : IDL.Func([], [IDL.Vec(HomePageSection)], ['query']),
+    'getSocialMediaLinks' : IDL.Func(
+        [],
+        [IDL.Opt(SocialMediaLinks)],
+        ['query'],
+      ),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'setSocialMediaLinks' : IDL.Func([SocialMediaLinks], [], []),
+    'submitMembershipRegistration' : IDL.Func([MembershipRegistration], [], []),
+    'updateAboutSections' : IDL.Func([IDL.Vec(AboutSection)], [], []),
+    'updateClub' : IDL.Func(
+        [
+          IDL.Nat,
+          IDL.Text,
+          IDL.Opt(IDL.Text),
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+        ],
+        [],
+        [],
+      ),
+    'updateHistoryContent' : IDL.Func([IDL.Text], [], []),
+    'updateHomePageSections' : IDL.Func([IDL.Vec(HomePageSection)], [], []),
+  });
+};
 
 export const init = ({ IDL }) => { return []; };
