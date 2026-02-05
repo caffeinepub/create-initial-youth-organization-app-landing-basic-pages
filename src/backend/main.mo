@@ -7,10 +7,8 @@ import Nat32 "mo:core/Nat32";
 import Iter "mo:core/Iter";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
-
 import BlobStorage "blob-storage/Storage";
 import MixinStorage "blob-storage/Mixin";
-
 
 actor {
   let accessControlState = AccessControl.initState();
@@ -267,3 +265,4 @@ actor {
     brandingMedia := ?branding;
   };
 };
+

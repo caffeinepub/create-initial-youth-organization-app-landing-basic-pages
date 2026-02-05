@@ -19,7 +19,10 @@ import AdminSocialLinksPage from './pages/AdminSocialLinksPage';
 import AdminAboutPage from './pages/AdminAboutPage';
 import AdminHomePageEditorPage from './pages/AdminHomePageEditorPage';
 import AdminBrandingPage from './pages/AdminBrandingPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
 import { updateSeoUrls } from './utils/seo';
+import { injectAdSenseScript } from './utils/adsense';
 
 const rootRoute = createRootRoute({
   component: AppLayout,
@@ -77,6 +80,18 @@ const membershipRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/membership',
   component: MembershipRegistrationPage,
+});
+
+const privacyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/privacy',
+  component: PrivacyPolicyPage,
+});
+
+const termsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/terms',
+  component: TermsOfServicePage,
 });
 
 const adminLoginRoute = createRoute({
@@ -143,6 +158,8 @@ const routeTree = rootRoute.addChildren([
   clubDetailRoute,
   historyRoute,
   membershipRoute,
+  privacyRoute,
+  termsRoute,
   adminLoginRoute,
   adminDashboardRoute,
   adminBrandingRoute,
@@ -168,9 +185,10 @@ declare module '@tanstack/react-router' {
 }
 
 export default function App() {
-  // Update SEO URLs on initial load
+  // Update SEO URLs and inject AdSense on initial load
   useEffect(() => {
     updateSeoUrls(window.location.pathname);
+    injectAdSenseScript();
   }, []);
 
   return <RouterProvider router={router} />;

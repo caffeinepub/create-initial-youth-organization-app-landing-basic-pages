@@ -1,11 +1,12 @@
-// Service Worker for PWA support - Version 14
-const CACHE_NAME = 'yfo-cache-v14';
+// Service Worker for PWA support - Version 19
+const CACHE_NAME = 'yfo-cache-v19';
 const STATIC_ASSETS = [
   '/manifest.webmanifest',
   '/assets/generated/yfo-logo.dim_512x512.png',
   '/assets/generated/youth-hero.dim_1600x900.png',
   '/assets/generated/yfo-pwa-icon.dim_192x192.png',
   '/assets/generated/yfo-pwa-icon.dim_512x512.png',
+  '/ads.txt',
 ];
 
 // Install event - cache static assets (excluding HTML to ensure fresh content)

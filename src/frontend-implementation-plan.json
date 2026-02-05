@@ -1,56 +1,91 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Production deploy readiness: ensure latest bundle served + enforce Google Search Console meta verification",
+  "title": "Publish Draft Version 19 to production (frontend readiness + verification gates + share behavior validation)",
   "requirements": [
     {
-      "id": "REQ-46",
-      "summary": "Ensure the production site serves the latest frontend bundle (avoid stale/cached UI after deployment) and document the production deploy flow for the public URL.",
+      "id": "REQ-58",
+      "summary": "Prepare the frontend for promoting Draft Version 19 to production by aligning production deployment documentation and cache-busting behavior so the production site serves the latest Version 19 assets.",
       "acceptanceCriteria": [
-        "Visiting https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io loads the latest frontend UI (not an older cached bundle).",
-        "The backend canister deployed corresponds to the same latest release intended for production."
+        "The production URL https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io loads successfully in a fresh browser session (no cache) and reflects the Draft Version 19 build output.",
+        "The production deployment updates the frontend canister assets (dist) and the backend canister (if the backend was changed in Draft Version 19)."
       ],
       "file_operations": [
         {
           "path": "frontend/public/sw.js",
           "operation": "modify",
-          "description": "Adjust service worker caching behavior to reduce risk of serving stale HTML/app shell after a production deployment (e.g., avoid caching navigation/index.html responses and/or force network no-store for navigations), while keeping offline support for static assets."
+          "description": "Bump the service worker cache version from v18 to v19 (e.g., CACHE_NAME and file header comment) to reduce the risk of stale cached assets after promoting Draft Version 19 to production."
         },
         {
           "path": "frontend/docs/production-deploy-google-search-console.md",
           "operation": "modify",
-          "description": "Complete and update the production deployment guide to explicitly include steps that help ensure the latest build is what users see at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io (e.g., rebuild, redeploy, verify new bundle is served, and note service worker update considerations)."
+          "description": "Update the production deployment checklist and instructions to reference Draft/Version 19 (including the service worker version note and the canonical production URL) so the documented promotion process matches Version 19."
         }
       ]
     },
     {
-      "id": "REQ-47",
-      "summary": "Guarantee the Google Search Console verification meta tag is present in the deployed HTML <head> and enforce a failing build when it’s missing using the existing verification script.",
+      "id": "REQ-59",
+      "summary": "Ensure the production promotion build verification runs the existing Google Search Console meta-tag check and blocks promotion if the tag is missing from the built HTML.",
       "acceptanceCriteria": [
-        "The deployed site’s page source for https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io includes the google-site-verification meta tag inside the <head>.",
-        "The existing check script (frontend/scripts/verify-gsc-meta.ts) runs as part of the production build/deploy pipeline and causes a non-zero exit if the meta tag is missing.",
-        "After deployment, Google Search Console can reach the site (no “site not found” due to the site not being live)."
+        "The production promotion pipeline executes the existing script at frontend/scripts/run-prod-build-with-gsc-check.ts (or equivalent existing verification step) and fails the promotion if the google-site-verification meta tag is not found in the built dist/index.html.",
+        "After successful promotion, viewing page source of https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io shows the expected Google Search Console verification meta tag in the rendered <head>."
       ],
       "file_operations": [
         {
-          "path": "frontend/index.html",
+          "path": "frontend/scripts/run-prod-build-with-gsc-check.ts",
           "operation": "modify",
-          "description": "Ensure the Google Search Console verification meta tag is present in the <head> exactly as required by the existing build-time check (do not change the token value)."
+          "description": "Update the script messaging/comments to reflect Draft Version 19 (instead of Version 16) while preserving behavior: run the production build and then execute the GSC meta verification step, failing the build when verification fails."
         },
         {
           "path": "frontend/scripts/verify-gsc-meta.ts",
           "operation": "modify",
-          "description": "Harden the existing build-time verification so it reliably fails with a non-zero exit when the required meta tag is missing in the built dist/index.html, and keep messaging aligned with production deploy usage."
+          "description": "Keep the GSC meta verification gate authoritative for production promotion; update any version-specific messaging to Version 19 and ensure the check still fails when the required google-site-verification meta tag is absent or incorrect."
         },
         {
-          "path": "frontend/scripts/run-prod-build-with-gsc-check.ts",
-          "operation": "create",
-          "description": "Add a small production build orchestrator script that runs the frontend production build and then executes frontend/scripts/verify-gsc-meta.ts, exiting non-zero on failure, so CI/deploy can invoke a single command for enforcement."
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Confirm the required Google Search Console verification meta tag remains present in the <head> (so the build-time check passes and production page source includes it)."
         },
         {
           "path": "frontend/docs/production-deploy-google-search-console.md",
           "operation": "modify",
-          "description": "Update the guide to require running the existing verification script (or the new wrapper script) as part of the production build/deploy process, and include a post-deploy check instruction to confirm the meta tag is present in the live page source at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io."
+          "description": "Document that production promotion must run the existing GSC-checked build script (frontend/scripts/run-prod-build-with-gsc-check.ts) and must not proceed if it fails."
+        }
+      ]
+    },
+    {
+      "id": "REQ-60",
+      "summary": "Verify and finalize the enhanced Share behavior across existing Share entry points: use native Web Share API when available and fall back to copying the production public URL to the clipboard with an English success message.",
+      "acceptanceCriteria": [
+        "On a device/browser that supports the Web Share API, triggering Share from the UI opens the native share prompt.",
+        "On a device/browser that does not support the Web Share API, triggering Share copies https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io to the clipboard and presents an English success message in the UI (existing pattern).",
+        "The shared/copied link uses the existing constant from frontend/src/config/publicSite.ts (production URL)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/share.ts",
+          "operation": "modify",
+          "description": "Ensure shareUrl reliably prefers navigator.share when available and falls back to clipboard copy when not (or when native share fails), returning a structured result used by the UI to show the existing English clipboard success message."
+        },
+        {
+          "path": "frontend/src/components/TopNav.tsx",
+          "operation": "modify",
+          "description": "Verify the existing Share entry point uses shareUrl(PUBLIC_SITE_URL) and that the clipboard fallback path shows the existing English success message in the UI."
+        },
+        {
+          "path": "frontend/src/components/SettingsSheet.tsx",
+          "operation": "modify",
+          "description": "Verify the existing Share entry point uses shareUrl(PUBLIC_SITE_URL) and that the clipboard fallback path shows the existing English success message in the UI."
+        },
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Verify the existing Share entry point uses shareUrl(PUBLIC_SITE_URL) and that the clipboard fallback path shows the existing English success message in the UI."
+        },
+        {
+          "path": "frontend/src/config/publicSite.ts",
+          "operation": "modify",
+          "description": "Confirm the production URL constant remains exactly https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io and is the single source used by Share flows."
         }
       ]
     }

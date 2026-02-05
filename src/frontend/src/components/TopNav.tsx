@@ -1,5 +1,5 @@
 import { Link, useRouterState, useNavigate } from '@tanstack/react-router';
-import { Menu, Settings, X, LogOut } from 'lucide-react';
+import { Menu, Settings, X, LogOut, Share2, Check } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -11,10 +11,13 @@ import { getLogoUrl } from '@/config/branding';
 import { primaryNavLinks, useMeLink } from '@/config/navLinks';
 import SettingsSheet from './SettingsSheet';
 import { useQueryClient } from '@tanstack/react-query';
+import { PUBLIC_SITE_URL } from '@/config/publicSite';
+import { shareUrl } from '@/utils/share';
 
 export default function TopNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [shareMessage, setShareMessage] = useState<string | null>(null);
   const router = useRouterState();
   const navigate = useNavigate();
   const currentPath = router.location.pathname;
@@ -30,6 +33,15 @@ export default function TopNav() {
   const handleOpenSettings = () => {
     setIsOpen(false);
     setIsSettingsOpen(true);
+  };
+
+  const handleShareLink = async () => {
+    const result = await shareUrl(PUBLIC_SITE_URL, 'The Youth And Friends Organization');
+    
+    if (result.success && result.method === 'clipboard') {
+      setShareMessage('Link copied to clipboard');
+      setTimeout(() => setShareMessage(null), 2000);
+    }
   };
 
   const handleLogout = async () => {
@@ -127,6 +139,24 @@ export default function TopNav() {
                 >
                   <Settings className="mr-3 h-5 w-5" />
                   Settings
+                </Button>
+                
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-base h-12"
+                  onClick={handleShareLink}
+                >
+                  {shareMessage ? (
+                    <>
+                      <Check className="mr-3 h-5 w-5 text-green-600" />
+                      <span className="text-green-600">{shareMessage}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Share2 className="mr-3 h-5 w-5" />
+                      Share link
+                    </>
+                  )}
                 </Button>
                 
                 <Separator className="my-2" />

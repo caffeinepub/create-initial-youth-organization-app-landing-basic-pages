@@ -1,0 +1,14 @@
+# Google AdSense ads.txt file
+# 
+# INSTRUCTIONS:
+# Replace the line below with your official Google AdSense ads.txt line(s).
+# You can find your ads.txt content in your AdSense account under:
+# Account > Sites > Show ads.txt snippet
+#
+# Example format:
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+#
+# After replacing this placeholder, redeploy your site for the changes to take effect.
+
+# Placeholder - Replace with your AdSense publisher ID
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

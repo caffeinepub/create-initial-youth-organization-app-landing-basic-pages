@@ -1,18 +1,18 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T19:08:28.376Z",
+  "generatedAt": "2026-02-05T20:41:06.520Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
+    "total": 3,
     "implemented": 2,
     "items": [
       {
-        "id": "REQ-46",
-        "summary": "Deploy the latest application build (current latest version) to the production Internet Computer canisters so the public site is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
+        "id": "REQ-58",
+        "summary": "Promote/publish the current draft build (Draft Version 19) to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the Version 19 frontend bundle and corresponding backend canister.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/public/sw.js",
@@ -24,24 +24,38 @@
         ]
       },
       {
-        "id": "REQ-47",
-        "summary": "Ensure the deployed production HTML contains the Google Search Console verification meta tag in the rendered <head> on https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0-io, and fail the build/deploy process if the meta tag is missing (using the existing build-time verification script).",
+        "id": "REQ-59",
+        "summary": "Run the existing production build verification that checks for the Google Search Console verification meta tag and block production promotion if the verification meta tag is missing from the rendered HTML head.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/index.html",
-          "frontend/scripts/verify-gsc-meta.ts",
           "frontend/scripts/run-prod-build-with-gsc-check.ts",
+          "frontend/scripts/verify-gsc-meta.ts",
+          "frontend/index.html",
           "frontend/docs/production-deploy-google-search-console.md"
         ],
         "matchedFiles": [
-          "frontend/scripts/verify-gsc-meta.ts",
           "frontend/scripts/run-prod-build-with-gsc-check.ts",
+          "frontend/scripts/verify-gsc-meta.ts",
           "frontend/docs/production-deploy-google-search-console.md"
         ]
+      },
+      {
+        "id": "REQ-60",
+        "summary": "Verify that the enhanced Share behavior is live on production: using the app’s existing Share entry points should invoke the native share prompt (Web Share API) when available and fall back to copying the public URL to the clipboard when not available.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/utils/share.ts",
+          "frontend/src/components/TopNav.tsx",
+          "frontend/src/components/SettingsSheet.tsx",
+          "frontend/src/components/Footer.tsx",
+          "frontend/src/config/publicSite.ts"
+        ],
+        "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",

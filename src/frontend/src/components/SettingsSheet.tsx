@@ -12,27 +12,26 @@ import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useTheme } from '@/hooks/useTheme';
 import { usePwaInstallPrompt } from '@/hooks/usePwaInstallPrompt';
-import { Copy, Check, Download, Sun, Moon } from 'lucide-react';
+import { Share2, Check, Download, Sun, Moon } from 'lucide-react';
+import { PUBLIC_SITE_URL } from '@/config/publicSite';
+import { shareUrl } from '@/utils/share';
 
 interface SettingsSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const SHARE_URL = 'https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io';
-
 export default function SettingsSheet({ open, onOpenChange }: SettingsSheetProps) {
   const { theme, toggleTheme, isDark } = useTheme();
   const { isInstallable, promptInstall } = usePwaInstallPrompt();
-  const [copied, setCopied] = useState(false);
+  const [shareMessage, setShareMessage] = useState<string | null>(null);
 
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(SHARE_URL);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error('Failed to copy link:', error);
+  const handleShareLink = async () => {
+    const result = await shareUrl(PUBLIC_SITE_URL, 'The Youth And Friends Organization');
+    
+    if (result.success && result.method === 'clipboard') {
+      setShareMessage('Link copied to clipboard');
+      setTimeout(() => setShareMessage(null), 2000);
     }
   };
 
@@ -76,31 +75,31 @@ export default function SettingsSheet({ open, onOpenChange }: SettingsSheetProps
 
           {/* Share Link */}
           <div className="space-y-3">
-            <Label className="text-base font-semibold">Share Link</Label>
+            <Label className="text-base font-semibold">Share link</Label>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">
                 Share this link with colleagues to invite them to the app:
               </p>
               <div className="flex items-center gap-2">
                 <div className="flex-1 rounded-md border bg-muted/50 px-3 py-2 text-sm">
-                  {SHARE_URL}
+                  {PUBLIC_SITE_URL}
                 </div>
                 <Button
                   size="icon"
                   variant="outline"
-                  onClick={handleCopyLink}
+                  onClick={handleShareLink}
                   className="shrink-0"
                 >
-                  {copied ? (
+                  {shareMessage ? (
                     <Check className="h-4 w-4 text-green-600" />
                   ) : (
-                    <Copy className="h-4 w-4" />
+                    <Share2 className="h-4 w-4" />
                   )}
-                  <span className="sr-only">Copy link</span>
+                  <span className="sr-only">Share link</span>
                 </Button>
               </div>
-              {copied && (
-                <p className="text-sm text-green-600 font-medium">Link copied to clipboard!</p>
+              {shareMessage && (
+                <p className="text-sm text-green-600 font-medium">{shareMessage}</p>
               )}
             </div>
           </div>

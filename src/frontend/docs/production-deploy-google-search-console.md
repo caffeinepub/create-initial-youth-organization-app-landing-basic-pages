@@ -1,6 +1,6 @@
 # Production Deployment & Google Search Console Verification
 
-This guide covers deploying Version 14 of your application to production on the Internet Computer and verifying ownership with Google Search Console.
+This guide covers deploying Version 19 of your application to production on the Internet Computer and verifying ownership with Google Search Console.
 
 ## Prerequisites
 
@@ -24,8 +24,10 @@ Before deploying to production, verify:
 - [ ] Google Search Console meta tag is present in `frontend/index.html`
 - [ ] All code changes are committed
 - [ ] Local build succeeds without errors
-- [ ] Service worker version is updated (currently v14)
+- [ ] Service worker version is updated to v19
+- [ ] ads.txt file is configured (if using AdSense)
 - [ ] You have sufficient cycles in your wallet
+- [ ] Enhanced share functionality (native Web Share API + clipboard fallback) is working
 
 ### Step 1: Build with Verification
 

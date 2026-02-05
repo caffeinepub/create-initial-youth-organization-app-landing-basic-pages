@@ -2,8 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-deploy-the-latest-application-build-current-latest-version-to-the-production-internet-computer-canisters-so-the-public-site-is-served-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io",
-      "featureTitle": "Deploy the latest application build (current latest version) to the production Internet Computer canisters so the public site is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
+      "featureId": "feature-promote-publish-the-current-draft-build-draft-version-19-to-the-production-internet-computer-canisters-so-the-public-site-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-serves-the-version-19-frontend-bundle-and-corresponding-backend-canister",
+      "featureTitle": "Promote/publish the current draft build (Draft Version 19) to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the Version 19 frontend bundle and corresponding backend canister.",
       "files": [
         "frontend/docs/production-deploy-google-search-console.md",
         "frontend/public/sw.js"
@@ -18,13 +18,13 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-46"
+        "REQ-58"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-ensure-the-deployed-production-html-contains-the-google-search-console-verification-meta-tag-in-the-rendered-head-on-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-and-fail-the-build-deploy-process-if-the-meta-tag-is-missing-using-the-existing-build-time-verification-script",
-      "featureTitle": "Ensure the deployed production HTML contains the Google Search Console verification meta tag in the rendered <head> on https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0-io, and fail the build/deploy process if the meta tag is missing (using the existing build-time verification script).",
+      "featureId": "feature-run-the-existing-production-build-verification-that-checks-for-the-google-search-console-verification-meta-tag-and-block-production-promotion-if-the-verification-meta-tag-is-missing-from-the-rendered-html-head",
+      "featureTitle": "Run the existing production build verification that checks for the Google Search Console verification meta tag and block production promotion if the verification meta tag is missing from the rendered HTML head.",
       "files": [
         "frontend/docs/production-deploy-google-search-console.md",
         "frontend/scripts/run-prod-build-with-gsc-check.ts",
@@ -40,7 +40,7 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-47"
+        "REQ-59"
       ],
       "confidence": "high"
     }

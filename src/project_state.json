@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 37,
-  "summary": "Project scope includes UI/navigation refinements for the web app (move main menu to a bottom button on the main/home interface, repurpose the hamburger/three-lines menu to settings/close/logout, and add a theme toggle), plus sharing/accessibility requests (shareable link for colleagues and improved add-to-home-screen/PWA access), alongside existing deployment/SEO and potential APK distribution goals.",
+  "projectStateVersion": 47,
+  "summary": "Project scope includes UI/navigation refinements for the web app (move main menu to a bottom button on the main/home interface, repurpose the hamburger/three-lines menu to settings/close/logout, and add a theme toggle), plus sharing/accessibility requests (shareable link for colleagues and improved add-to-home-screen/PWA access), alongside existing deployment/SEO goals and potential APK distribution goals, with an added request to support Google Ads/AdSense readiness for monetization/advertising.",
   "architectural_notes": [
     "Frontend uses React + Vite with Tailwind CSS and shadcn/ui component primitives.",
     "ICP backend is a Motoko canister with Candid bindings generated for the frontend.",
@@ -18,7 +18,7 @@
     "Google Search Console verification failing with \"site not found\" because the production site HTML does not currently expose the expected google-site-verification meta tag; requires publishing the latest (v9) deployment to production and re-verifying.",
     "Production deployment is showing an incorrect logo/image (not the user-provided asset), including within the admin interface."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "generatedImages": [
     {
       "filename": "frontend/public/assets/generated/yfo-logo.dim_512x512.png",
@@ -449,6 +449,102 @@
         "REQ-47"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-make-the-public-production-site-url-clearly-available-to-the-user-for-sharing-advertising-by-surfacing-the-existing-production-url-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-in-a-prominent-easy-to-copy-location-in-the-public-ui-in-addition-to-the-existing-settings-share-link",
+      "title": "Make the public production site URL clearly available to the user for sharing/advertising by surfacing the existing production URL (https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io) in a prominent, easy-to-copy location in the public UI (in addition to the existing Settings share link).",
+      "reqIds": [
+        "REQ-48"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-google-adsense-readiness-by-serving-an-ads-txt-file-from-the-site-root-and-documenting-where-to-put-the-publisher-content-without-requiring-any-backend-changes",
+      "title": "Add Google AdSense readiness by serving an ads.txt file from the site root and documenting where to put the publisher content, without requiring any backend changes.",
+      "reqIds": [
+        "REQ-49"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-optional-configuration-driven-adsense-script-include-so-the-site-can-be-linked-to-google-adsense-when-the-user-provides-their-adsense-publisher-client-identifier-without-hardcoding-any-account-specific-ids-into-the-repository",
+      "title": "Add an optional, configuration-driven AdSense script include so the site can be linked to Google AdSense when the user provides their AdSense publisher/client identifier, without hardcoding any account-specific IDs into the repository.",
+      "reqIds": [
+        "REQ-50"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-basic-crawlable-policy-pages-commonly-required-for-advertising-monetization-review-a-public-privacy-policy-page-and-a-public-terms-page-linked-from-the-site-footer-using-english-user-facing-text",
+      "title": "Add basic, crawlable policy pages commonly required for advertising/monetization review: a Public Privacy Policy page and a Public Terms page, linked from the site footer using English user-facing text.",
+      "reqIds": [
+        "REQ-51"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-promote-the-currently-deployed-draft-version-16-to-the-production-internet-computer-canisters-so-the-public-site-serves-the-version-16-frontend-bundle-and-backend-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io",
+      "title": "Promote the currently deployed draft (Version 16) to the production Internet Computer canisters so the public site serves the Version 16 frontend bundle and backend at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
+      "reqIds": [
+        "REQ-52"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-run-the-existing-production-build-verification-that-checks-for-the-google-search-console-verification-meta-tag-and-block-the-production-promotion-if-the-tag-is-missing-from-the-rendered-html-head-output",
+      "title": "Run the existing production build verification that checks for the Google Search Console verification meta tag, and block the production promotion if the tag is missing from the rendered HTML <head> output.",
+      "reqIds": [
+        "REQ-53"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-adsense-readiness-static-file-is-accessible-from-the-production-site-root-by-confirming-ads-txt-is-served-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-ads-txt-after-the-production-deployment",
+      "title": "Ensure the AdSense readiness static file is accessible from the production site root by confirming /ads.txt is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io/ads.txt after the production deployment.",
+      "reqIds": [
+        "REQ-54"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-new-action-in-the-mobile-hamburger-menu-the-same-menu-that-currently-contains-settings-close-and-logout-in-frontend-src-components-topnav-tsx-labeled-share-link-that-allows-the-user-to-quickly-copy-the-public-site-url-to-the-clipboard-from-that-menu",
+      "title": "Add a new action in the mobile hamburger menu (the same menu that currently contains Settings, Close, and Logout in `frontend/src/components/TopNav.tsx`) labeled \"Share link\" that allows the user to quickly copy the public site URL to the clipboard from that menu.",
+      "reqIds": [
+        "REQ-55"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-promote-publish-draft-version-18-to-the-production-internet-computer-canisters-so-the-public-site-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-includes-the-share-button-on-the-publicly-accessible-ui",
+      "title": "Promote/publish Draft Version 18 to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io includes the Share button on the publicly accessible UI.",
+      "reqIds": [
+        "REQ-56"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-existing-share-entry-point-currently-a-copy-link-action-so-that-clicking-it-opens-the-device-browser-native-share-prompt-web-share-api-when-available-allowing-users-to-choose-a-destination-app-service-e-g-facebook-whatsapp-instagram-google-drive-messages-and-other-installed-share-targets",
+      "title": "Update the existing Share entry point (currently a copy-link action) so that clicking it opens the device/browser native share prompt (Web Share API) when available, allowing users to choose a destination app/service (e.g., Facebook, WhatsApp, Instagram, Google Drive, Messages, and other installed share targets).",
+      "reqIds": [
+        "REQ-57"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-promote-publish-the-current-draft-build-draft-version-19-to-the-production-internet-computer-canisters-so-the-public-site-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-serves-the-version-19-frontend-bundle-and-corresponding-backend-canister",
+      "title": "Promote/publish the current draft build (Draft Version 19) to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the Version 19 frontend bundle and corresponding backend canister.",
+      "reqIds": [
+        "REQ-58"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-run-the-existing-production-build-verification-that-checks-for-the-google-search-console-verification-meta-tag-and-block-production-promotion-if-the-verification-meta-tag-is-missing-from-the-rendered-html-head",
+      "title": "Run the existing production build verification that checks for the Google Search Console verification meta tag and block production promotion if the verification meta tag is missing from the rendered HTML head.",
+      "reqIds": [
+        "REQ-59"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -640,6 +736,50 @@
       "id": "AR-32",
       "summary": "Provide a shareable access link (public URL) that can be sent to colleagues to preview/use the web app, and ensure the app can be accessed via an add-to-home-screen style workflow (PWA install) even before Google Search Console verification is completed.",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Make the site compatible with Google AdSense/ads workflows (e.g., ensure required verification/ownership steps and any needed site metadata/policies/pages are supported) so the user can link the site to Google AdSense and run Google Ads.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-34",
+      "summary": "Deploy/push the currently deployed draft (Version 16) to the production ICP canisters so the user can share the live link and proceed with Google Ads/AdSense.",
+      "reqIds": [],
+      "status": "in_progress"
+    },
+    {
+      "id": "AR-35",
+      "summary": "Add a “Share” button entry in the mobile hamburger menu (where Close and Logout are) so users can quickly copy/get the public link from that menu.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-36",
+      "summary": "Update the in-app Share button behavior so clicking it opens a platform share prompt/sheet with share targets such as Facebook, WhatsApp, Instagram, Google Drive, Messages, etc. (not just copying the link).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-37",
+      "summary": "Publish/promote Draft Version 18 to production so the public link includes the Share button.",
+      "reqIds": [],
+      "status": "in_progress"
+    },
+    {
+      "id": "AR-38",
+      "summary": "Publish/promote Draft Version 19 to production so the enhanced share options go live on the public site.",
+      "reqIds": [],
+      "status": "in_progress"
+    },
+    {
+      "id": "AR-41",
+      "summary": "Verify that the enhanced Share behavior is live on production: using the app’s existing Share entry points should invoke the native share prompt (Web Share API) when available and fall back to copying the public URL to the clipboard when not available.",
+      "reqIds": [
+        "REQ-60"
+      ],
       "status": "pending"
     }
   ],

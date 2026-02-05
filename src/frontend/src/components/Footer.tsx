@@ -1,9 +1,14 @@
+import { useState } from 'react';
 import { SiFacebook, SiInstagram, SiX, SiLinkedin, SiYoutube, SiTiktok, SiWhatsapp } from 'react-icons/si';
-import { Heart } from 'lucide-react';
+import { Heart, Share2, Check } from 'lucide-react';
 import { useGetSocialMediaLinks } from '@/hooks/useQueries';
+import { Button } from '@/components/ui/button';
+import { PUBLIC_SITE_URL } from '@/config/publicSite';
+import { shareUrl } from '@/utils/share';
 
 export default function Footer() {
   const { data: socialLinks } = useGetSocialMediaLinks();
+  const [shareMessage, setShareMessage] = useState<string | null>(null);
 
   const socialPlatforms = [
     { name: 'Facebook', icon: SiFacebook, url: socialLinks?.facebook, label: 'Facebook' },
@@ -16,6 +21,15 @@ export default function Footer() {
   ];
 
   const activeSocialLinks = socialPlatforms.filter((platform) => platform.url && platform.url.trim() !== '');
+
+  const handleShareLink = async () => {
+    const result = await shareUrl(PUBLIC_SITE_URL, 'The Youth And Friends Organization');
+    
+    if (result.success && result.method === 'clipboard') {
+      setShareMessage('Link copied to clipboard');
+      setTimeout(() => setShareMessage(null), 2000);
+    }
+  };
 
   return (
     <footer className="border-t border-border/40 bg-muted/30">
@@ -74,13 +88,23 @@ export default function Footer() {
                   Get in Touch
                 </a>
               </li>
+              <li>
+                <a href="/privacy" className="hover:text-primary transition-colors">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="/terms" className="hover:text-primary transition-colors">
+                  Terms of Service
+                </a>
+              </li>
             </ul>
           </div>
 
           <div>
             <h3 className="font-semibold mb-4">Connect With Us</h3>
             {activeSocialLinks.length > 0 ? (
-              <div className="flex gap-3 flex-wrap">
+              <div className="flex gap-3 flex-wrap mb-6">
                 {activeSocialLinks.map((platform) => {
                   const Icon = platform.icon;
                   return (
@@ -98,10 +122,39 @@ export default function Footer() {
                 })}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground mb-6">
                 Social media links will appear here once configured.
               </p>
             )}
+
+            {/* Public Site Link */}
+            <div className="space-y-2">
+              <h4 className="text-sm font-semibold">Public Site Link</h4>
+              <p className="text-xs text-muted-foreground">
+                Share this link on social media or use it for advertising:
+              </p>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 rounded-md border bg-background px-3 py-2 text-xs break-all">
+                  {PUBLIC_SITE_URL}
+                </div>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  onClick={handleShareLink}
+                  className="shrink-0 h-9 w-9"
+                >
+                  {shareMessage ? (
+                    <Check className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <Share2 className="h-4 w-4" />
+                  )}
+                  <span className="sr-only">Share link</span>
+                </Button>
+              </div>
+              {shareMessage && (
+                <p className="text-xs text-green-600 font-medium">{shareMessage}</p>
+              )}
+            </div>
           </div>
         </div>
 

@@ -1,46 +1,50 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T19:08:28.371Z",
-  "summary": "Diff adds a new production build orchestrator script and enhances the existing GSC meta verification script; it also updates the service worker cache strategy/versioning and adds/updates deployment documentation. However, the diff does not show actual production deployment changes, nor does it show the verification script being wired into the production build/deploy pipeline or the meta tag being added/confirmed in the source HTML.",
+  "generatedAt": "2026-02-05T20:41:06.516Z",
+  "summary": "Diff implements/updates production build gating for Google Search Console verification (REQ-59) and indicates enhanced Share behavior in UI components, but does not provide evidence of an actual production canister promotion/deploy (REQ-58). Diff also appears to introduce AdSense/ads.txt-related behavior not requested and disallowed by constraints.",
   "missing_requirements": [
     {
-      "id": "REQ-46",
-      "requirement": "Deploy the latest application build (current latest version) to the production Internet Computer canisters so the public site is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
-      "reason": "The diff only shows scripts/docs/service-worker changes; it does not include any canister deployment configuration or automation changes (e.g., dfx deploy pipeline updates) that would evidence a production deployment of both frontend and backend to the specified canisters.",
+      "id": "REQ-58",
+      "requirement": "Promote/publish the current draft build (Draft Version 19) to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the Version 19 frontend bundle and corresponding backend canister.",
+      "reason": "The diff shows documentation and local scripts, but no evidence of changes to production deployment configuration/pipeline or canister promotion steps that would actually publish to the production canisters.",
       "evidence": [
         "frontend/docs/production-deploy-google-search-console.md",
-        "project_state.json"
+        "frontend/scripts/run-prod-build-with-gsc-check.ts",
+        "frontend/scripts/verify-gsc-meta.ts"
       ]
     },
     {
-      "id": "REQ-47",
-      "requirement": "Ensure the deployed production HTML contains the Google Search Console verification meta tag in the rendered <head> on https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io, and fail the build/deploy process if the meta tag is missing (using the existing build-time verification script).",
-      "reason": "While the verification script exists/was modified and a new wrapper script was added, the diff does not show (1) the meta tag being present in the HTML source template (e.g., frontend/index.html) nor (2) any change that ensures the check runs as part of the actual production build/deploy pipeline (e.g., package.json scripts/CI config).",
+      "id": "REQ-60",
+      "requirement": "Enhanced Share on production must use Web Share API when available, otherwise copy https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io to clipboard with an English success message, and the shared/copied link must use the existing constant from frontend/src/config/publicSite.ts.",
+      "reason": "File summaries mention native share + clipboard fallback, but the diff does not include the actual component code or any reference showing the link is sourced from frontend/src/config/publicSite.ts (or that the exact production URL is used). With only summaries, this cannot be confirmed.",
       "evidence": [
-        "frontend/scripts/verify-gsc-meta.ts",
-        "frontend/scripts/run-prod-build-with-gsc-check.ts"
+        "frontend-file-summaries.txt"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Service worker cache version bump to v14 and a new fetch strategy (network-first for navigation with no-store; cache behavior changes).",
-      "reason": "Not requested explicitly; REQ-46 is about deploying latest build and avoiding an older cached bundle, but this is an additional PWA/service-worker feature change beyond ensuring the GSC verification meta tag is present and deployed.",
+      "description": "AdSense/advertising integration behavior (AdSense script injection, ads.txt considerations) introduced as part of Version 19 changes.",
+      "reason": "BuildRequest explicitly disallows new third-party integrations/analytics; AdSense script injection and ads.txt deployment guidance go beyond the requested promotion + GSC verification + existing enhanced Share deployment.",
       "evidence": [
-        "frontend/public/sw.js"
+        "frontend-file-summaries.txt",
+        "frontend/docs/production-deploy-google-search-console.md",
+        "frontend/public/sw.js",
+        "frontend/scripts/verify-gsc-meta.ts"
       ]
     },
     {
-      "description": "New/updated production deployment documentation referring to “Version 14”, service worker version updates, and a detailed manual checklist.",
-      "reason": "BuildRequest focuses on deploying latest build and ensuring the existing GSC verification meta tag check is enforced; this doc content (versioning details, extra checklist items) is not explicitly requested.",
+      "description": "New site routes/pages for /privacy and /terms.",
+      "reason": "Not requested in REQ-58/59/60 and qualifies as additional feature scope beyond deploying the already-implemented enhanced Share behavior.",
       "evidence": [
-        "frontend/docs/production-deploy-google-search-console.md"
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.74,
+  "confidence": 0.66,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
     "frontend/docs/production-deploy-google-search-console.md",
     "frontend/public/sw.js",

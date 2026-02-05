@@ -1,53 +1,70 @@
 {
   "kind": "build_request",
-  "title": "Deploy latest production build with Google Search Console verification meta tag",
+  "title": "Publish Draft Version 19 to production so enhanced Share goes live",
   "priority": "high",
   "requirements": [
     {
-      "id": "REQ-46",
-      "text": "Deploy the latest application build (current latest version) to the production Internet Computer canisters so the public site is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
+      "id": "REQ-58",
+      "text": "Promote/publish the current draft build (Draft Version 19) to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the Version 19 frontend bundle and corresponding backend canister.",
       "target": "both",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "Can you deploy the site with the latest version with the meta tag so that when I click on it to go life then I do the verification"
+          "Publish it to production now to enhance share option to go live"
         ]
       },
       "acceptanceCriteria": [
-        "Visiting https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io loads the latest frontend UI (not an older cached bundle).",
-        "The backend canister deployed corresponds to the same latest release intended for production."
+        "The production URL https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io loads successfully in a fresh browser session (no cache) and reflects the Draft Version 19 build output.",
+        "The production deployment updates the frontend canister assets (dist) and the backend canister (if the backend was changed in Draft Version 19)."
       ]
     },
     {
-      "id": "REQ-47",
-      "text": "Ensure the deployed production HTML contains the Google Search Console verification meta tag in the rendered <head> on https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0-io, and fail the build/deploy process if the meta tag is missing (using the existing build-time verification script).",
+      "id": "REQ-59",
+      "text": "Run the existing production build verification that checks for the Google Search Console verification meta tag and block production promotion if the verification meta tag is missing from the rendered HTML head.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "deploy the site with the latest version with the meta tag"
+          "Publish it to production now to enhance share option to go live"
         ]
       },
       "acceptanceCriteria": [
-        "The deployed site’s page source for https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io includes the google-site-verification meta tag inside the <head>.",
-        "The existing check script (frontend/scripts/verify-gsc-meta.ts) runs as part of the production build/deploy pipeline and causes a non-zero exit if the meta tag is missing.",
-        "After deployment, Google Search Console can reach the site (no “site not found” due to the site not being live)."
+        "The production promotion pipeline executes the existing script at frontend/scripts/run-prod-build-with-gsc-check.ts (or equivalent existing verification step) and fails the promotion if the google-site-verification meta tag is not found in the built dist/index.html.",
+        "After successful promotion, viewing page source of https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io shows the expected Google Search Console verification meta tag in the rendered <head>."
+      ]
+    },
+    {
+      "id": "REQ-60",
+      "text": "Verify that the enhanced Share behavior is live on production: using the app’s existing Share entry points should invoke the native share prompt (Web Share API) when available and fall back to copying the public URL to the clipboard when not available.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Publish it to production now to enhance share option to go live"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On a device/browser that supports the Web Share API, triggering Share from the UI opens the native share prompt.",
+        "On a device/browser that does not support the Web Share API, triggering Share copies https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io to the clipboard and presents an English success message in the UI (existing pattern).",
+        "The shared/copied link uses the existing constant from frontend/src/config/publicSite.ts (production URL)."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
-    "Do not edit frontend immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, and anything under frontend/src/components/ui.",
-    "Use English for any user-facing text."
+    "Do not modify files under frontend/src/components/ui (shadcn/ui sources); compose them only.",
+    "Do not edit immutable hook paths listed in SYSTEM_CONTEXT (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx).",
+    "Backend must remain single-actor; keep Motoko logic in backend/main.mo. Add backend/migration.mo only if a stable-state upgrade is required for Draft Version 19."
   ],
   "nonGoals": [
-    "Adding or changing any new SEO features beyond ensuring the existing verification meta tag is present on the live production site.",
-    "Changing the Google Search Console verification token value (only ensure it is present and deployed).",
-    "Implementing new app features unrelated to production deployment and verification."
+    "Do not introduce new Share features beyond deploying the already-implemented enhanced Share behavior in Draft Version 19.",
+    "Do not change the production URL (must remain https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io).",
+    "Do not add new third-party integrations or analytics as part of this deployment."
   ],
   "imageRequirements": {
     "required": [],
@@ -56,7 +73,9 @@
   "userProfileUpdate": {
     "goalsToAdd": [],
     "goalsToRemove": [],
-    "preferencesToAdd": [],
+    "preferencesToAdd": [
+      "Use English for any user-facing text."
+    ],
     "preferencesToRemove": [],
     "miscToAdd": [],
     "miscToRemove": [],

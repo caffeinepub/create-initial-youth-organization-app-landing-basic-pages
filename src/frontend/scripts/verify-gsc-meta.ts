@@ -1,7 +1,7 @@
 /**
  * Build-time verification script for Google Search Console meta tag
  * Ensures the required verification tag is present in the built HTML output
- * Version 14 - Production readiness check with enhanced validation
+ * Version 19 - Production readiness check with enhanced validation
  */
 
 import { readFileSync, existsSync } from 'fs';
@@ -38,14 +38,16 @@ function verifyGSCMeta() {
   }
 
   console.log('✅ Google Search Console verification meta tag verified in dist/index.html');
-  console.log('✅ Version 14 is ready for production deployment');
+  console.log('✅ Version 19 is ready for production deployment');
   console.log('');
   console.log('📋 Next steps for deployment:');
   console.log('  1. Deploy backend: dfx deploy backend --network ic');
   console.log('  2. Deploy frontend: dfx deploy frontend --network ic');
   console.log(`  3. Visit production URL: ${PRODUCTION_URL}`);
   console.log('  4. Verify the meta tag is live (view page source)');
-  console.log('  5. Complete verification in Google Search Console');
+  console.log('  5. Test enhanced share functionality (native + clipboard fallback)');
+  console.log('  6. Complete verification in Google Search Console');
+  console.log('  7. Verify /ads.txt is accessible at the site root');
   console.log('');
   console.log('💡 Tip: After deployment, users may need to hard refresh (Ctrl+Shift+R)');
   console.log('   to see the latest version due to browser caching.');

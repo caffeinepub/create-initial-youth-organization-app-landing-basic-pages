@@ -1,12 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Deploy the latest production build to the Internet Computer and ensure the Google Search Console verification meta tag is present in the live site’s HTML head.
+**Goal:** Promote Draft Version 19 to production so the enhanced Share behavior is live on the public site.
 
 **Planned changes:**
-- Deploy the latest frontend build to the production canisters so https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the current (non-stale) UI.
-- Deploy the corresponding latest backend canister release alongside the frontend.
-- Ensure the production build/deploy pipeline runs the existing Google Search Console meta-tag verification script and fails if the required meta tag is missing.
-- Verify the deployed site’s rendered `<head>` includes the `google-site-verification` meta tag so Search Console can validate the live site.
+- Publish/promote the Draft Version 19 frontend bundle to the production Internet Computer frontend canister so https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves Version 19 assets.
+- Publish/promote the corresponding backend canister to production only if Draft Version 19 includes backend changes.
+- Run the existing production build verification that checks for the Google Search Console verification meta tag, and block promotion if the tag is missing.
+- Verify the enhanced Share behavior on production: use the native Web Share API when available, otherwise copy the production public URL to the clipboard and show an English success message.
 
-**User-visible outcome:** Visiting https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io loads the latest live production site, and Google Search Console can verify ownership using the meta tag present in the page source.
+**User-visible outcome:** Visiting https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io loads the Draft Version 19 build, includes the Google Search Console verification meta tag in page source, and Share uses native sharing when supported (or copies the production URL when not).
