@@ -1,0 +1,93 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-create-a-responsive-multi-page-frontend-scaffold-for-a-youth-organization-app-with-a-top-navigation-and-the-following-pages-home-about-programs-events-contact",
+      "featureTitle": "Create a responsive, multi-page frontend scaffold for a youth organization app with a top navigation and the following pages: Home, About, Programs, Events, Contact.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/TopNav.tsx",
+        "frontend/src/layouts/AppLayout.tsx",
+        "frontend/src/main.tsx",
+        "frontend/src/pages/AboutPage.tsx",
+        "frontend/src/pages/ContactPage.tsx",
+        "frontend/src/pages/EventsPage.tsx",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/pages/ProgramsPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-coherent-visual-theme-appropriate-for-a-youth-organization-colors-typography-spacing-components-and-use-it-consistently-across-all-pages",
+      "featureTitle": "Apply a coherent visual theme appropriate for a youth organization (colors, typography, spacing, components) and use it consistently across all pages.",
+      "files": [
+        "frontend/src/index.css",
+        "frontend/src/layouts/AppLayout.tsx",
+        "frontend/src/pages/AboutPage.tsx",
+        "frontend/src/pages/ContactPage.tsx",
+        "frontend/src/pages/EventsPage.tsx",
+        "frontend/src/pages/ProgramsPage.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-home-page-hero-section-that-uses-a-generated-hero-image-and-includes-an-english-headline-and-short-description-suitable-for-a-youth-organization",
+      "featureTitle": "Add a Home page hero section that uses a generated hero image and includes an English headline and short description suitable for a youth organization.",
+      "files": [
+        "frontend/src/layouts/AppLayout.tsx",
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-generated-static-image-assets-to-the-project-under-frontend-public-assets-generated-and-render-them-in-the-ui-where-appropriate-e-g-hero-and-logo",
+      "featureTitle": "Add generated static image assets to the project under frontend/public/assets/generated and render them in the UI where appropriate (e.g., hero and logo).",
+      "files": [
+        "frontend/src/components/TopNav.tsx",
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "App for a youth organization",
+  "existing_features": [
+    {
+      "id": "feature-create-a-responsive-multi-page-frontend-scaffold-for-a-youth-organization-app-with-a-top-navigation-and-the-following-pages-home-about-programs-events-contact",
+      "title": "Create a responsive, multi-page frontend scaffold for a youth organization app with a top navigation and the following pages: Home, About, Programs, Events, Contact.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-visual-theme-appropriate-for-a-youth-organization-colors-typography-spacing-components-and-use-it-consistently-across-all-pages",
+      "title": "Apply a coherent visual theme appropriate for a youth organization (colors, typography, spacing, components) and use it consistently across all pages.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-home-page-hero-section-that-uses-a-generated-hero-image-and-includes-an-english-headline-and-short-description-suitable-for-a-youth-organization",
+      "title": "Add a Home page hero section that uses a generated hero image and includes an English headline and short description suitable for a youth organization.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-generated-static-image-assets-to-the-project-under-frontend-public-assets-generated-and-render-them-in-the-ui-where-appropriate-e-g-hero-and-logo",
+      "title": "Add generated static image assets to the project under frontend/public/assets/generated and render them in the UI where appropriate (e.g., hero and logo).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [],
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Friendly youth-organization logo mark, flat vector style (youth-logo.dim_512x512.png)\n- Warm, energetic hero banner illustration/photo-collage style with diverse youths, no text (youth-hero.dim_1600x900.png)\n- Small set of 3 simple flat icons representing activities/learning/community (youth-icons.dim_768x256.png)",
+  "generatedImages": [
+    {
+      "filename": "youth-logo.dim_512x512.png",
+      "description": "Friendly youth-organization logo mark, flat vector style",
+      "targetWidth": 512,
+      "targetHeight": 512
+    },
+    {
+      "filename": "youth-hero.dim_1600x900.png",
+      "description": "Warm, energetic hero banner illustration/photo-collage style with diverse youths, no text",
+      "targetWidth": 1600,
+      "targetHeight": 900
+    },
+    {
+      "filename": "youth-icons.dim_768x256.png",
+      "description": "Small set of 3 simple flat icons representing activities/learning/community",
+      "targetWidth": 768,
+      "targetHeight": 256
+    }
+  ],
+  "projectName": "Create initial youth organization app (landing + basic pages)",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

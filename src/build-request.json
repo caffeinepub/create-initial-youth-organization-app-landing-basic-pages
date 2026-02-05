@@ -1,0 +1,111 @@
+{
+  "kind": "build_request",
+  "title": "Create initial youth organization app (landing + basic pages)",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a responsive, multi-page frontend scaffold for a youth organization app with a top navigation and the following pages: Home, About, Programs, Events, Contact.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "An app for a youth organization"
+        ]
+      },
+      "acceptanceCriteria": [
+        "App loads successfully from the template and shows a consistent top navigation on all pages.",
+        "Each page renders distinct placeholder content in English that can be edited later.",
+        "Navigation works without full page reloads.",
+        "Layout is mobile-first and remains usable on common breakpoints (mobile/tablet/desktop)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Apply a coherent visual theme appropriate for a youth organization (colors, typography, spacing, components) and use it consistently across all pages.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "An app for a youth organization"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Theme is consistent across pages (buttons, headings, cards, links).",
+        "Theme does not use a blue/purple primary palette.",
+        "Typography hierarchy is clear (H1/H2/body)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a Home page hero section that uses a generated hero image and includes an English headline and short description suitable for a youth organization.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "An app for a youth organization"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Home page displays the hero image from frontend/public/assets/generated.",
+        "Hero includes an English headline and supporting text.",
+        "Hero section remains readable and well-laid-out on mobile."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add generated static image assets to the project under frontend/public/assets/generated and render them in the UI where appropriate (e.g., hero and logo).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "An app for a youth organization"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images exist in frontend/public/assets/generated with the specified filenames.",
+        "At least the logo and hero image are displayed in the UI.",
+        "No backend is used to serve or transform these images."
+      ]
+    }
+  ],
+  "constraints": [
+    "Use English for all user-facing text.",
+    "Do not modify files under frontend/src/components/ui or other immutable paths listed in SYSTEM_CONTEXT.",
+    "Keep backend changes minimal unless required; do not introduce additional backend services beyond the single Motoko actor."
+  ],
+  "nonGoals": [
+    "Member management features (sign-up, roles, permissions).",
+    "Event registration, ticketing, or payments.",
+    "Messaging/chat or real-time features.",
+    "External integrations (social media APIs, maps, email providers)."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Friendly youth-organization logo mark, flat vector style (youth-logo.dim_512x512.png)",
+      "Warm, energetic hero banner illustration/photo-collage style with diverse youths, no text (youth-hero.dim_1600x900.png)",
+      "Small set of 3 simple flat icons representing activities/learning/community (youth-icons.dim_768x256.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Use English for all user-facing text."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

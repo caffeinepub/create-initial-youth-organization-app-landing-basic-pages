@@ -1,0 +1,23 @@
+{
+  "backend/main.mo": "Minimal Motoko canister with an empty actor.",
+  "feature_evidence.json": "Feature evidence report listing implemented features, associated files, components, and test IDs.",
+  "frontend-file-summaries.txt": "Text file containing short summaries of all major frontend source files.",
+  "frontend/index.css": "Tailwind base styles defining OKLCH color tokens, theming variables, and dark mode variants.",
+  "frontend/index.html": "HTML entry file mounting the React app and loading main.tsx.",
+  "frontend/src/App.tsx": "Sets up TanStack Router and maps routes to Home, About, Programs, Events, and Contact pages.",
+  "frontend/src/components/Footer.tsx": "Footer with branding, navigation links, social icons, and attribution.",
+  "frontend/src/components/TopNav.tsx": "Responsive navigation bar with logo, desktop menu, and mobile sheet menu highlighting active routes.",
+  "frontend/src/hooks/useActor.ts": "React hook that creates and manages an authenticated or anonymous backend actor and refreshes queries on identity change.",
+  "frontend/src/hooks/useInternetIdentity.ts": "Context and hooks for managing Internet Identity authentication, state, and login flow.",
+  "frontend/src/hooks/useQueries.ts": "Placeholder file for future React Query hooks.",
+  "frontend/src/index.css": "Defines Tailwind layers and extensive CSS variables for light and dark themes, plus base typography and layout styles.",
+  "frontend/src/layouts/AppLayout.tsx": "Provides the main app layout with top navigation, footer, and routed page content via Outlet.",
+  "frontend/src/main.tsx": "Bootstraps the React app, wrapping it in React Query and Internet Identity providers and loading global styles.",
+  "frontend/src/pages/AboutPage.tsx": "Displays YouthHub's story, mission, vision, and values using styled sections and card components.",
+  "frontend/src/pages/ContactPage.tsx": "Shows contact methods including email, phone, address, and office hours using card-based UI.",
+  "frontend/src/pages/EventsPage.tsx": "Lists upcoming events with details and badges, rendering them as styled cards with metadata.",
+  "frontend/src/pages/HomePage.tsx": "Renders the homepage with a hero section and overview of core programs using cards and calls to action.",
+  "frontend/src/pages/ProgramsPage.tsx": "Renders a Programs page with a grid of program cards, each showing an icon, description, age range, and schedule, plus a call‑to‑action section.",
+  "frontend/tailwind.config.js": "Configures Tailwind with custom colors, fonts, radii, animations, plugins, and content paths for the frontend.",
+  "project_state.json": "Stores the project's state, including feature definitions, generated image requirements, and metadata for the youth organization app."
+}

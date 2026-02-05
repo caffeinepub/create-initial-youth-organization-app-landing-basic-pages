@@ -1,0 +1,167 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Youth organization app (landing + basic pages) — frontend scaffold + theme + generated images",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Create a responsive multi-page React scaffold with top navigation and pages: Home, About, Programs, Events, Contact.",
+      "acceptanceCriteria": [
+        "App loads successfully from the template and shows a consistent top navigation on all pages.",
+        "Each page renders distinct placeholder content in English that can be edited later.",
+        "Navigation works without full page reloads.",
+        "Layout is mobile-first and remains usable on common breakpoints (mobile/tablet/desktop)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the root app component that wires client-side routing for Home, About, Programs, Events, and Contact, ensuring navigation happens without full page reloads. Use the shadcn-ui component library (e.g., layout primitives like Card/Button where helpful) for consistent UI; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/layouts/AppLayout.tsx",
+          "operation": "create",
+          "description": "Create a shared layout that renders a persistent top navigation (visible on every page) and a responsive content container. Use the shadcn-ui component library for consistent header/nav styling; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/TopNav.tsx",
+          "operation": "create",
+          "description": "Implement the top navigation with links to Home, About, Programs, Events, Contact, including mobile-friendly behavior (e.g., collapsible menu) and active link styling. Use the shadcn-ui component library components (e.g., Button, Sheet/Dropdown if available) to support responsive navigation; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "create",
+          "description": "Create the Home page with distinct editable English placeholder content and sections to be expanded later (hero is handled in REQ-3). Use the shadcn-ui component library for section structure (e.g., Card) where helpful; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AboutPage.tsx",
+          "operation": "create",
+          "description": "Create the About page with distinct editable English placeholder content. Use the shadcn-ui component library for consistent typography/cards; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProgramsPage.tsx",
+          "operation": "create",
+          "description": "Create the Programs page with distinct editable English placeholder content and room for program listings. Use the shadcn-ui component library for consistent cards/lists; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/EventsPage.tsx",
+          "operation": "create",
+          "description": "Create the Events page with distinct editable English placeholder content and room for upcoming events. Use the shadcn-ui component library for consistent cards/lists; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ContactPage.tsx",
+          "operation": "create",
+          "description": "Create the Contact page with distinct editable English placeholder content (no external integrations). Use the shadcn-ui component library for consistent form-like layout (static/placeholder only) if needed; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Ensure the root render continues to mount the new App component and global styles for the multi-page scaffold (no full reload navigation via client routing)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Apply a consistent youth-appropriate visual theme (non blue/purple primary) with clear typography hierarchy and reusable UI styling across pages.",
+      "acceptanceCriteria": [
+        "Theme is consistent across pages (buttons, headings, cards, links).",
+        "Theme does not use a blue/purple primary palette.",
+        "Typography hierarchy is clear (H1/H2/body)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Create global styles including Tailwind directives and theme CSS variables (primary palette must not be blue/purple), plus base typography defaults (H1/H2/body) and spacing rhythm used across all pages."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme extension as needed to support the chosen youth-appropriate palette and typography scale (ensure the primary palette is not blue/purple) and keep usage consistent across the app."
+        },
+        {
+          "path": "frontend/src/layouts/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Apply consistent layout spacing, typography wrappers, and shared components (header/footer/container) so pages visually match. Use the shadcn-ui component library for consistent theming across cards/buttons/links; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AboutPage.tsx",
+          "operation": "modify",
+          "description": "Align About page headings, body text, and section spacing to the global theme (typography hierarchy and consistent components). Use the shadcn-ui component library where appropriate; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProgramsPage.tsx",
+          "operation": "modify",
+          "description": "Align Programs page UI (cards/sections/buttons) to the global theme for consistent look and feel. Use the shadcn-ui component library where appropriate; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/EventsPage.tsx",
+          "operation": "modify",
+          "description": "Align Events page UI (cards/sections/buttons) to the global theme for consistent look and feel. Use the shadcn-ui component library where appropriate; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ContactPage.tsx",
+          "operation": "modify",
+          "description": "Align Contact page UI (sections/buttons/links) to the global theme for consistent look and feel. Use the shadcn-ui component library where appropriate; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add a Home page hero section using the generated hero image with an English headline and short description, optimized for mobile readability.",
+      "acceptanceCriteria": [
+        "Home page displays the hero image from frontend/public/assets/generated.",
+        "Hero includes an English headline and supporting text.",
+        "Hero section remains readable and well-laid-out on mobile."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Implement a hero section on the Home page that renders the generated hero image from frontend/public/assets/generated/youth-hero.dim_1600x900.png and overlays/places an English headline + short supporting description with mobile-first layout. Use the shadcn-ui component library (e.g., Card/Button for a call-to-action placeholder) if helpful; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/layouts/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Ensure layout/container rules support full-width hero presentation while keeping text readable on mobile and scaling appropriately at tablet/desktop breakpoints."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Add specified generated image assets under frontend/public/assets/generated and render at least the logo and hero in the UI (no backend involvement).",
+      "acceptanceCriteria": [
+        "Generated images exist in frontend/public/assets/generated with the specified filenames.",
+        "At least the logo and hero image are displayed in the UI.",
+        "No backend is used to serve or transform these images."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/youth-logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static logo asset at the exact path frontend/public/assets/generated/youth-logo.dim_512x512.png (static file served by the frontend build)."
+        },
+        {
+          "path": "frontend/public/assets/generated/youth-hero.dim_1600x900.png",
+          "operation": "create",
+          "description": "Add the generated static hero asset at the exact path frontend/public/assets/generated/youth-hero.dim_1600x900.png (static file served by the frontend build)."
+        },
+        {
+          "path": "frontend/public/assets/generated/youth-icons.dim_768x256.png",
+          "operation": "create",
+          "description": "Add the generated static icons asset at the exact path frontend/public/assets/generated/youth-icons.dim_768x256.png (static file served by the frontend build)."
+        },
+        {
+          "path": "frontend/src/components/TopNav.tsx",
+          "operation": "modify",
+          "description": "Render the logo image in the top navigation using frontend/public/assets/generated/youth-logo.dim_512x512.png, sized appropriately for mobile/desktop. Use the shadcn-ui component library for consistent header styling; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Ensure the Home page displays the hero image from frontend/public/assets/generated/youth-hero.dim_1600x900.png and optionally uses frontend/public/assets/generated/youth-icons.dim_768x256.png in a simple 'What we do' section (static, no backend). Use the shadcn-ui component library for consistent cards/sections; verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}

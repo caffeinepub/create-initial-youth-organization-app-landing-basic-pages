@@ -1,0 +1,14 @@
+{
+  "frontend/src/App.tsx": "Main application component that sets up TanStack Router with routes for Home, About, Programs, Events, and Contact pages, all wrapped in the AppLayout.",
+  "frontend/src/layouts/AppLayout.tsx": "Shared layout component that renders the persistent TopNav header, main content area with Outlet for page routing, and Footer on all pages.",
+  "frontend/src/components/TopNav.tsx": "Responsive navigation header with logo, desktop menu, and mobile sheet menu that highlights the active route and supports smooth navigation.",
+  "frontend/src/components/Footer.tsx": "Footer component with organization branding, quick links, social media icons, and attribution to caffeine.ai with a heart icon.",
+  "frontend/src/pages/HomePage.tsx": "Home page featuring a hero section with generated image and headline, \"What We Do\" cards with icons, and a call-to-action section encouraging engagement.",
+  "frontend/src/pages/AboutPage.tsx": "About page presenting the organization's story, mission/vision/values cards with icons, and impact statistics in an engaging layout.",
+  "frontend/src/pages/ProgramsPage.tsx": "Programs page displaying a grid of six program cards with icons, descriptions, age ranges, schedules, and a call-to-action to join.",
+  "frontend/src/pages/EventsPage.tsx": "Events page listing upcoming events with dates, times, locations, type badges, and descriptions in an organized card layout.",
+  "frontend/src/pages/ContactPage.tsx": "Contact page with four contact method cards (email, phone, location, hours) and additional information about volunteering and partnerships.",
+  "frontend/src/index.css": "Global styles with OKLCH color system featuring a vibrant orange/coral primary palette (not blue/purple), typography hierarchy, and both light and dark mode support.",
+  "frontend/tailwind.config.js": "Tailwind configuration extending the theme with custom font stack, varied border radius utilities (xl, 2xl, 3xl), and color tokens mapped to the OKLCH design system.",
+  "frontend/src/hooks/useQueries.ts": "Empty placeholder file for future React Query hooks when backend data operations are implemented."
+}
