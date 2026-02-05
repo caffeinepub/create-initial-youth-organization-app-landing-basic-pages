@@ -1,104 +1,159 @@
 {
   "kind": "build_request",
-  "title": "Rebuild with latest updates + public indexing readiness and Android install prompt",
+  "title": "Fix incorrect logo and add consistent media (image/video) upload button across admin editors",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-21",
-      "text": "Make the site’s SEO/indexing configuration work with the actual deployed production URL (instead of hardcoded placeholders), including updating/parameterizing canonical URL and sitemap/robots URLs so Google can correctly crawl and index the deployed site.",
+      "id": "REQ-33",
+      "text": "Fix the site-wide header logo so the same correct logo is shown consistently on all pages (including admin pages), by removing any hardcoded/incorrect logo filename usage and using a single canonical logo source throughout the frontend.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4",
-          "msg-8"
+          "msg-1"
         ],
         "quotes": [
-          "Host it online and make it visible on Google for people to visit it worldwide",
-          "Build it again with the latest update"
+          "The logo or the picture there is not what I sent it to you"
         ]
       },
       "acceptanceCriteria": [
-        "The canonical URL is not hardcoded to a placeholder domain (e.g., not fixed to https://yfo.org/) and matches the deployed site URL.",
-        "frontend/public/robots.txt and frontend/public/sitemap.xml do not reference an incorrect domain for the deployed site.",
-        "Admin routes remain excluded from crawling (e.g., /me/* disallowed) while public routes are crawlable.",
-        "Build output still includes robots.txt and sitemap.xml at the expected public paths."
+        "The TopNav logo image is not hardcoded to an unexpected filename and is sourced from a single shared configuration.",
+        "The same logo is displayed on public pages and on admin pages (admin uses the same header).",
+        "If no configured logo exists, the UI falls back to the existing generated logo asset without breaking layout."
       ]
     },
     {
-      "id": "REQ-22",
-      "text": "Add PWA support so visitors on Android can install the site, including a web app manifest, required PWA icons, and service worker registration compatible with the current Vite + React setup.",
+      "id": "REQ-34",
+      "text": "Add backend support for an admin-managed app branding configuration that includes a logo media field, readable publicly and writable only by admins.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "The logo or the picture there is not what I sent it to you and moreover at the admin interface where I will be updating the app."
+        ]
+      },
+      "acceptanceCriteria": [
+        "There is a public query method to fetch the current branding configuration (including logo).",
+        "There is an admin-only update method to set/replace the branding configuration (including logo).",
+        "Unauthorized callers attempting to update branding are rejected with an authorization error."
+      ]
+    },
+    {
+      "id": "REQ-35",
+      "text": "Create an admin page in the existing admin area that allows admins to update the app branding logo using an explicit control with English user-facing text (including an \"Add picture/video\"-style media button, constrained to images for the logo).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-1"
         ],
         "quotes": [
-          "And make it an android apk and prompt people that visit it to install it at the homepage."
+          "at the admin interface where I will be updating the app. Add a button I can add a picture or video when updating"
         ]
       },
       "acceptanceCriteria": [
-        "The app includes a valid web app manifest linked from the HTML entrypoint.",
-        "The manifest references local icon assets in the frontend public directory (no backend image routing).",
-        "A service worker is registered in production builds and the app is installable as a PWA on Android Chrome (meeting basic installability requirements)."
+        "The admin area contains a reachable UI for updating the app logo.",
+        "The page provides a clear button to select media from the user’s device and updates the logo preview before saving.",
+        "Saving persists the selected logo so that refreshing the site still shows the updated logo.",
+        "All user-facing text on the page is in English."
       ]
     },
     {
-      "id": "REQ-23",
-      "text": "Add an install prompt UI on the public Home page that encourages Android users to install the app, using English user-facing text and only showing the prompt when installation is supported and the app is not already installed.",
+      "id": "REQ-36",
+      "text": "Implement a reusable \"Add picture or video\" media picker control for admin editing workflows that supports selecting a local image or video file and produces a storable URL/string value for saving.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-1"
         ],
         "quotes": [
-          "...prompt people that visit it to install it at the homepage."
+          "Add a button I can add a picture or video when updating and making changes or editing. Every part of the interface should have this"
         ]
       },
       "acceptanceCriteria": [
-        "Home page displays an install prompt/banner only when the browser provides an install event (or equivalent installability signal) and the app is not already installed.",
-        "Clicking the prompt’s primary action triggers the browser’s install flow (where supported).",
-        "All user-facing strings in the install prompt are in English (e.g., title, description, button text, dismiss text).",
-        "The prompt can be dismissed and does not reappear excessively during the same session (reasonable UX persistence)."
+        "A shared media-picker control exists and can be embedded in multiple admin pages without duplicating logic.",
+        "The control supports choosing an image or a video file from the local device.",
+        "The control provides a preview (image preview or video preview) and a way to remove/clear the selected media before saving.",
+        "All user-facing text in the control is in English and consistently labeled across pages (e.g., \"Add picture or video\")."
       ]
     },
     {
-      "id": "REQ-24",
-      "text": "Provide project documentation for producing an Android APK from the deployed PWA (e.g., via Trusted Web Activity), including clear prerequisites and step-by-step instructions, without introducing unsupported backend services.",
-      "target": "unknown",
+      "id": "REQ-37",
+      "text": "Extend admin editable pages so that wherever admins edit content, the UI includes the same \"Add picture or video\" control, and any selected media is saved and loaded back when revisiting the editor (cover at minimum: History editor, About content editor, and Home page editor).",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-1"
         ],
         "quotes": [
-          "And make it an android apk..."
+          "Every part of the interface should have this"
         ]
       },
       "acceptanceCriteria": [
-        "Repository includes a written guide explaining how to generate an Android APK wrapper for the deployed URL (PWA-to-APK approach).",
-        "The guide includes: required tools, where to put the deployed URL, build/sign steps at a high level, and limitations (e.g., Play Store requirements).",
-        "The guide does not require adding non-supported backend technologies or third-party auth providers."
+        "AdminHistoryEditorPage includes a media control and can save and reload the selected media with the history content.",
+        "AdminAboutPage includes a media control for each editable section (or an equivalent per-section media attachment) and persists it through save/load.",
+        "AdminHomePageEditorPage includes a media control per card/section and persists it through save/load.",
+        "Public pages that render the edited content display the saved images/videos appropriately (read-only)."
+      ]
+    },
+    {
+      "id": "REQ-38",
+      "text": "Update the backend data model and APIs as needed to persist media attachments for History content, About sections, and Home page sections in stable storage, with admin-only write access and public read access.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Add a button I can add a picture or video when updating and making changes or editing. Every part of the interface should have this"
+        ]
+      },
+      "acceptanceCriteria": [
+        "History content API supports storing and returning associated media (image/video) in addition to text.",
+        "About sections API supports storing and returning media per section.",
+        "Home page sections API supports storing and returning media per section (in addition to existing fields).",
+        "All write/update methods remain admin-only; all read methods are publicly readable."
+      ]
+    },
+    {
+      "id": "REQ-39",
+      "text": "Add a conditional Motoko stable-state migration so deployed canisters can upgrade safely after changing stable types required to store branding/logo and editor media attachments.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A conditional migration is implemented following the project’s migration policy.",
+        "Upgrading from existing deployed state preserves previously stored history/about/home/clubs/social links data.",
+        "After upgrade, existing data loads successfully and the new media/branding fields default safely when previously absent."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
-    "Do not modify files under frontend/src/components/ui or any other immutable paths listed in SYSTEM_CONTEXT.",
-    "Use English for any user-facing text.",
-    "Do not add third-party authentication providers (only Internet Identity is supported)."
+    "Backend must remain a single Motoko actor in backend/main.mo; only add backend/migration.mo when required for stable upgrades.",
+    "Do not edit files under frontend/src/components/ui or other frontend immutablePaths; compose new components instead.",
+    "Use English for all user-facing text.",
+    "Do not introduce external storage/services for media uploads (no S3/Cloudinary/etc.)."
   ],
   "nonGoals": [
-    "Automating publication to Google Search Console or guaranteeing search ranking/instant indexing.",
-    "Deploying to non-ICP hosting providers (e.g., AWS/GCP/Azure/Vercel/Netlify).",
-    "Building and shipping a native Android application with custom native features beyond wrapping the PWA.",
-    "Adding real-time features (WebSockets/push notifications) as part of the install prompt work."
+    "Implementing large-file video hosting/streaming; media support should be constrained to reasonable sizes suitable for canister storage.",
+    "Adding public (non-admin) editing controls for any content or media.",
+    "Changing unrelated site content or navigation structure beyond what is required to add the requested admin editing controls and fix the logo source."
   ],
   "imageRequirements": {
-    "required": [
-      "Square PWA app icon derived from the YFO logo (yfo-pwa-icon.dim_192x192.png)",
-      "Square PWA app icon derived from the YFO logo (yfo-pwa-icon.dim_512x512.png)",
-      "Maskable square PWA icon derived from the YFO logo with safe padding (yfo-pwa-icon-maskable.dim_512x512.png)",
-      "Apple touch icon derived from the YFO logo (yfo-apple-touch-icon.dim_180x180.png)"
-    ],
+    "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

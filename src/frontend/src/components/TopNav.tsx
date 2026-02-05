@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useAdminSession } from '@/hooks/useAdminSession';
+import { useGetBrandingMedia } from '@/hooks/useQueries';
+import { getLogoUrl } from '@/config/branding';
 
 const navLinks = [
   { path: '/', label: 'Home' },
@@ -21,23 +23,25 @@ export default function TopNav() {
   const router = useRouterState();
   const currentPath = router.location.pathname;
   const { isAdmin } = useAdminSession();
+  const { data: branding } = useGetBrandingMedia();
 
   const meLink = isAdmin ? '/me/dashboard' : '/me';
+  const logoUrl = getLogoUrl(branding?.logo);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
           <img
-            src="/assets/generated/yfo-logo.dim_512x512.png"
+            src={logoUrl}
             alt="The Youth And Friends Organization Logo"
-            className="h-10 w-10 rounded-lg"
+            className="h-10 w-10 rounded-lg object-cover"
           />
           <span className="text-xl font-bold text-primary hidden sm:inline">
             The Youth And Friends Organization
           </span>
           <span className="text-xl font-bold text-primary sm:hidden">
-            YFO
+            The Youth And Friends Organization
           </span>
         </Link>
 
@@ -75,11 +79,11 @@ export default function TopNav() {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <img
-                  src="/assets/generated/yfo-logo.dim_512x512.png"
+                  src={logoUrl}
                   alt="The Youth And Friends Organization Logo"
-                  className="h-10 w-10 rounded-lg"
+                  className="h-10 w-10 rounded-lg object-cover"
                 />
-                <span className="text-xl font-bold text-primary">YFO</span>
+                <span className="text-xl font-bold text-primary">The Youth And Friends Organization</span>
               </div>
               <Button
                 variant="ghost"

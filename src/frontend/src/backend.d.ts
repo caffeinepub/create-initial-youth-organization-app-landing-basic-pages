@@ -7,7 +7,20 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
+export class ExternalBlob {
+    getBytes(): Promise<Uint8Array<ArrayBuffer>>;
+    getDirectURL(): string;
+    static fromURL(url: string): ExternalBlob;
+    static fromBytes(blob: Uint8Array<ArrayBuffer>): ExternalBlob;
+    withUploadProgress(onProgress: (percentage: number) => void): ExternalBlob;
+}
+export interface HomePageSection {
+    title: string;
+    description: string;
+    image?: ExternalBlob;
+}
 export interface AboutSection {
+    media?: ExternalBlob;
     title: string;
     content: string;
     link: boolean;
@@ -40,13 +53,13 @@ export interface Club {
     profilePicture?: string;
     program: string;
 }
+export interface Branding {
+    logo?: ExternalBlob;
+    name: string;
+    otherMedia?: ExternalBlob;
+}
 export interface UserProfile {
     name: string;
-}
-export interface HomePageSection {
-    title: string;
-    description: string;
-    imageUrl: string;
 }
 export enum UserRole {
     admin = "admin",
@@ -59,10 +72,14 @@ export interface backendInterface {
     deleteClub(id: bigint): Promise<void>;
     getAboutSections(): Promise<Array<AboutSection>>;
     getAllMembershipRegistrations(): Promise<Array<MembershipRegistration>>;
+    getBrandingMedia(): Promise<Branding | null>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getClubs(): Promise<Array<Club>>;
-    getHistoryContent(): Promise<string>;
+    getHistoryContent(): Promise<{
+        media?: ExternalBlob;
+        content: string;
+    }>;
     getHomePageSections(): Promise<Array<HomePageSection>>;
     getSocialMediaLinks(): Promise<SocialMediaLinks | null>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
@@ -71,7 +88,8 @@ export interface backendInterface {
     setSocialMediaLinks(links: SocialMediaLinks): Promise<void>;
     submitMembershipRegistration(registration: MembershipRegistration): Promise<void>;
     updateAboutSections(sections: Array<AboutSection>): Promise<void>;
+    updateBrandingMedia(branding: Branding): Promise<void>;
     updateClub(id: bigint, name: string, profilePicture: string | null, aims: string, motto: string, slogan: string, achievements: string, program: string, activities: string, history: string): Promise<void>;
-    updateHistoryContent(newContent: string): Promise<void>;
+    updateHistoryContent(content: string, media: ExternalBlob | null): Promise<void>;
     updateHomePageSections(sections: Array<HomePageSection>): Promise<void>;
 }

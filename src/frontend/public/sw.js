@@ -1,5 +1,5 @@
-// Service Worker for PWA support
-const CACHE_NAME = 'yfo-cache-v1';
+// Service Worker for PWA support - Version 10
+const CACHE_NAME = 'yfo-cache-v10';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

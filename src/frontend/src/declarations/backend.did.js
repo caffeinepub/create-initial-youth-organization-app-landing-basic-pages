@@ -8,12 +8,25 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const _CaffeineStorageCreateCertificateResult = IDL.Record({
+  'method' : IDL.Text,
+  'blob_hash' : IDL.Text,
+});
+export const _CaffeineStorageRefillInformation = IDL.Record({
+  'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+});
+export const _CaffeineStorageRefillResult = IDL.Record({
+  'success' : IDL.Opt(IDL.Bool),
+  'topped_up_amount' : IDL.Opt(IDL.Nat),
+});
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
+export const ExternalBlob = IDL.Vec(IDL.Nat8);
 export const AboutSection = IDL.Record({
+  'media' : IDL.Opt(ExternalBlob),
   'title' : IDL.Text,
   'content' : IDL.Text,
   'link' : IDL.Bool,
@@ -24,6 +37,11 @@ export const MembershipRegistration = IDL.Record({
   'email' : IDL.Text,
   'address' : IDL.Text,
   'phone' : IDL.Text,
+});
+export const Branding = IDL.Record({
+  'logo' : IDL.Opt(ExternalBlob),
+  'name' : IDL.Text,
+  'otherMedia' : IDL.Opt(ExternalBlob),
 });
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 export const Club = IDL.Record({
@@ -41,7 +59,7 @@ export const Club = IDL.Record({
 export const HomePageSection = IDL.Record({
   'title' : IDL.Text,
   'description' : IDL.Text,
-  'imageUrl' : IDL.Text,
+  'image' : IDL.Opt(ExternalBlob),
 });
 export const SocialMediaLinks = IDL.Record({
   'linkedin' : IDL.Text,
@@ -54,6 +72,32 @@ export const SocialMediaLinks = IDL.Record({
 });
 
 export const idlService = IDL.Service({
+  '_caffeineStorageBlobIsLive' : IDL.Func(
+      [IDL.Vec(IDL.Nat8)],
+      [IDL.Bool],
+      ['query'],
+    ),
+  '_caffeineStorageBlobsToDelete' : IDL.Func(
+      [],
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      ['query'],
+    ),
+  '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      [],
+      [],
+    ),
+  '_caffeineStorageCreateCertificate' : IDL.Func(
+      [IDL.Text],
+      [_CaffeineStorageCreateCertificateResult],
+      [],
+    ),
+  '_caffeineStorageRefillCashier' : IDL.Func(
+      [IDL.Opt(_CaffeineStorageRefillInformation)],
+      [_CaffeineStorageRefillResult],
+      [],
+    ),
+  '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'createClub' : IDL.Func(
@@ -78,10 +122,15 @@ export const idlService = IDL.Service({
       [IDL.Vec(MembershipRegistration)],
       ['query'],
     ),
+  'getBrandingMedia' : IDL.Func([], [IDL.Opt(Branding)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getClubs' : IDL.Func([], [IDL.Vec(Club)], ['query']),
-  'getHistoryContent' : IDL.Func([], [IDL.Text], ['query']),
+  'getHistoryContent' : IDL.Func(
+      [],
+      [IDL.Record({ 'media' : IDL.Opt(ExternalBlob), 'content' : IDL.Text })],
+      ['query'],
+    ),
   'getHomePageSections' : IDL.Func([], [IDL.Vec(HomePageSection)], ['query']),
   'getSocialMediaLinks' : IDL.Func([], [IDL.Opt(SocialMediaLinks)], ['query']),
   'getUserProfile' : IDL.Func(
@@ -94,6 +143,7 @@ export const idlService = IDL.Service({
   'setSocialMediaLinks' : IDL.Func([SocialMediaLinks], [], []),
   'submitMembershipRegistration' : IDL.Func([MembershipRegistration], [], []),
   'updateAboutSections' : IDL.Func([IDL.Vec(AboutSection)], [], []),
+  'updateBrandingMedia' : IDL.Func([Branding], [], []),
   'updateClub' : IDL.Func(
       [
         IDL.Nat,
@@ -110,19 +160,32 @@ export const idlService = IDL.Service({
       [],
       [],
     ),
-  'updateHistoryContent' : IDL.Func([IDL.Text], [], []),
+  'updateHistoryContent' : IDL.Func([IDL.Text, IDL.Opt(ExternalBlob)], [], []),
   'updateHomePageSections' : IDL.Func([IDL.Vec(HomePageSection)], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const _CaffeineStorageCreateCertificateResult = IDL.Record({
+    'method' : IDL.Text,
+    'blob_hash' : IDL.Text,
+  });
+  const _CaffeineStorageRefillInformation = IDL.Record({
+    'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+  });
+  const _CaffeineStorageRefillResult = IDL.Record({
+    'success' : IDL.Opt(IDL.Bool),
+    'topped_up_amount' : IDL.Opt(IDL.Nat),
+  });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
   });
+  const ExternalBlob = IDL.Vec(IDL.Nat8);
   const AboutSection = IDL.Record({
+    'media' : IDL.Opt(ExternalBlob),
     'title' : IDL.Text,
     'content' : IDL.Text,
     'link' : IDL.Bool,
@@ -133,6 +196,11 @@ export const idlFactory = ({ IDL }) => {
     'email' : IDL.Text,
     'address' : IDL.Text,
     'phone' : IDL.Text,
+  });
+  const Branding = IDL.Record({
+    'logo' : IDL.Opt(ExternalBlob),
+    'name' : IDL.Text,
+    'otherMedia' : IDL.Opt(ExternalBlob),
   });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
   const Club = IDL.Record({
@@ -150,7 +218,7 @@ export const idlFactory = ({ IDL }) => {
   const HomePageSection = IDL.Record({
     'title' : IDL.Text,
     'description' : IDL.Text,
-    'imageUrl' : IDL.Text,
+    'image' : IDL.Opt(ExternalBlob),
   });
   const SocialMediaLinks = IDL.Record({
     'linkedin' : IDL.Text,
@@ -163,6 +231,32 @@ export const idlFactory = ({ IDL }) => {
   });
   
   return IDL.Service({
+    '_caffeineStorageBlobIsLive' : IDL.Func(
+        [IDL.Vec(IDL.Nat8)],
+        [IDL.Bool],
+        ['query'],
+      ),
+    '_caffeineStorageBlobsToDelete' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        ['query'],
+      ),
+    '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        [],
+        [],
+      ),
+    '_caffeineStorageCreateCertificate' : IDL.Func(
+        [IDL.Text],
+        [_CaffeineStorageCreateCertificateResult],
+        [],
+      ),
+    '_caffeineStorageRefillCashier' : IDL.Func(
+        [IDL.Opt(_CaffeineStorageRefillInformation)],
+        [_CaffeineStorageRefillResult],
+        [],
+      ),
+    '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'createClub' : IDL.Func(
@@ -187,10 +281,15 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(MembershipRegistration)],
         ['query'],
       ),
+    'getBrandingMedia' : IDL.Func([], [IDL.Opt(Branding)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getClubs' : IDL.Func([], [IDL.Vec(Club)], ['query']),
-    'getHistoryContent' : IDL.Func([], [IDL.Text], ['query']),
+    'getHistoryContent' : IDL.Func(
+        [],
+        [IDL.Record({ 'media' : IDL.Opt(ExternalBlob), 'content' : IDL.Text })],
+        ['query'],
+      ),
     'getHomePageSections' : IDL.Func([], [IDL.Vec(HomePageSection)], ['query']),
     'getSocialMediaLinks' : IDL.Func(
         [],
@@ -207,6 +306,7 @@ export const idlFactory = ({ IDL }) => {
     'setSocialMediaLinks' : IDL.Func([SocialMediaLinks], [], []),
     'submitMembershipRegistration' : IDL.Func([MembershipRegistration], [], []),
     'updateAboutSections' : IDL.Func([IDL.Vec(AboutSection)], [], []),
+    'updateBrandingMedia' : IDL.Func([Branding], [], []),
     'updateClub' : IDL.Func(
         [
           IDL.Nat,
@@ -223,7 +323,11 @@ export const idlFactory = ({ IDL }) => {
         [],
         [],
       ),
-    'updateHistoryContent' : IDL.Func([IDL.Text], [], []),
+    'updateHistoryContent' : IDL.Func(
+        [IDL.Text, IDL.Opt(ExternalBlob)],
+        [],
+        [],
+      ),
     'updateHomePageSections' : IDL.Func([IDL.Vec(HomePageSection)], [], []),
   });
 };

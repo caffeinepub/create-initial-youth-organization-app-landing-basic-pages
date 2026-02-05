@@ -16,17 +16,17 @@ export default function HomePage() {
         {
           title: 'Community Building',
           description: 'Connect with peers, build friendships, and develop a strong sense of belonging in a welcoming environment.',
-          imageUrl: '',
+          image: undefined,
         },
         {
           title: 'Skill Development',
           description: 'Learn new skills through workshops, mentorship programs, and hands-on activities that prepare you for the future.',
-          imageUrl: '',
+          image: undefined,
         },
         {
           title: 'Events & Activities',
           description: 'Participate in exciting events, social gatherings, and community service projects throughout the year.',
-          imageUrl: '',
+          image: undefined,
         },
       ];
 
@@ -104,12 +104,19 @@ export default function HomePage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {whatWeDoSections.map((section, index) => {
             const IconComponent = getIconForSection(section.title);
+            const imageUrl = section.image?.getDirectURL();
             return (
               <Card key={index} className="border-2 hover:border-primary/50 transition-colors">
                 <CardHeader>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
-                    <IconComponent className="h-6 w-6" />
-                  </div>
+                  {imageUrl ? (
+                    <div className="mb-4 rounded-lg overflow-hidden">
+                      <img src={imageUrl} alt={section.title} className="w-full h-32 object-cover" />
+                    </div>
+                  ) : (
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
+                      <IconComponent className="h-6 w-6" />
+                    </div>
+                  )}
                   <CardTitle>{section.title}</CardTitle>
                   <CardDescription>{section.description}</CardDescription>
                 </CardHeader>
@@ -130,18 +137,26 @@ export default function HomePage() {
                 </h2>
               </div>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {aboutContentSections.map((section, index) => (
-                  <Card key={index} className="border-2">
-                    <CardHeader>
-                      <CardTitle className="text-xl">{section.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground whitespace-pre-wrap">
-                        {section.content}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
+                {aboutContentSections.map((section, index) => {
+                  const mediaUrl = section.media?.getDirectURL();
+                  return (
+                    <Card key={index} className="border-2">
+                      <CardHeader>
+                        {mediaUrl && (
+                          <div className="mb-4 rounded-lg overflow-hidden">
+                            <img src={mediaUrl} alt={section.title} className="w-full h-32 object-cover" />
+                          </div>
+                        )}
+                        <CardTitle className="text-xl">{section.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground whitespace-pre-wrap">
+                          {section.content}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
               {aboutLinkSections.length > 0 && (
                 <div className="flex flex-wrap gap-4 justify-center pt-6">

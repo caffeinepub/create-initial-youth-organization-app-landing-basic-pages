@@ -11,9 +11,15 @@ import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
 export interface AboutSection {
+  'media' : [] | [ExternalBlob],
   'title' : string,
   'content' : string,
   'link' : boolean,
+}
+export interface Branding {
+  'logo' : [] | [ExternalBlob],
+  'name' : string,
+  'otherMedia' : [] | [ExternalBlob],
 }
 export interface Club {
   'id' : bigint,
@@ -27,10 +33,11 @@ export interface Club {
   'profilePicture' : [] | [string],
   'program' : string,
 }
+export type ExternalBlob = Uint8Array;
 export interface HomePageSection {
   'title' : string,
   'description' : string,
-  'imageUrl' : string,
+  'image' : [] | [ExternalBlob],
 }
 export interface MembershipRegistration {
   'additionalInfo' : string,
@@ -52,7 +59,33 @@ export interface UserProfile { 'name' : string }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export interface _CaffeineStorageCreateCertificateResult {
+  'method' : string,
+  'blob_hash' : string,
+}
+export interface _CaffeineStorageRefillInformation {
+  'proposed_top_up_amount' : [] | [bigint],
+}
+export interface _CaffeineStorageRefillResult {
+  'success' : [] | [boolean],
+  'topped_up_amount' : [] | [bigint],
+}
 export interface _SERVICE {
+  '_caffeineStorageBlobIsLive' : ActorMethod<[Uint8Array], boolean>,
+  '_caffeineStorageBlobsToDelete' : ActorMethod<[], Array<Uint8Array>>,
+  '_caffeineStorageConfirmBlobDeletion' : ActorMethod<
+    [Array<Uint8Array>],
+    undefined
+  >,
+  '_caffeineStorageCreateCertificate' : ActorMethod<
+    [string],
+    _CaffeineStorageCreateCertificateResult
+  >,
+  '_caffeineStorageRefillCashier' : ActorMethod<
+    [[] | [_CaffeineStorageRefillInformation]],
+    _CaffeineStorageRefillResult
+  >,
+  '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'createClub' : ActorMethod<
@@ -75,10 +108,14 @@ export interface _SERVICE {
     [],
     Array<MembershipRegistration>
   >,
+  'getBrandingMedia' : ActorMethod<[], [] | [Branding]>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getClubs' : ActorMethod<[], Array<Club>>,
-  'getHistoryContent' : ActorMethod<[], string>,
+  'getHistoryContent' : ActorMethod<
+    [],
+    { 'media' : [] | [ExternalBlob], 'content' : string }
+  >,
   'getHomePageSections' : ActorMethod<[], Array<HomePageSection>>,
   'getSocialMediaLinks' : ActorMethod<[], [] | [SocialMediaLinks]>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
@@ -90,6 +127,7 @@ export interface _SERVICE {
     undefined
   >,
   'updateAboutSections' : ActorMethod<[Array<AboutSection>], undefined>,
+  'updateBrandingMedia' : ActorMethod<[Branding], undefined>,
   'updateClub' : ActorMethod<
     [
       bigint,
@@ -105,7 +143,10 @@ export interface _SERVICE {
     ],
     undefined
   >,
-  'updateHistoryContent' : ActorMethod<[string], undefined>,
+  'updateHistoryContent' : ActorMethod<
+    [string, [] | [ExternalBlob]],
+    undefined
+  >,
   'updateHomePageSections' : ActorMethod<[Array<HomePageSection>], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;

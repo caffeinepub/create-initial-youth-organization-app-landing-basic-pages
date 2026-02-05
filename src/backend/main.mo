@@ -7,12 +7,15 @@ import Nat32 "mo:core/Nat32";
 import Iter "mo:core/Iter";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
+import Migration "migration";
+import BlobStorage "blob-storage/Storage";
+import MixinStorage "blob-storage/Mixin";
 
-
-
+(with migration = Migration.run)
 actor {
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
+  include MixinStorage();
 
   public type MembershipRegistration = {
     name : Text;
@@ -53,21 +56,30 @@ actor {
     title : Text;
     content : Text;
     link : Bool;
+    media : ?BlobStorage.ExternalBlob;
   };
 
   public type HomePageSection = {
     title : Text;
     description : Text;
-    imageUrl : Text;
+    image : ?BlobStorage.ExternalBlob;
   };
 
-  stable var historyContent = "";
+  public type Branding = {
+    logo : ?BlobStorage.ExternalBlob;
+    otherMedia : ?BlobStorage.ExternalBlob;
+    name : Text;
+  };
+
+  stable var historyContent : Text = "";
+  stable var historyMedia : ?BlobStorage.ExternalBlob = null;
   stable var membershipRegistrations : [MembershipRegistration] = [];
   stable var nextClubId = 0;
   stable var clubIdRange = (0 : Nat32, 0 : Nat32 + 1000);
   stable var socialMediaLinks : ?SocialMediaLinks = null;
   stable var aboutSections : [AboutSection] = [];
   stable var homePageSections : [HomePageSection] = [];
+  stable var brandingMedia : ?Branding = null;
 
   let clubMap = Map.empty<Nat, Club>();
 
@@ -91,15 +103,20 @@ actor {
     };
   };
 
-  public query func getHistoryContent() : async Text {
-    historyContent;
+  // History Content with Media
+  public query func getHistoryContent() : async {
+    content : Text;
+    media : ?BlobStorage.ExternalBlob;
+  } {
+    { content = historyContent; media = historyMedia };
   };
 
-  public shared ({ caller }) func updateHistoryContent(newContent : Text) : async () {
+  public shared ({ caller }) func updateHistoryContent(content : Text, media : ?BlobStorage.ExternalBlob) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can update history content");
     };
-    historyContent := newContent;
+    historyContent := content;
+    historyMedia := media;
   };
 
   public shared ({ caller }) func submitMembershipRegistration(registration : MembershipRegistration) : async () {
@@ -237,5 +254,16 @@ actor {
     };
     homePageSections := sections;
   };
-};
 
+  // Branding Management
+  public query func getBrandingMedia() : async ?Branding {
+    brandingMedia;
+  };
+
+  public shared ({ caller }) func updateBrandingMedia(branding : Branding) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can update branding media");
+    };
+    brandingMedia := ?branding;
+  };
+};

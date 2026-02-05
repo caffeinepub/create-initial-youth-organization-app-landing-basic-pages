@@ -8,22 +8,26 @@ import { Link } from '@tanstack/react-router';
 import { ArrowLeft, Loader2, Save, CheckCircle2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AdminGuard } from '@/components/AdminGuard';
+import MediaPicker from '@/components/admin/MediaPicker';
+import type { ExternalBlob } from '../backend';
 
 function AdminHistoryEditorContent() {
-  const { data: historyContent, isLoading } = useGetHistoryContent();
+  const { data: historyData, isLoading } = useGetHistoryContent();
   const updateMutation = useUpdateHistoryContent();
   const [content, setContent] = useState('');
+  const [media, setMedia] = useState<ExternalBlob | null>(null);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (historyContent !== undefined) {
-      setContent(historyContent);
+    if (historyData) {
+      setContent(historyData.content || '');
+      setMedia(historyData.media || null);
     }
-  }, [historyContent]);
+  }, [historyData]);
 
   const handleSave = async () => {
     try {
-      await updateMutation.mutateAsync(content);
+      await updateMutation.mutateAsync({ content, media });
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (error) {
@@ -81,6 +85,14 @@ function AdminHistoryEditorContent() {
                     {content.length} characters
                   </p>
                 </div>
+
+                <MediaPicker
+                  label="Add picture or video"
+                  value={media}
+                  onChange={setMedia}
+                  accept="both"
+                  disabled={updateMutation.isPending}
+                />
 
                 {saved && (
                   <Alert className="border-primary/50 bg-primary/5">

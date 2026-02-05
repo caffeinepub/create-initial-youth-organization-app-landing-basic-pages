@@ -8,7 +8,8 @@ import { AdminGuard } from '@/components/AdminGuard';
 import { useGetHomePageSections, useUpdateHomePageSections } from '@/hooks/useQueries';
 import { Loader2, Save, Home, Plus, Trash2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import type { HomePageSection } from '../backend';
+import MediaPicker from '@/components/admin/MediaPicker';
+import type { HomePageSection, ExternalBlob } from '../backend';
 
 function AdminHomePageEditorContent() {
   const { data: homePageSections, isLoading, isError } = useGetHomePageSections();
@@ -26,17 +27,17 @@ function AdminHomePageEditorContent() {
         {
           title: 'Community Building',
           description: 'Connect with peers, build friendships, and develop a strong sense of belonging in a welcoming environment.',
-          imageUrl: '',
+          image: undefined,
         },
         {
           title: 'Skill Development',
           description: 'Learn new skills through workshops, mentorship programs, and hands-on activities that prepare you for the future.',
-          imageUrl: '',
+          image: undefined,
         },
         {
           title: 'Events & Activities',
           description: 'Participate in exciting events, social gatherings, and community service projects throughout the year.',
-          imageUrl: '',
+          image: undefined,
         },
       ]);
     }
@@ -52,14 +53,14 @@ function AdminHomePageEditorContent() {
     }
   };
 
-  const handleChange = (index: number, field: keyof HomePageSection, value: string) => {
+  const handleChange = (index: number, field: keyof HomePageSection, value: string | ExternalBlob | null) => {
     const updated = [...sections];
     updated[index] = { ...updated[index], [field]: value };
     setSections(updated);
   };
 
   const handleAddSection = () => {
-    setSections([...sections, { title: '', description: '', imageUrl: '' }]);
+    setSections([...sections, { title: '', description: '', image: undefined }]);
   };
 
   const handleRemoveSection = (index: number) => {
@@ -165,18 +166,13 @@ function AdminHomePageEditorContent() {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor={`imageUrl-${index}`}>Image URL (optional)</Label>
-                    <Input
-                      id={`imageUrl-${index}`}
-                      value={section.imageUrl}
-                      onChange={(e) => handleChange(index, 'imageUrl', e.target.value)}
-                      placeholder="e.g., /assets/image.png or https://example.com/image.png"
-                    />
-                    <p className="text-sm text-muted-foreground">
-                      Leave empty to use default icon
-                    </p>
-                  </div>
+                  <MediaPicker
+                    label="Add picture or video"
+                    value={section.image}
+                    onChange={(image) => handleChange(index, 'image', image)}
+                    accept="both"
+                    disabled={isSaving}
+                  />
                 </CardContent>
               </Card>
             ))}

@@ -2,14 +2,35 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-make-the-site-s-seo-indexing-configuration-work-with-the-actual-deployed-production-url-instead-of-hardcoded-placeholders-including-updating-parameterizing-canonical-url-and-sitemap-robots-urls-so-google-can-correctly-crawl-and-index-the-deployed-site",
-      "featureTitle": "Make the site’s SEO/indexing configuration work with the actual deployed production URL (instead of hardcoded placeholders), including updating/parameterizing canonical URL and sitemap/robots URLs so Google can correctly crawl and index the deployed site.",
+      "featureId": "feature-fix-the-site-wide-header-logo-so-the-same-correct-logo-is-shown-consistently-on-all-pages-including-admin-pages-by-removing-any-hardcoded-incorrect-logo-filename-usage-and-using-a-single-canonical-logo-source-throughout-the-frontend",
+      "featureTitle": "Fix the site-wide header logo so the same correct logo is shown consistently on all pages (including admin pages), by removing any hardcoded/incorrect logo filename usage and using a single canonical logo source throughout the frontend.",
       "files": [
-        "frontend/index.html",
-        "frontend/public/robots.txt",
-        "frontend/public/sitemap.xml",
+        "frontend/src/components/TopNav.tsx",
+        "frontend/src/config/branding.ts",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-33"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-an-admin-page-in-the-existing-admin-area-that-allows-admins-to-update-the-app-branding-logo-using-an-explicit-control-with-english-user-facing-text-including-an-add-picture-video-style-media-button-constrained-to-images-for-the-logo",
+      "featureTitle": "Create an admin page in the existing admin area that allows admins to update the app branding logo using an explicit control with English user-facing text (including an \"Add picture/video\"-style media button, constrained to images for the logo).",
+      "files": [
         "frontend/src/App.tsx",
-        "frontend/src/utils/seo.ts"
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/AdminBrandingPage.tsx",
+        "frontend/src/pages/AdminDashboardPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -17,20 +38,20 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-21"
+        "REQ-35"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-pwa-support-so-visitors-on-android-can-install-the-site-including-a-web-app-manifest-required-pwa-icons-and-service-worker-registration-compatible-with-the-current-vite-react-setup",
-      "featureTitle": "Add PWA support so visitors on Android can install the site, including a web app manifest, required PWA icons, and service worker registration compatible with the current Vite + React setup.",
+      "featureId": "feature-implement-a-reusable-add-picture-or-video-media-picker-control-for-admin-editing-workflows-that-supports-selecting-a-local-image-or-video-file-and-produces-a-storable-url-string-value-for-saving",
+      "featureTitle": "Implement a reusable \"Add picture or video\" media picker control for admin editing workflows that supports selecting a local image or video file and produces a storable URL/string value for saving.",
       "files": [
-        "frontend/index.html",
-        "frontend/public/manifest.webmanifest",
-        "frontend/public/sw.js"
+        "frontend/src/components/admin/MediaPicker.tsx",
+        "frontend/src/utils/media.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -38,19 +59,23 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-22"
+        "REQ-36"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-an-install-prompt-ui-on-the-public-home-page-that-encourages-android-users-to-install-the-app-using-english-user-facing-text-and-only-showing-the-prompt-when-installation-is-supported-and-the-app-is-not-already-installed",
-      "featureTitle": "Add an install prompt UI on the public Home page that encourages Android users to install the app, using English user-facing text and only showing the prompt when installation is supported and the app is not already installed.",
+      "featureId": "feature-extend-admin-editable-pages-so-that-wherever-admins-edit-content-the-ui-includes-the-same-add-picture-or-video-control-and-any-selected-media-is-saved-and-loaded-back-when-revisiting-the-editor-cover-at-minimum-history-editor-about-content-editor-and-home-page-editor",
+      "featureTitle": "Extend admin editable pages so that wherever admins edit content, the UI includes the same \"Add picture or video\" control, and any selected media is saved and loaded back when revisiting the editor (cover at minimum: History editor, About content editor, and Home page editor).",
       "files": [
-        "frontend/src/components/InstallPromptBanner.tsx",
-        "frontend/src/hooks/usePwaInstallPrompt.ts",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/AdminAboutPage.tsx",
+        "frontend/src/pages/AdminHistoryEditorPage.tsx",
+        "frontend/src/pages/AdminHomePageEditorPage.tsx",
+        "frontend/src/pages/HistoryPage.tsx",
         "frontend/src/pages/HomePage.tsx"
       ],
       "components": [
@@ -59,29 +84,11 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-23"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-provide-project-documentation-for-producing-an-android-apk-from-the-deployed-pwa-e-g-via-trusted-web-activity-including-clear-prerequisites-and-step-by-step-instructions-without-introducing-unsupported-backend-services",
-      "featureTitle": "Provide project documentation for producing an Android APK from the deployed PWA (e.g., via Trusted Web Activity), including clear prerequisites and step-by-step instructions, without introducing unsupported backend services.",
-      "files": [
-        "frontend/docs/android-apk-from-pwa.md"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-24"
+        "REQ-37"
       ],
       "confidence": "high"
     }

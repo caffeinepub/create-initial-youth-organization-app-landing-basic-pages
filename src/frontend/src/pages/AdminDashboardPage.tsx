@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
 import { useAdminSession } from '@/hooks/useAdminSession';
-import { BookOpen, Users, LogOut, Shield, Sparkles, Share2, Info, Home } from 'lucide-react';
+import { BookOpen, Users, LogOut, Shield, Sparkles, Share2, Info, Home, Image as ImageIcon } from 'lucide-react';
 import { AdminGuard } from '@/components/AdminGuard';
 
 function AdminDashboardContent() {
@@ -34,6 +34,23 @@ function AdminDashboardContent() {
 
         {/* Admin Tools */}
         <div className="grid gap-6 md:grid-cols-2">
+          <Card className="border-2 hover:border-primary/50 transition-colors">
+            <CardHeader>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
+                <ImageIcon className="h-6 w-6" />
+              </div>
+              <CardTitle className="text-2xl">Branding</CardTitle>
+              <CardDescription className="text-base">
+                Update your organization's logo and branding that appears throughout the site.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link to="/me/branding">
+                <Button className="w-full">Edit Branding</Button>
+              </Link>
+            </CardContent>
+          </Card>
+
           <Card className="border-2 hover:border-primary/50 transition-colors">
             <CardHeader>
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">

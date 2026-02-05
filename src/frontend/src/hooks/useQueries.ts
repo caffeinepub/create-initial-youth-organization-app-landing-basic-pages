@@ -1,15 +1,44 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { MembershipRegistration, Club, SocialMediaLinks, AboutSection, HomePageSection } from '../backend';
+import type { MembershipRegistration, Club, SocialMediaLinks, AboutSection, HomePageSection, Branding, ExternalBlob } from '../backend';
+
+// Branding Queries
+export function useGetBrandingMedia() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<Branding | null>({
+    queryKey: ['brandingMedia'],
+    queryFn: async () => {
+      if (!actor) return null;
+      return actor.getBrandingMedia();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useUpdateBrandingMedia() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (branding: Branding) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.updateBrandingMedia(branding);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['brandingMedia'] });
+    },
+  });
+}
 
 // History Content Queries
 export function useGetHistoryContent() {
   const { actor, isFetching } = useActor();
 
-  return useQuery<string>({
+  return useQuery<{ content: string; media?: ExternalBlob }>({
     queryKey: ['historyContent'],
     queryFn: async () => {
-      if (!actor) return '';
+      if (!actor) return { content: '' };
       return actor.getHistoryContent();
     },
     enabled: !!actor && !isFetching,
@@ -21,9 +50,9 @@ export function useUpdateHistoryContent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (newContent: string) => {
+    mutationFn: async ({ content, media }: { content: string; media: ExternalBlob | null }) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.updateHistoryContent(newContent);
+      return actor.updateHistoryContent(content, media);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['historyContent'] });

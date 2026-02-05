@@ -18,6 +18,7 @@ import AdminClubsManagerPage from './pages/AdminClubsManagerPage';
 import AdminSocialLinksPage from './pages/AdminSocialLinksPage';
 import AdminAboutPage from './pages/AdminAboutPage';
 import AdminHomePageEditorPage from './pages/AdminHomePageEditorPage';
+import AdminBrandingPage from './pages/AdminBrandingPage';
 import { updateSeoUrls } from './utils/seo';
 
 const rootRoute = createRootRoute({
@@ -90,6 +91,12 @@ const adminDashboardRoute = createRoute({
   component: AdminDashboardPage,
 });
 
+const adminBrandingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/me/branding',
+  component: AdminBrandingPage,
+});
+
 const adminHistoryEditorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/me/history-editor',
@@ -138,6 +145,7 @@ const routeTree = rootRoute.addChildren([
   membershipRoute,
   adminLoginRoute,
   adminDashboardRoute,
+  adminBrandingRoute,
   adminHistoryEditorRoute,
   adminMembershipReviewRoute,
   adminClubsManagerRoute,

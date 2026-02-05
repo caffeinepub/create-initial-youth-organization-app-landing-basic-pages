@@ -1,52 +1,47 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T15:59:48.159Z",
-  "summary": "REQ-21 appears largely addressed via dynamic canonical/OG URL updates and robots/sitemap using relative URLs with /me/* disallowed. REQ-22 is partially addressed (manifest + SW file), but the diff does not show service worker registration. REQ-23 adds a Home-page install banner, but the hook does not gate display on “not already installed”. REQ-24 adds an Android APK-from-PWA guide, but the provided diff is truncated/incomplete, so step-by-step completeness cannot be verified.",
+  "generatedAt": "2026-02-05T17:52:55.872Z",
+  "summary": "Diff implements branding/logo plumbing and a reusable admin MediaPicker, adds admin branding page and routes, updates TopNav to use backend branding logo with fallback, and extends history/about/home editors to include MediaPicker with backend model/migration changes. Two likely gaps: (1) fallback logo still hardcodes a specific filename, and (2) public rendering of video media is not evidenced and HistoryPage currently renders media only as an <img>.",
   "missing_requirements": [
     {
-      "id": "REQ-22",
-      "requirement": "A service worker is registered in production builds and the app is installable as a PWA on Android Chrome.",
-      "reason": "A service worker file (frontend/public/sw.js) is added, but the diff does not show any client-side registration code (e.g., navigator.serviceWorker.register) in the app entrypoint or elsewhere, so installability criteria cannot be confirmed from the provided changes.",
+      "id": "REQ-33",
+      "requirement": "Fix the site-wide header logo so the same correct logo is shown consistently on all pages by removing any hardcoded/incorrect logo filename usage and using a single canonical logo source throughout the frontend; fallback to existing generated logo asset when no configured logo exists.",
+      "reason": "While TopNav now uses a shared getLogoUrl() helper, the fallback in branding config is still a hardcoded, specific logo filename/path. This appears to violate the requirement to remove hardcoded/incorrect logo filename usage and to fall back to the existing generated logo asset.",
       "evidence": [
-        "frontend/public/sw.js",
-        "frontend/index.html"
+        "frontend/src/config/branding.ts",
+        "frontend/src/components/TopNav.tsx"
       ]
     },
     {
-      "id": "REQ-23",
-      "requirement": "Only show the install prompt when installation is supported and the app is not already installed.",
-      "reason": "The hook computes `isInstallable` as `!!deferredPrompt && !isDismissed` and does not include `!isInstalled` in that condition. Therefore, the banner may still render even when `isInstalled` is true (depending on whether a deferred prompt exists).",
+      "id": "REQ-37",
+      "requirement": "Public pages that render the edited content display the saved images/videos appropriately (read-only) for History, About, and Home content.",
+      "reason": "HistoryPage renders attached media using an <img> tag only; there is no evidence of conditional rendering for video (e.g., <video>) when a video is selected via the 'Add picture or video' control. Diff evidence for About/Home public rendering of media is not shown, and for History it appears incomplete for video.",
       "evidence": [
-        "frontend/src/hooks/usePwaInstallPrompt.ts",
-        "frontend/src/components/InstallPromptBanner.tsx"
-      ]
-    },
-    {
-      "id": "REQ-24",
-      "requirement": "Provide a written guide with clear prerequisites and step-by-step instructions (tools, where to put deployed URL, build/sign steps at a high level, limitations).",
-      "reason": "The added documentation file is truncated in the diff summary and stops at the beginning of Step 1 (Bubblewrap), so it is not verifiable that the guide includes the required step-by-step instructions, URL placement, signing/build steps, and limitations.",
-      "evidence": [
-        "frontend/docs/android-apk-from-pwa.md"
+        "frontend/src/pages/HistoryPage.tsx",
+        "frontend/src/components/admin/MediaPicker.tsx"
       ]
     }
   ],
   "hallucinated_features": [],
-  "confidence": 0.68,
+  "confidence": 0.66,
   "changed_files": [
     "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/docs/android-apk-from-pwa.md",
-    "frontend/index.html",
-    "frontend/public/manifest.webmanifest",
-    "frontend/public/robots.txt",
-    "frontend/public/sitemap.xml",
-    "frontend/public/sw.js",
     "frontend/src/App.tsx",
-    "frontend/src/components/InstallPromptBanner.tsx",
-    "frontend/src/hooks/usePwaInstallPrompt.ts",
+    "frontend/src/components/TopNav.tsx",
+    "frontend/src/components/admin/MediaPicker.tsx",
+    "frontend/src/config/branding.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/AdminAboutPage.tsx",
+    "frontend/src/pages/AdminBrandingPage.tsx",
+    "frontend/src/pages/AdminDashboardPage.tsx",
+    "frontend/src/pages/AdminHistoryEditorPage.tsx",
+    "frontend/src/pages/AdminHomePageEditorPage.tsx",
+    "frontend/src/pages/HistoryPage.tsx",
     "frontend/src/pages/HomePage.tsx",
-    "frontend/src/utils/seo.ts",
+    "frontend/src/utils/media.ts",
     "project_state.json"
   ]
 }

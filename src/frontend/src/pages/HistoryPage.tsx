@@ -3,7 +3,9 @@ import { useGetHistoryContent } from '@/hooks/useQueries';
 import { BookOpen, Loader2 } from 'lucide-react';
 
 export default function HistoryPage() {
-  const { data: historyContent, isLoading, error } = useGetHistoryContent();
+  const { data: historyData, isLoading, error } = useGetHistoryContent();
+
+  const mediaUrl = historyData?.media?.getDirectURL();
 
   return (
     <div className="container py-12 md:py-16 lg:py-20">
@@ -35,7 +37,7 @@ export default function HistoryPage() {
               <div className="text-center py-12 text-muted-foreground">
                 <p>Unable to load history content. Please try again later.</p>
               </div>
-            ) : !historyContent || historyContent.trim() === '' ? (
+            ) : !historyData?.content || historyData.content.trim() === '' ? (
               <div className="text-center py-12 text-muted-foreground">
                 <p className="text-lg">
                   Our history is being written every day through the amazing work of our members and community.
@@ -45,8 +47,15 @@ export default function HistoryPage() {
                 </p>
               </div>
             ) : (
-              <div className="prose prose-lg max-w-none text-muted-foreground whitespace-pre-wrap">
-                {historyContent}
+              <div className="space-y-6">
+                {mediaUrl && (
+                  <div className="rounded-lg overflow-hidden">
+                    <img src={mediaUrl} alt="History" className="w-full h-auto object-cover" />
+                  </div>
+                )}
+                <div className="prose prose-lg max-w-none text-muted-foreground whitespace-pre-wrap">
+                  {historyData.content}
+                </div>
               </div>
             )}
           </CardContent>

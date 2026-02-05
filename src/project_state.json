@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 21,
+  "projectStateVersion": 33,
   "summary": "Project scope expands beyond admin-managed clubs/social links to include admin-editable homepage/about content blocks (e.g., community building, skill development, events/activities, “our program”, “upcoming events”, “what we do/explore program”), homepage customization, club profile pictures, and deployment/distribution goals (public hosting + Google indexing, potential APK build).",
   "architectural_notes": [
     "Frontend uses React + Vite with Tailwind CSS and shadcn/ui component primitives.",
@@ -15,10 +15,10 @@
     "Public/main pages should render club data fetched from the backend as read-only; mutations (create/update/delete) are only available via admin-gated UI."
   ],
   "known_issues": [
-    "Build attempt failed with error: \"AI couldn't process your request successfully. Try simplifying or rewording it.\" User requested to retry the build with the latest update."
+    "Google Search Console verification failing with \"site not found\" because the production site HTML does not currently expose the expected google-site-verification meta tag; requires publishing the latest (v9) deployment to production and re-verifying.",
+    "Production deployment is showing an incorrect logo/image (not the user-provided asset), including within the admin interface."
   ],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Square PWA app icon derived from the YFO logo (yfo-pwa-icon.dim_192x192.png)\n- Square PWA app icon derived from the YFO logo (yfo-pwa-icon.dim_512x512.png)\n- Maskable square PWA icon derived from the YFO logo with safe padding (yfo-pwa-icon-maskable.dim_512x512.png)\n- Apple touch icon derived from the YFO logo (yfo-apple-touch-icon.dim_180x180.png)",
+  "isFixRequest": true,
   "generatedImages": [
     {
       "filename": "frontend/public/assets/generated/yfo-logo.dim_512x512.png",
@@ -289,6 +289,102 @@
         "REQ-24"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-insert-the-provided-google-search-console-verification-meta-tag-into-the-html-head-so-google-can-verify-ownership-for-the-production-site-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-and-redeploy-the-site",
+      "title": "Insert the provided Google Search Console verification meta tag into the HTML <head> so Google can verify ownership for the production site (https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io), and redeploy the site.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-deploy-the-current-frontend-and-backend-canisters-to-the-production-environment-so-the-site-is-publicly-accessible-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-and-google-search-console-can-verify-ownership-using-the-existing-verification-meta-tag-already-present-in-frontend-index-html",
+      "title": "Deploy the current frontend and backend canisters to the production environment so the site is publicly accessible at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io and Google Search Console can verify ownership using the existing verification meta tag already present in frontend/index.html.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-publish-version-9-the-latest-build-to-the-production-internet-computer-canisters-so-the-public-site-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-serves-the-current-frontend-bundle-and-backend-canister-and-the-google-search-console-verification-meta-tag-is-present-in-the-rendered-html-head",
+      "title": "Publish version 9 (the latest build) to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the current frontend bundle and backend canister, and the Google Search Console verification meta tag is present in the rendered HTML <head>.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-publish-the-current-application-version-the-build-the-assistant-labeled-version-10-to-the-production-internet-computer-canisters-so-the-public-site-is-served-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io",
+      "title": "Publish the current application version (the build the assistant labeled “Version 10”) to the production Internet Computer canisters so the public site is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-google-search-console-verification-can-succeed-by-confirming-that-the-deployed-production-html-exposes-the-google-verification-meta-tag-in-the-rendered-head-for-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io",
+      "title": "Ensure Google Search Console verification can succeed by confirming that the deployed production HTML exposes the Google verification meta tag in the rendered <head> for https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-production-deployment-documentation-to-reflect-deploying-the-current-version-version-10-for-google-search-console-verification-keeping-the-production-url-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-unchanged",
+      "title": "Update the production deployment documentation to reflect deploying the current version (Version 10) for Google Search Console verification, keeping the production URL https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io unchanged.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-current-top-navigation-logo-image-with-the-provided-app-logo-image-and-ensure-the-top-navigation-uses-the-updated-logo-asset-everywhere-it-appears-desktop-header-and-mobile-menu",
+      "title": "Replace the current top-navigation logo image with the provided app logo image, and ensure the top-navigation uses the updated logo asset everywhere it appears (desktop header and mobile menu).",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-change-the-top-navigation-heading-text-so-it-never-displays-the-abbreviation-yfo-and-instead-always-displays-the-youth-and-friends-organization-including-mobile-layouts-and-the-mobile-menu-header",
+      "title": "Change the top-navigation heading text so it never displays the abbreviation “YFO”, and instead always displays “The Youth And Friends Organization” (including mobile layouts and the mobile menu header).",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-site-wide-header-logo-so-the-same-correct-logo-is-shown-consistently-on-all-pages-including-admin-pages-by-removing-any-hardcoded-incorrect-logo-filename-usage-and-using-a-single-canonical-logo-source-throughout-the-frontend",
+      "title": "Fix the site-wide header logo so the same correct logo is shown consistently on all pages (including admin pages), by removing any hardcoded/incorrect logo filename usage and using a single canonical logo source throughout the frontend.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-admin-page-in-the-existing-admin-area-that-allows-admins-to-update-the-app-branding-logo-using-an-explicit-control-with-english-user-facing-text-including-an-add-picture-video-style-media-button-constrained-to-images-for-the-logo",
+      "title": "Create an admin page in the existing admin area that allows admins to update the app branding logo using an explicit control with English user-facing text (including an \"Add picture/video\"-style media button, constrained to images for the logo).",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-reusable-add-picture-or-video-media-picker-control-for-admin-editing-workflows-that-supports-selecting-a-local-image-or-video-file-and-produces-a-storable-url-string-value-for-saving",
+      "title": "Implement a reusable \"Add picture or video\" media picker control for admin editing workflows that supports selecting a local image or video file and produces a storable URL/string value for saving.",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-extend-admin-editable-pages-so-that-wherever-admins-edit-content-the-ui-includes-the-same-add-picture-or-video-control-and-any-selected-media-is-saved-and-loaded-back-when-revisiting-the-editor-cover-at-minimum-history-editor-about-content-editor-and-home-page-editor",
+      "title": "Extend admin editable pages so that wherever admins edit content, the UI includes the same \"Add picture or video\" control, and any selected media is saved and loaded back when revisiting the editor (cover at minimum: History editor, About content editor, and Home page editor).",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -408,6 +504,60 @@
       "id": "AR-17",
       "summary": "Add an install prompt on the homepage for Android users (PWA install banner / prompt visitors to install the app).",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Add Google Search Console verification by inserting the provided google-site-verification meta tag into the site’s HTML <head> for the production domain (https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io), then redeploy so ownership can be verified and indexing can proceed.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Publish the current build/version to the production ICP canisters so the live site is updated and Google Search Console verification can succeed.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Replace the current app/site picture (image asset) with the picture used on the app.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Update the site/app header heading text from “YFO” to “the youth and friends organization”.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Add admin UI support across all editable/admin-managed sections to attach/upload media (images and videos) when creating/updating content, via a consistent \"Add picture/video\" button available wherever edits occur.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Add backend support for an admin-managed app branding configuration that includes a logo media field, readable publicly and writable only by admins.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Update the backend data model and APIs as needed to persist media attachments for History content, About sections, and Home page sections in stable storage, with admin-only write access and public read access.",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Add a conditional Motoko stable-state migration so deployed canisters can upgrade safely after changing stable types required to store branding/logo and editor media attachments.",
+      "reqIds": [
+        "REQ-39"
+      ],
       "status": "pending"
     }
   ],

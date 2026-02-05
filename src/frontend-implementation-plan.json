@@ -1,136 +1,127 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "SEO deployment URL readiness, PWA installability, and Android install prompt",
+  "title": "Consistent logo sourcing and reusable admin media picker across editors",
   "requirements": [
     {
-      "id": "REQ-21",
-      "summary": "Make canonical/robots/sitemap reflect the deployed production URL (no placeholder domains) while keeping admin routes excluded from crawling.",
+      "id": "REQ-33",
+      "summary": "Remove hardcoded logo filenames and source the header logo from a single shared branding configuration with a safe fallback.",
       "acceptanceCriteria": [
-        "The canonical URL is not hardcoded to a placeholder domain (e.g., not fixed to https://yfo.org/) and matches the deployed site URL.",
-        "frontend/public/robots.txt and frontend/public/sitemap.xml do not reference an incorrect domain for the deployed site.",
-        "Admin routes remain excluded from crawling (e.g., /me/* disallowed) while public routes are crawlable.",
-        "Build output still includes robots.txt and sitemap.xml at the expected public paths."
+        "The TopNav logo image is not hardcoded to an unexpected filename and is sourced from a single shared configuration.",
+        "The same logo is displayed on public pages and on admin pages (admin uses the same header).",
+        "If no configured logo exists, the UI falls back to the existing generated logo asset without breaking layout."
       ],
       "file_operations": [
         {
-          "path": "frontend/index.html",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Remove the hardcoded canonical domain and adjust SEO tags to be compatible with runtime canonical URL setting (e.g., keep canonical tag present but not fixed to a placeholder, and/or allow it to be set from client code)."
+          "description": "Add React Query hooks to load public branding configuration (logo) from the backend, and expose a stable queryKey for reuse. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/utils/seo.ts",
+          "path": "frontend/src/config/branding.ts",
           "operation": "create",
-          "description": "Add small SEO helpers to set/update the canonical URL to the current deployed origin + current route path (and optionally keep related share/meta URL fields consistent) at runtime."
+          "description": "Create a single canonical frontend branding config helper that provides the default/fallback logo asset reference and utilities to derive a displayable logo URL from optional backend branding data."
+        },
+        {
+          "path": "frontend/src/components/TopNav.tsx",
+          "operation": "modify",
+          "description": "Replace hardcoded logo asset usage with the shared canonical logo source: prefer branding.logo (when available) and fall back to the existing generated logo asset path from the shared config; keep layout stable across desktop/mobile nav."
+        }
+      ]
+    },
+    {
+      "id": "REQ-35",
+      "summary": "Add a reachable admin Branding page to update the app logo with an English-labeled image-only media button and preview-before-save UX.",
+      "acceptanceCriteria": [
+        "The admin area contains a reachable UI for updating the app logo.",
+        "The page provides a clear button to select media from the user’s device and updates the logo preview before saving.",
+        "Saving persists the selected logo so that refreshing the site still shows the updated logo.",
+        "All user-facing text on the page is in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AdminBrandingPage.tsx",
+          "operation": "create",
+          "description": "Create an admin-only Branding page (wrapped in AdminGuard) that loads current branding, allows selecting a new logo via the shared MediaPicker with images-only constraint, previews the logo, and saves via the branding update hook. Use the blob-storage ExternalBlob flow to produce a storable value; verify the blob-storage component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Wire SEO helpers into routing so canonical updates on navigation (e.g., subscribe to TanStack Router navigation changes and update canonical accordingly)."
+          "description": "Register a new admin route for the Branding page under the existing /me/* admin area so it is reachable."
         },
         {
-          "path": "frontend/public/robots.txt",
+          "path": "frontend/src/pages/AdminDashboardPage.tsx",
           "operation": "modify",
-          "description": "Update robots.txt to avoid any incorrect hardcoded domain by using a non-placeholder sitemap location (e.g., a relative sitemap reference) while keeping /me/ and /me/* disallowed and public routes crawlable."
+          "description": "Add a new Admin Dashboard navigation card/button linking to the Branding page, with English user-facing text, without changing unrelated navigation structure."
         },
         {
-          "path": "frontend/public/sitemap.xml",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Update sitemap.xml to remove any incorrect hardcoded domain (e.g., use non-placeholder URL forms compatible with the deployed origin) and keep only public routes listed (no /me/*)."
+          "description": "Add/update mutations and queries needed for branding save/load (e.g., useGetBrandingMedia/useUpdateBrandingMedia) and ensure cache invalidation so TopNav refreshes its logo after saving. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-22",
-      "summary": "Add PWA support (manifest, icons, service worker) compatible with the current Vite + React setup.",
+      "id": "REQ-36",
+      "summary": "Implement a reusable admin media picker control (Add picture or video) that supports image/video selection, preview, and clearing, returning a storable value for saving.",
       "acceptanceCriteria": [
-        "The app includes a valid web app manifest linked from the HTML entrypoint.",
-        "The manifest references local icon assets in the frontend public directory (no backend image routing).",
-        "A service worker is registered in production builds and the app is installable as a PWA on Android Chrome (meeting basic installability requirements)."
+        "A shared media-picker control exists and can be embedded in multiple admin pages without duplicating logic.",
+        "The control supports choosing an image or a video file from the local device.",
+        "The control provides a preview (image preview or video preview) and a way to remove/clear the selected media before saving.",
+        "All user-facing text in the control is in English and consistently labeled across pages (e.g., \"Add picture or video\")."
       ],
       "file_operations": [
         {
-          "path": "frontend/index.html",
-          "operation": "modify",
-          "description": "Link the web app manifest from the HTML entrypoint and add any required PWA meta tags (e.g., theme-color) for installability."
-        },
-        {
-          "path": "frontend/public/manifest.webmanifest",
+          "path": "frontend/src/components/admin/MediaPicker.tsx",
           "operation": "create",
-          "description": "Add a valid web app manifest configured for the deployed SPA, referencing local icon assets under frontend/public/assets/generated/ and using appropriate start_url/scope/display settings."
+          "description": "Create a reusable MediaPicker control for admin editors with consistent English labeling (e.g., \"Add picture or video\"), local file selection (image/video based on props), preview rendering, and remove/clear support. Use the blob-storage ExternalBlob type to produce a storable value (and a preview URL via getDirectURL when needed). Verify the blob-storage component's usage instructions before implementing."
         },
         {
-          "path": "frontend/public/sw.js",
+          "path": "frontend/src/utils/media.ts",
           "operation": "create",
-          "description": "Add a service worker suitable for Vite static builds (basic offline caching strategy for app shell/static assets; avoid push/websocket features per non-goals)."
-        },
-        {
-          "path": "frontend/src/main.tsx",
-          "operation": "modify",
-          "description": "Register the service worker only for production builds (and handle update/reload behavior safely) so PWA installability works on Android Chrome."
-        },
-        {
-          "path": "frontend/public/assets/generated/yfo-pwa-icon.dim_192x192.png",
-          "operation": "create",
-          "description": "Add the required generated PWA icon asset at frontend/public/assets/generated/yfo-pwa-icon.dim_192x192.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/yfo-pwa-icon.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the required generated PWA icon asset at frontend/public/assets/generated/yfo-pwa-icon.dim_512x512.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/yfo-pwa-icon-maskable.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the required generated maskable PWA icon asset at frontend/public/assets/generated/yfo-pwa-icon-maskable.dim_512x512.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/yfo-apple-touch-icon.dim_180x180.png",
-          "operation": "create",
-          "description": "Add the required generated Apple touch icon asset at frontend/public/assets/generated/yfo-apple-touch-icon.dim_180x180.png."
+          "description": "Add shared helpers to validate media type/size, convert File->Uint8Array for upload, and derive preview URLs consistently for the MediaPicker and editor pages."
         }
       ]
     },
     {
-      "id": "REQ-23",
-      "summary": "Add an install prompt banner on the public Home page that appears only when PWA installation is supported and the app is not already installed.",
+      "id": "REQ-37",
+      "summary": "Add the same shared media picker to the History, About, and Home admin editors; ensure selected media saves, reloads, and is rendered on public pages.",
       "acceptanceCriteria": [
-        "Home page displays an install prompt/banner only when the browser provides an install event (or equivalent installability signal) and the app is not already installed.",
-        "Clicking the prompt’s primary action triggers the browser’s install flow (where supported).",
-        "All user-facing strings in the install prompt are in English (e.g., title, description, button text, dismiss text).",
-        "The prompt can be dismissed and does not reappear excessively during the same session (reasonable UX persistence)."
+        "AdminHistoryEditorPage includes a media control and can save and reload the selected media with the history content.",
+        "AdminAboutPage includes a media control for each editable section (or an equivalent per-section media attachment) and persists it through save/load.",
+        "AdminHomePageEditorPage includes a media control per card/section and persists it through save/load.",
+        "Public pages that render the edited content display the saved images/videos appropriately (read-only)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/usePwaInstallPrompt.ts",
-          "operation": "create",
-          "description": "Implement a hook that listens for the browser install prompt signal (e.g., beforeinstallprompt), tracks whether the app is already installed (display-mode/standalone checks), and exposes actions to trigger the install flow and to dismiss with session-scoped persistence."
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Align history/about/home React Query hooks and types with the current backend interface for media attachments (History returns content+media; Home sections use image?: ExternalBlob; About sections use media?: ExternalBlob). Ensure save mutations accept and send media values and invalidate relevant queries. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/components/InstallPromptBanner.tsx",
-          "operation": "create",
-          "description": "Create a Home-page-friendly install prompt/banner UI component with English text and primary/secondary actions. Use the shadcn-ui components already available in the project (e.g., Card/Button) to match the app design. Verify the component's usage instructions before implementing."
+          "path": "frontend/src/pages/AdminHistoryEditorPage.tsx",
+          "operation": "modify",
+          "description": "Embed the shared MediaPicker (image/video) into the History editor, load existing history media into the control on page load, update preview immediately on selection, and include media in save behavior (clear supported). Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HistoryPage.tsx",
+          "operation": "modify",
+          "description": "Render the saved History media (image/video) read-only when present (using ExternalBlob direct URL), while keeping existing loading/empty/error states intact. Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AdminAboutPage.tsx",
+          "operation": "modify",
+          "description": "Add a per-section shared MediaPicker (image/video) to About section cards, wiring selection/clear into the section state as AboutSection.media and ensuring save/load round-trips through existing update flow. Verify the blob-storage component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/HomePage.tsx",
           "operation": "modify",
-          "description": "Wire the InstallPromptBanner into the public Home page (no new route), ensuring it only renders when install is supported and the app is not already installed, and that dismiss state behaves reasonably within the same session."
-        }
-      ]
-    },
-    {
-      "id": "REQ-24",
-      "summary": "Add documentation explaining how to wrap the deployed PWA URL into an Android APK (Trusted Web Activity) without adding unsupported backend services.",
-      "acceptanceCriteria": [
-        "Repository includes a written guide explaining how to generate an Android APK wrapper for the deployed URL (PWA-to-APK approach).",
-        "The guide includes: required tools, where to put the deployed URL, build/sign steps at a high level, and limitations (e.g., Play Store requirements).",
-        "The guide does not require adding non-supported backend technologies or third-party auth providers."
-      ],
-      "file_operations": [
+          "description": "When rendering About content sections and Home page sections, display saved media (image/video) read-only where present (using ExternalBlob direct URL), while preserving existing fallbacks and layout. Verify the blob-storage component's usage instructions before implementing."
+        },
         {
-          "path": "frontend/docs/android-apk-from-pwa.md",
-          "operation": "create",
-          "description": "Write a step-by-step guide for generating an Android APK wrapper for the deployed URL (e.g., using Bubblewrap/Trusted Web Activity), including prerequisites, where to configure the deployed URL, high-level build/sign steps, and limitations/Play Store considerations. Avoid requiring any unsupported backend services or third-party auth providers."
+          "path": "frontend/src/pages/AdminHomePageEditorPage.tsx",
+          "operation": "modify",
+          "description": "Replace the current Image URL string field with the shared MediaPicker for each card/section, storing the chosen image/video as the section media field expected by the backend interface; support preview and clear, and ensure save/load persists it. Verify the blob-storage component's usage instructions before implementing."
         }
       ]
     }

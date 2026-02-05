@@ -9,7 +9,8 @@ import { useGetAboutSections, useUpdateAboutSections } from '@/hooks/useQueries'
 import { Loader2, Save, Info, Plus, Trash2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
-import type { AboutSection } from '../backend';
+import MediaPicker from '@/components/admin/MediaPicker';
+import type { AboutSection, ExternalBlob } from '../backend';
 
 function AdminAboutContent() {
   const { data: aboutSections, isLoading, isError } = useGetAboutSections();
@@ -24,11 +25,11 @@ function AdminAboutContent() {
     } else {
       // Initialize with default sections
       setSections([
-        { title: 'Community Building', content: '', link: false },
-        { title: 'Skill Development', content: '', link: false },
-        { title: 'Events & Activities', content: '', link: false },
-        { title: 'Our Programs', content: '', link: true },
-        { title: 'Upcoming Events', content: '', link: true },
+        { title: 'Community Building', content: '', link: false, media: undefined },
+        { title: 'Skill Development', content: '', link: false, media: undefined },
+        { title: 'Events & Activities', content: '', link: false, media: undefined },
+        { title: 'Our Programs', content: '', link: true, media: undefined },
+        { title: 'Upcoming Events', content: '', link: true, media: undefined },
       ]);
     }
   }, [aboutSections]);
@@ -43,14 +44,14 @@ function AdminAboutContent() {
     }
   };
 
-  const handleChange = (index: number, field: keyof AboutSection, value: string | boolean) => {
+  const handleChange = (index: number, field: keyof AboutSection, value: string | boolean | ExternalBlob | null) => {
     const updated = [...sections];
     updated[index] = { ...updated[index], [field]: value };
     setSections(updated);
   };
 
   const handleAddSection = () => {
-    setSections([...sections, { title: '', content: '', link: false }]);
+    setSections([...sections, { title: '', content: '', link: false, media: undefined }]);
   };
 
   const handleRemoveSection = (index: number) => {
@@ -177,6 +178,14 @@ function AdminAboutContent() {
                       This is a link (button)
                     </Label>
                   </div>
+
+                  <MediaPicker
+                    label="Add picture or video"
+                    value={section.media}
+                    onChange={(media) => handleChange(index, 'media', media)}
+                    accept="both"
+                    disabled={isSaving}
+                  />
                 </CardContent>
               </Card>
             ))}

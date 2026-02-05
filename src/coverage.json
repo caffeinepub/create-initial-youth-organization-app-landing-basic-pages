@@ -1,107 +1,131 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T15:59:48.163Z",
+  "generatedAt": "2026-02-05T17:52:55.877Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
+    "total": 7,
     "implemented": 4,
     "items": [
       {
-        "id": "REQ-21",
-        "summary": "Make the site’s SEO/indexing configuration work with the actual deployed production URL (instead of hardcoded placeholders), including updating/parameterizing canonical URL and sitemap/robots URLs so Google can correctly crawl and index the deployed site.",
+        "id": "REQ-33",
+        "summary": "Fix the site-wide header logo so the same correct logo is shown consistently on all pages (including admin pages), by removing any hardcoded/incorrect logo filename usage and using a single canonical logo source throughout the frontend.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/index.html",
-          "frontend/src/utils/seo.ts",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/config/branding.ts",
+          "frontend/src/components/TopNav.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/config/branding.ts",
+          "frontend/src/components/TopNav.tsx"
+        ]
+      },
+      {
+        "id": "REQ-34",
+        "summary": "Add backend support for an admin-managed app branding configuration that includes a logo media field, readable publicly and writable only by admins.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-35",
+        "summary": "Create an admin page in the existing admin area that allows admins to update the app branding logo using an explicit control with English user-facing text (including an \"Add picture/video\"-style media button, constrained to images for the logo).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/AdminBrandingPage.tsx",
           "frontend/src/App.tsx",
-          "frontend/public/robots.txt",
-          "frontend/public/sitemap.xml"
+          "frontend/src/pages/AdminDashboardPage.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/index.html",
-          "frontend/src/utils/seo.ts",
+          "frontend/src/pages/AdminBrandingPage.tsx",
           "frontend/src/App.tsx",
-          "frontend/public/robots.txt",
-          "frontend/public/sitemap.xml"
+          "frontend/src/pages/AdminDashboardPage.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
-        "id": "REQ-22",
-        "summary": "Add PWA support so visitors on Android can install the site, including a web app manifest, required PWA icons, and service worker registration compatible with the current Vite + React setup.",
+        "id": "REQ-36",
+        "summary": "Implement a reusable \"Add picture or video\" media picker control for admin editing workflows that supports selecting a local image or video file and produces a storable URL/string value for saving.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/index.html",
-          "frontend/public/manifest.webmanifest",
-          "frontend/public/sw.js",
-          "frontend/src/main.tsx",
-          "frontend/public/assets/generated/yfo-pwa-icon.dim_192x192.png",
-          "frontend/public/assets/generated/yfo-pwa-icon.dim_512x512.png",
-          "frontend/public/assets/generated/yfo-pwa-icon-maskable.dim_512x512.png",
-          "frontend/public/assets/generated/yfo-apple-touch-icon.dim_180x180.png"
+          "frontend/src/components/admin/MediaPicker.tsx",
+          "frontend/src/utils/media.ts"
         ],
         "matchedFiles": [
-          "frontend/index.html",
-          "frontend/public/manifest.webmanifest",
-          "frontend/public/sw.js",
-          "frontend/public/assets/generated/yfo-pwa-icon.dim_192x192.png",
-          "frontend/public/assets/generated/yfo-pwa-icon.dim_512x512.png",
-          "frontend/public/assets/generated/yfo-pwa-icon-maskable.dim_512x512.png",
-          "frontend/public/assets/generated/yfo-apple-touch-icon.dim_180x180.png"
+          "frontend/src/components/admin/MediaPicker.tsx",
+          "frontend/src/utils/media.ts"
         ]
       },
       {
-        "id": "REQ-23",
-        "summary": "Add an install prompt UI on the public Home page that encourages Android users to install the app, using English user-facing text and only showing the prompt when installation is supported and the app is not already installed.",
+        "id": "REQ-37",
+        "summary": "Extend admin editable pages so that wherever admins edit content, the UI includes the same \"Add picture or video\" control, and any selected media is saved and loaded back when revisiting the editor (cover at minimum: History editor, About content editor, and Home page editor).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/usePwaInstallPrompt.ts",
-          "frontend/src/components/InstallPromptBanner.tsx",
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/pages/AdminHistoryEditorPage.tsx",
+          "frontend/src/pages/HistoryPage.tsx",
+          "frontend/src/pages/AdminAboutPage.tsx",
+          "frontend/src/pages/HomePage.tsx",
+          "frontend/src/pages/AdminHomePageEditorPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/usePwaInstallPrompt.ts",
-          "frontend/src/components/InstallPromptBanner.tsx",
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/pages/AdminHistoryEditorPage.tsx",
+          "frontend/src/pages/HistoryPage.tsx",
+          "frontend/src/pages/AdminAboutPage.tsx",
+          "frontend/src/pages/HomePage.tsx",
+          "frontend/src/pages/AdminHomePageEditorPage.tsx"
         ]
       },
       {
-        "id": "REQ-24",
-        "summary": "Provide project documentation for producing an Android APK from the deployed PWA (e.g., via Trusted Web Activity), including clear prerequisites and step-by-step instructions, without introducing unsupported backend services.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/docs/android-apk-from-pwa.md"
-        ],
-        "matchedFiles": [
-          "frontend/docs/android-apk-from-pwa.md"
-        ]
+        "id": "REQ-38",
+        "summary": "Update the backend data model and APIs as needed to persist media attachments for History content, About sections, and Home page sections in stable storage, with admin-only write access and public read access.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-39",
+        "summary": "Add a conditional Motoko stable-state migration so deployed canisters can upgrade safely after changing stable types required to store branding/logo and editor media attachments.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
+    "backend/blob-storage/Mixin.mo",
+    "backend/blob-storage/Storage.mo",
     "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
+    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/docs/android-apk-from-pwa.md",
-    "frontend/index.html",
-    "frontend/public/assets/generated/yfo-apple-touch-icon.dim_180x180.png",
-    "frontend/public/assets/generated/yfo-pwa-icon-maskable.dim_512x512.png",
-    "frontend/public/assets/generated/yfo-pwa-icon.dim_192x192.png",
-    "frontend/public/assets/generated/yfo-pwa-icon.dim_512x512.png",
-    "frontend/public/manifest.webmanifest",
-    "frontend/public/robots.txt",
-    "frontend/public/sitemap.xml",
-    "frontend/public/sw.js",
     "frontend/src/App.tsx",
-    "frontend/src/components/InstallPromptBanner.tsx",
-    "frontend/src/hooks/usePwaInstallPrompt.ts",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/TopNav.tsx",
+    "frontend/src/components/admin/MediaPicker.tsx",
+    "frontend/src/config/branding.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/AdminAboutPage.tsx",
+    "frontend/src/pages/AdminBrandingPage.tsx",
+    "frontend/src/pages/AdminDashboardPage.tsx",
+    "frontend/src/pages/AdminHistoryEditorPage.tsx",
+    "frontend/src/pages/AdminHomePageEditorPage.tsx",
+    "frontend/src/pages/HistoryPage.tsx",
     "frontend/src/pages/HomePage.tsx",
-    "frontend/src/utils/seo.ts",
+    "frontend/src/utils/media.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
