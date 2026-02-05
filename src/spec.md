@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Update the application to address the “Canister ID Not Resolved (Error 400)” issue shown in the provided screenshot.
+**Goal:** Re-run the previously failing production build and deployment flow, ensuring the existing Google Search Console meta-tag verification step is enforced, and capture actionable error output if it fails again.
 
 **Planned changes:**
-- Investigate and fix the app’s Internet Computer/ICP canister routing configuration so the deployed site resolves to a valid canister ID / recognized domain.
-- Validate deployment settings to ensure end-users can load the app without the gateway error.
+- Re-execute the repository’s full production build and promotion/deployment pipeline using the existing tooling and checks (including the Google Search Console meta-tag verification script that blocks deployment if the expected meta tag is missing).
+- If the build/deploy fails, capture and include the exact failing step and full error output in build logs/artifacts for troubleshooting.
+- If the build/deploy succeeds, promote/deploy the updated site so it is reachable at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.
 
-**User-visible outcome:** The application loads normally in the browser instead of showing the “Canister ID Not Resolved” error page.
+**User-visible outcome:** The site is either successfully redeployed and reachable at the target URL, or clear build/deploy logs identify exactly what failed and what needs to be fixed next.

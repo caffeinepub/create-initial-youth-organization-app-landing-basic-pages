@@ -1,4 +1,26 @@
 {
   "kind": "feature_evidence_report",
-  "features": []
+  "features": [
+    {
+      "featureId": "feature-re-run-the-full-production-build-and-promotion-deployment-flow-again-the-same-flow-that-previously-failed-during-deployment-and-ensure-the-process-uses-the-existing-google-search-console-meta-tag-verification-step-so-the-deployment-is-blocked-if-the-expected-verification-meta-tag-is-missing",
+      "featureTitle": "Re-run the full production build and promotion/deployment flow again (the same flow that previously failed during deployment), and ensure the process uses the existing Google Search Console meta-tag verification step so the deployment is blocked if the expected verification meta tag is missing.",
+      "files": [
+        "frontend/scripts/run-prod-build-with-gsc-check.ts",
+        "frontend/scripts/verify-gsc-meta.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-73"
+      ],
+      "confidence": "high"
+    }
+  ]
 }

@@ -1,6 +1,33 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Untitled request",
-  "requirements": []
+  "title": "Retryable production build flow with GSC meta-tag gate and actionable error logs",
+  "requirements": [
+    {
+      "id": "REQ-73",
+      "summary": "Ensure the production build flow reuses the existing Google Search Console meta-tag verification gate and captures full failing-step output into an artifact log for debugging.",
+      "acceptanceCriteria": [
+        "A production build is executed using the repository’s existing production build tooling and checks (including the Google Search Console meta-tag verification script).",
+        "If the build/deploy fails again, the exact failing step and full error output are captured and included in the build logs/artifacts so it is clear what needs to be fixed next.",
+        "If the build/deploy succeeds, the public site is updated and reachable at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/scripts/run-prod-build-with-gsc-check.ts",
+          "operation": "modify",
+          "description": "Enhance the existing production build orchestrator to (1) clearly label each step (build, dist existence check, GSC verification), and (2) capture full stdout/stderr to a persistent log artifact file while still streaming output to the console; on failure, include the failing step name and point to the saved log file for the complete error output."
+        },
+        {
+          "path": "frontend/scripts/verify-gsc-meta.ts",
+          "operation": "modify",
+          "description": "Improve error output when the GSC meta tag check fails by printing explicit diagnostics (file path checked, the exact expected meta tag string, and guidance to fix in frontend/index.html) and ensure the script exits non-zero so the production flow remains blocked when the tag is missing."
+        },
+        {
+          "path": "frontend/docs/production-deploy-google-search-console.md",
+          "operation": "modify",
+          "description": "Update the production deployment guide to instruct re-running the existing production build gate script and to reference the generated build log artifact location for actionable troubleshooting if the flow fails again (no new UI/UX changes)."
+        }
+      ]
+    }
+  ]
 }

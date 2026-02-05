@@ -1,12 +1,53 @@
 {
   "kind": "build_request",
-  "title": "Untitled request",
+  "title": "Retry failed production build/deployment and capture actionable error output",
   "priority": "normal",
-  "requirements": [],
-  "constraints": [],
-  "nonGoals": [],
+  "requirements": [
+    {
+      "id": "REQ-73",
+      "text": "Re-run the full production build and promotion/deployment flow again (the same flow that previously failed during deployment), and ensure the process uses the existing Google Search Console meta-tag verification step so the deployment is blocked if the expected verification meta tag is missing.",
+      "target": "unknown",
+      "source": {
+        "messageIds": [
+          "msg-1",
+          "msg-2",
+          "msg-3"
+        ],
+        "quotes": [
+          "Do it again",
+          "🙏 We hit a snag during deployment",
+          "Got it — starting the build now."
+        ]
+      },
+      "acceptanceCriteria": [
+        "A production build is executed using the repository’s existing production build tooling and checks (including the Google Search Console meta-tag verification script).",
+        "If the build/deploy fails again, the exact failing step and full error output are captured and included in the build logs/artifacts so it is clear what needs to be fixed next.",
+        "If the build/deploy succeeds, the public site is updated and reachable at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify any files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or anything under frontend/src/components/ui.",
+    "Respect the single-actor Motoko backend architecture (all logic in backend/main.mo); only add a migration file if a state upgrade is required."
+  ],
+  "nonGoals": [
+    "No new product features or UI/UX changes beyond what is required to successfully re-run the build/deploy flow.",
+    "No backend schema changes unless they are strictly required to resolve the deployment failure."
+  ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Use English for any user-facing text."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

@@ -1,21 +1,38 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T23:09:52.953Z",
+  "generatedAt": "2026-02-05T23:34:25.066Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 0,
-    "implemented": 0,
-    "items": []
+    "total": 1,
+    "implemented": 1,
+    "items": [
+      {
+        "id": "REQ-73",
+        "summary": "Re-run the full production build and promotion/deployment flow again (the same flow that previously failed during deployment), and ensure the process uses the existing Google Search Console meta-tag verification step so the deployment is blocked if the expected verification meta tag is missing.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/scripts/run-prod-build-with-gsc-check.ts",
+          "frontend/scripts/verify-gsc-meta.ts",
+          "frontend/docs/production-deploy-google-search-console.md"
+        ],
+        "matchedFiles": [
+          "frontend/scripts/run-prod-build-with-gsc-check.ts",
+          "frontend/scripts/verify-gsc-meta.ts"
+        ]
+      }
+    ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
+    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/scripts/run-prod-build-with-gsc-check.ts",
+    "frontend/scripts/verify-gsc-meta.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

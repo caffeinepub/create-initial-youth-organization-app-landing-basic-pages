@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 53,
+  "projectStateVersion": 57,
   "summary": "Project scope includes UI/navigation refinements for the web app (move main menu to a bottom button on the main/home interface, repurpose the hamburger/three-lines menu to settings/close/logout, and add a theme toggle), plus sharing/accessibility requests (shareable link for colleagues and improved add-to-home-screen/PWA access), alongside existing deployment/SEO goals and potential APK distribution goals, with an added request to support Google Ads/AdSense readiness for monetization/advertising.",
   "architectural_notes": [
     "Frontend uses React + Vite with Tailwind CSS and shadcn/ui component primitives.",
@@ -21,7 +21,7 @@
     "An \"Install app\" option is appearing in the Share menu; may be unintended UX placement or mislabeled entry and should be reviewed.",
     "On Version 21 production, the user cannot find the “Me” feature/button that should provide access to the admin login interface (admin entry point appears missing or not discoverable)."
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "generatedImages": [
     {
       "filename": "frontend/public/assets/generated/yfo-logo.dim_512x512.png",
@@ -604,6 +604,22 @@
         "REQ-68"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-ensure-google-adsense-can-be-enabled-via-configuration-without-hardcoding-any-adsense-account-identifiers-into-the-repository-by-injecting-the-adsense-script-only-when-the-vite-environment-variable-vite-adsense-client-id-is-set-and-doing-nothing-when-it-is-unset-blank",
+      "title": "Ensure Google AdSense can be enabled via configuration without hardcoding any AdSense account identifiers into the repository by injecting the AdSense script only when the Vite environment variable `VITE_ADSENSE_CLIENT_ID` is set, and doing nothing when it is unset/blank.",
+      "reqIds": [
+        "REQ-70"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-re-run-the-full-production-build-and-promotion-deployment-flow-again-the-same-flow-that-previously-failed-during-deployment-and-ensure-the-process-uses-the-existing-google-search-console-meta-tag-verification-step-so-the-deployment-is-blocked-if-the-expected-verification-meta-tag-is-missing",
+      "title": "Re-run the full production build and promotion/deployment flow again (the same flow that previously failed during deployment), and ensure the process uses the existing Google Search Console meta-tag verification step so the deployment is blocked if the expected verification meta tag is missing.",
+      "reqIds": [
+        "REQ-73"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -884,6 +900,22 @@
       "summary": "Audit the public-facing pages and UI to ensure there are no edit/create/update/delete controls available outside the admin area; all content editing must be possible only within the admin-gated interface, while public pages remain read-only (except for allowed public actions like submitting a membership registration form).",
       "reqIds": [
         "REQ-69"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-54",
+      "summary": "Ensure the AdSense `ads.txt` file is served from the site root as a static public file and is ready to be replaced with the user’s official AdSense snippet.",
+      "reqIds": [
+        "REQ-71"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-55",
+      "summary": "Provide clear project documentation for enabling AdSense that explains (in English) how to set `VITE_ADSENSE_CLIENT_ID` and how/where to replace `frontend/public/ads.txt` with the official AdSense-provided line(s).",
+      "reqIds": [
+        "REQ-72"
       ],
       "status": "pending"
     }
