@@ -10,7 +10,10 @@ A Trusted Web Activity (TWA) is a way to package your PWA as an Android app that
 
 Before you begin, ensure you have:
 
-1. **Your deployed PWA URL** - The live URL where your app is hosted (e.g., `https://your-canister-id.ic0.app` or your custom domain)
+1. **Your deployed PWA URL** - The live URL where your app is hosted. For this application, use:
+   ```
+   https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io
+   ```
 2. **Node.js and npm** installed on your computer
 3. **Android Studio** (optional, but recommended for testing)
 4. **Java Development Kit (JDK)** version 8 or higher

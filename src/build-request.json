@@ -1,159 +1,133 @@
 {
   "kind": "build_request",
-  "title": "Fix incorrect logo and add consistent media (image/video) upload button across admin editors",
+  "title": "Move main navigation to a bottom menu on Home, repurpose hamburger menu, add Settings with theme toggle and shareable link",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-33",
-      "text": "Fix the site-wide header logo so the same correct logo is shown consistently on all pages (including admin pages), by removing any hardcoded/incorrect logo filename usage and using a single canonical logo source throughout the frontend.",
+      "id": "REQ-40",
+      "text": "Move the primary navigation menu (Home/About/Programs/Events/Clubs/History/Membership/Contact/Me) out of the mobile hamburger (three-lines) menu and make it accessible from the Home page via a bottom-positioned button that opens the main menu.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "The logo or the picture there is not what I sent it to you"
+          "Bring the main Manu from that three lines to the home page  Let it appear at the down button of the main interface"
         ]
       },
       "acceptanceCriteria": [
-        "The TopNav logo image is not hardcoded to an unexpected filename and is sourced from a single shared configuration.",
-        "The same logo is displayed on public pages and on admin pages (admin uses the same header).",
-        "If no configured logo exists, the UI falls back to the existing generated logo asset without breaking layout."
+        "On mobile, the TopNav hamburger menu no longer contains the full site navigation links.",
+        "On the Home page, a bottom-positioned button is visible that opens a menu/sheet containing the primary navigation links.",
+        "Selecting any navigation item from the Home bottom menu navigates to the selected route and closes the menu.",
+        "The Home bottom menu is keyboard accessible (can be opened via keyboard and items can be focused/activated)."
       ]
     },
     {
-      "id": "REQ-34",
-      "text": "Add backend support for an admin-managed app branding configuration that includes a logo media field, readable publicly and writable only by admins.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "The logo or the picture there is not what I sent it to you and moreover at the admin interface where I will be updating the app."
-        ]
-      },
-      "acceptanceCriteria": [
-        "There is a public query method to fetch the current branding configuration (including logo).",
-        "There is an admin-only update method to set/replace the branding configuration (including logo).",
-        "Unauthorized callers attempting to update branding are rejected with an authorization error."
-      ]
-    },
-    {
-      "id": "REQ-35",
-      "text": "Create an admin page in the existing admin area that allows admins to update the app branding logo using an explicit control with English user-facing text (including an \"Add picture/video\"-style media button, constrained to images for the logo).",
+      "id": "REQ-41",
+      "text": "Change the mobile hamburger (three-lines) menu contents to include only: Settings, Close, and Logout (using English user-facing text).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "at the admin interface where I will be updating the app. Add a button I can add a picture or video when updating"
+          "the three lines should rather consist of settings, close, logout"
         ]
       },
       "acceptanceCriteria": [
-        "The admin area contains a reachable UI for updating the app logo.",
-        "The page provides a clear button to select media from the user’s device and updates the logo preview before saving.",
-        "Saving persists the selected logo so that refreshing the site still shows the updated logo.",
-        "All user-facing text on the page is in English."
+        "Opening the hamburger menu shows only three actions labeled “Settings”, “Close”, and “Logout”.",
+        "“Close” closes the hamburger menu without navigating.",
+        "“Settings” opens a Settings UI (sheet/modal/page) and closes the hamburger menu.",
+        "“Logout” logs the user out of the current session (Internet Identity logout if logged in; and clears admin session if active), then returns the user to a public route (e.g., Home)."
       ]
     },
     {
-      "id": "REQ-36",
-      "text": "Implement a reusable \"Add picture or video\" media picker control for admin editing workflows that supports selecting a local image or video file and produces a storable URL/string value for saving.",
+      "id": "REQ-42",
+      "text": "Add a Settings UI that includes a theme toggle button to switch between Light and Dark mode, persisting the selected theme across page reloads.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "Add a button I can add a picture or video when updating and making changes or editing. Every part of the interface should have this"
+          "The settings should have a button to change the theme from dark to light or vice versa."
         ]
       },
       "acceptanceCriteria": [
-        "A shared media-picker control exists and can be embedded in multiple admin pages without duplicating logic.",
-        "The control supports choosing an image or a video file from the local device.",
-        "The control provides a preview (image preview or video preview) and a way to remove/clear the selected media before saving.",
-        "All user-facing text in the control is in English and consistently labeled across pages (e.g., \"Add picture or video\")."
+        "Settings includes a clear theme control labeled in English (e.g., “Theme: Light / Dark” or “Switch to Dark Mode”).",
+        "Toggling the theme updates the UI immediately by switching Tailwind theme styles (using the existing `.dark` theme variables in `frontend/src/index.css`).",
+        "The selected theme persists across reloads (e.g., stored in localStorage) and is applied on initial load.",
+        "The theme toggle works on all pages (not just Home)."
       ]
     },
     {
-      "id": "REQ-37",
-      "text": "Extend admin editable pages so that wherever admins edit content, the UI includes the same \"Add picture or video\" control, and any selected media is saved and loaded back when revisiting the editor (cover at minimum: History editor, About content editor, and Home page editor).",
-      "target": "both",
+      "id": "REQ-43",
+      "text": "Provide a shareable public access link in the UI that users can copy and send to colleagues; use the production URL https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io as the default share link text shown to the user.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "Every part of the interface should have this"
+          "if you can generate a link for me so that I send to my other colleagues for them to also go through it"
         ]
       },
       "acceptanceCriteria": [
-        "AdminHistoryEditorPage includes a media control and can save and reload the selected media with the history content.",
-        "AdminAboutPage includes a media control for each editable section (or an equivalent per-section media attachment) and persists it through save/load.",
-        "AdminHomePageEditorPage includes a media control per card/section and persists it through save/load.",
-        "Public pages that render the edited content display the saved images/videos appropriately (read-only)."
+        "Settings displays the share link `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` and a “Copy link” action.",
+        "Clicking “Copy link” copies the link to the clipboard and shows a visible success confirmation (toast/inline message).",
+        "The share link UI uses English user-facing text."
       ]
     },
     {
-      "id": "REQ-38",
-      "text": "Update the backend data model and APIs as needed to persist media attachments for History content, About sections, and Home page sections in stable storage, with admin-only write access and public read access.",
-      "target": "backend",
+      "id": "REQ-44",
+      "text": "Improve add-to-home-screen discoverability by adding an “Install app” entry point inside Settings that triggers the existing PWA install flow when available, and otherwise shows a short English message guiding the user to use the browser’s “Add to Home screen” option.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "Add a button I can add a picture or video when updating and making changes or editing. Every part of the interface should have this"
+          "make it one I can add to home screen for easy access although Google hasn't verified it"
         ]
       },
       "acceptanceCriteria": [
-        "History content API supports storing and returning associated media (image/video) in addition to text.",
-        "About sections API supports storing and returning media per section.",
-        "Home page sections API supports storing and returning media per section (in addition to existing fields).",
-        "All write/update methods remain admin-only; all read methods are publicly readable."
+        "Settings contains an “Install app” section/action.",
+        "If installation is supported (install prompt available), the Settings “Install app” action triggers the same install prompt behavior used by `InstallPromptBanner`.",
+        "If installation is not supported, Settings shows an English hint explaining how to add to home screen via the browser menu.",
+        "No backend changes are required for this feature."
       ]
     },
     {
-      "id": "REQ-39",
-      "text": "Add a conditional Motoko stable-state migration so deployed canisters can upgrade safely after changing stable types required to store branding/logo and editor media attachments.",
-      "target": "backend",
+      "id": "REQ-45",
+      "text": "Update the existing Android APK documentation to clearly explain how to produce an APK from the deployed PWA URL and explicitly clarify what is and is not supported regarding Google Play distribution (e.g., signing, Play Console submission steps are outside the app build system).",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
+        ],
+        "quotes": [
+          "make it a full apk to support Google Play service and other android version on any android phone"
         ]
       },
       "acceptanceCriteria": [
-        "A conditional migration is implemented following the project’s migration policy.",
-        "Upgrading from existing deployed state preserves previously stored history/about/home/clubs/social links data.",
-        "After upgrade, existing data loads successfully and the new media/branding fields default safely when previously absent."
+        "`frontend/docs/android-apk-from-pwa.md` includes a section that references the production PWA URL `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` as an example input for Bubblewrap.",
+        "The doc includes a short, clear note (English) explaining that creating the APK is supported via TWA/Bubblewrap, but publishing to Google Play requires separate developer account steps and is not performed automatically by the app.",
+        "Documentation remains consistent with the current Vite + PWA setup (manifest + service worker) and does not introduce unsupported backend services."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor in backend/main.mo; only add backend/migration.mo when required for stable upgrades.",
-    "Do not edit files under frontend/src/components/ui or other frontend immutablePaths; compose new components instead.",
-    "Use English for all user-facing text.",
-    "Do not introduce external storage/services for media uploads (no S3/Cloudinary/etc.)."
+    "Do not modify files under `frontend/src/components/ui` (shadcn/ui sources are read-only).",
+    "Do not edit any paths listed in `frontend.immutablePaths` in SYSTEM_CONTEXT; compose new hooks/components instead.",
+    "Keep all backend logic in the existing single Motoko actor (`backend/main.mo`); no backend changes are required for this request."
   ],
   "nonGoals": [
-    "Implementing large-file video hosting/streaming; media support should be constrained to reasonable sizes suitable for canister storage.",
-    "Adding public (non-admin) editing controls for any content or media.",
-    "Changing unrelated site content or navigation structure beyond what is required to add the requested admin editing controls and fix the logo source."
+    "Submitting the app to Google Play on the user’s behalf.",
+    "Adding native Android-specific features beyond the existing PWA + TWA (Trusted Web Activity) wrapper approach.",
+    "Changing the existing site content models (clubs/about/home/history) or backend APIs."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

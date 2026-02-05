@@ -1,127 +1,135 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Consistent logo sourcing and reusable admin media picker across editors",
+  "title": "Bottom home navigation menu, simplified hamburger actions, and Settings (theme, share link, install)",
   "requirements": [
     {
-      "id": "REQ-33",
-      "summary": "Remove hardcoded logo filenames and source the header logo from a single shared branding configuration with a safe fallback.",
+      "id": "REQ-40",
+      "summary": "Move primary site navigation into a Home-only bottom-positioned menu button that opens a navigable menu/sheet.",
       "acceptanceCriteria": [
-        "The TopNav logo image is not hardcoded to an unexpected filename and is sourced from a single shared configuration.",
-        "The same logo is displayed on public pages and on admin pages (admin uses the same header).",
-        "If no configured logo exists, the UI falls back to the existing generated logo asset without breaking layout."
+        "On mobile, the TopNav hamburger menu no longer contains the full site navigation links.",
+        "On the Home page, a bottom-positioned button is visible that opens a menu/sheet containing the primary navigation links.",
+        "Selecting any navigation item from the Home bottom menu navigates to the selected route and closes the menu.",
+        "The Home bottom menu is keyboard accessible (can be opened via keyboard and items can be focused/activated)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add React Query hooks to load public branding configuration (logo) from the backend, and expose a stable queryKey for reuse. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/config/branding.ts",
+          "path": "frontend/src/config/navLinks.ts",
           "operation": "create",
-          "description": "Create a single canonical frontend branding config helper that provides the default/fallback logo asset reference and utilities to derive a displayable logo URL from optional backend branding data."
+          "description": "Create a shared definition for primary navigation items (Home/About/Programs/Events/Clubs/History/Membership/Contact) plus a computed 'Me' destination to keep navigation consistent across TopNav and the Home bottom menu."
         },
         {
-          "path": "frontend/src/components/TopNav.tsx",
-          "operation": "modify",
-          "description": "Replace hardcoded logo asset usage with the shared canonical logo source: prefer branding.logo (when available) and fall back to the existing generated logo asset path from the shared config; keep layout stable across desktop/mobile nav."
-        }
-      ]
-    },
-    {
-      "id": "REQ-35",
-      "summary": "Add a reachable admin Branding page to update the app logo with an English-labeled image-only media button and preview-before-save UX.",
-      "acceptanceCriteria": [
-        "The admin area contains a reachable UI for updating the app logo.",
-        "The page provides a clear button to select media from the user’s device and updates the logo preview before saving.",
-        "Saving persists the selected logo so that refreshing the site still shows the updated logo.",
-        "All user-facing text on the page is in English."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/AdminBrandingPage.tsx",
+          "path": "frontend/src/components/HomeBottomNavMenu.tsx",
           "operation": "create",
-          "description": "Create an admin-only Branding page (wrapped in AdminGuard) that loads current branding, allows selecting a new logo via the shared MediaPicker with images-only constraint, previews the logo, and saves via the branding update hook. Use the blob-storage ExternalBlob flow to produce a storable value; verify the blob-storage component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Register a new admin route for the Branding page under the existing /me/* admin area so it is reachable."
-        },
-        {
-          "path": "frontend/src/pages/AdminDashboardPage.tsx",
-          "operation": "modify",
-          "description": "Add a new Admin Dashboard navigation card/button linking to the Branding page, with English user-facing text, without changing unrelated navigation structure."
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add/update mutations and queries needed for branding save/load (e.g., useGetBrandingMedia/useUpdateBrandingMedia) and ensure cache invalidation so TopNav refreshes its logo after saving. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-36",
-      "summary": "Implement a reusable admin media picker control (Add picture or video) that supports image/video selection, preview, and clearing, returning a storable value for saving.",
-      "acceptanceCriteria": [
-        "A shared media-picker control exists and can be embedded in multiple admin pages without duplicating logic.",
-        "The control supports choosing an image or a video file from the local device.",
-        "The control provides a preview (image preview or video preview) and a way to remove/clear the selected media before saving.",
-        "All user-facing text in the control is in English and consistently labeled across pages (e.g., \"Add picture or video\")."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/admin/MediaPicker.tsx",
-          "operation": "create",
-          "description": "Create a reusable MediaPicker control for admin editors with consistent English labeling (e.g., \"Add picture or video\"), local file selection (image/video based on props), preview rendering, and remove/clear support. Use the blob-storage ExternalBlob type to produce a storable value (and a preview URL via getDirectURL when needed). Verify the blob-storage component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/utils/media.ts",
-          "operation": "create",
-          "description": "Add shared helpers to validate media type/size, convert File->Uint8Array for upload, and derive preview URLs consistently for the MediaPicker and editor pages."
-        }
-      ]
-    },
-    {
-      "id": "REQ-37",
-      "summary": "Add the same shared media picker to the History, About, and Home admin editors; ensure selected media saves, reloads, and is rendered on public pages.",
-      "acceptanceCriteria": [
-        "AdminHistoryEditorPage includes a media control and can save and reload the selected media with the history content.",
-        "AdminAboutPage includes a media control for each editable section (or an equivalent per-section media attachment) and persists it through save/load.",
-        "AdminHomePageEditorPage includes a media control per card/section and persists it through save/load.",
-        "Public pages that render the edited content display the saved images/videos appropriately (read-only)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Align history/about/home React Query hooks and types with the current backend interface for media attachments (History returns content+media; Home sections use image?: ExternalBlob; About sections use media?: ExternalBlob). Ensure save mutations accept and send media values and invalidate relevant queries. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/AdminHistoryEditorPage.tsx",
-          "operation": "modify",
-          "description": "Embed the shared MediaPicker (image/video) into the History editor, load existing history media into the control on page load, update preview immediately on selection, and include media in save behavior (clear supported). Verify the blob-storage component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HistoryPage.tsx",
-          "operation": "modify",
-          "description": "Render the saved History media (image/video) read-only when present (using ExternalBlob direct URL), while keeping existing loading/empty/error states intact. Verify the blob-storage component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/AdminAboutPage.tsx",
-          "operation": "modify",
-          "description": "Add a per-section shared MediaPicker (image/video) to About section cards, wiring selection/clear into the section state as AboutSection.media and ensuring save/load round-trips through existing update flow. Verify the blob-storage component's usage instructions before implementing."
+          "description": "Add a Home-only bottom-positioned menu trigger that opens a shadcn-ui Sheet containing the primary navigation links, with keyboard-accessible Button/SheetTrigger, and closing behavior on selection. Verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/HomePage.tsx",
           "operation": "modify",
-          "description": "When rendering About content sections and Home page sections, display saved media (image/video) read-only where present (using ExternalBlob direct URL), while preserving existing fallbacks and layout. Verify the blob-storage component's usage instructions before implementing."
+          "description": "Render the new HomeBottomNavMenu on the Home page (mobile-only) and ensure the page layout allows the bottom button to be visible without covering content (e.g., add appropriate bottom padding when the menu button is present)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-41",
+      "summary": "Replace the mobile hamburger menu contents with only Settings, Close, and Logout actions (English), and implement logout behavior.",
+      "acceptanceCriteria": [
+        "Opening the hamburger menu shows only three actions labeled “Settings”, “Close”, and “Logout”.",
+        "“Close” closes the hamburger menu without navigating.",
+        "“Settings” opens a Settings UI (sheet/modal/page) and closes the hamburger menu.",
+        "“Logout” logs the user out of the current session (Internet Identity logout if logged in; and clears admin session if active), then returns the user to a public route (e.g., Home)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SettingsSheet.tsx",
+          "operation": "create",
+          "description": "Create a reusable Settings UI presented in a shadcn-ui Sheet, designed to be opened from TopNav hamburger. This file will later host theme toggle, share link, and install app sections. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/pages/AdminHomePageEditorPage.tsx",
+          "path": "frontend/src/components/TopNav.tsx",
           "operation": "modify",
-          "description": "Replace the current Image URL string field with the shared MediaPicker for each card/section, storing the chosen image/video as the section media field expected by the backend interface; support preview and clear, and ensure save/load persists it. Verify the blob-storage component's usage instructions before implementing."
+          "description": "Update mobile navigation to use the hamburger Sheet for only three actions (Settings/Close/Logout). Wire 'Settings' to open SettingsSheet and close the hamburger; wire 'Close' to close the hamburger; wire 'Logout' to call Internet Identity logout (useInternetIdentity.clear when authenticated) and clear admin session (useAdminSession.logout), then navigate to '/'. Use shadcn-ui Sheet/Button primitives without editing components under frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-42",
+      "summary": "Add a Settings theme toggle that switches Light/Dark via the existing Tailwind .dark variables and persists across reloads for the whole app.",
+      "acceptanceCriteria": [
+        "Settings includes a clear theme control labeled in English (e.g., “Theme: Light / Dark” or “Switch to Dark Mode”).",
+        "Toggling the theme updates the UI immediately by switching Tailwind theme styles (using the existing `.dark` theme variables in `frontend/src/index.css`).",
+        "The selected theme persists across reloads (e.g., stored in localStorage) and is applied on initial load.",
+        "The theme toggle works on all pages (not just Home)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/theme.ts",
+          "operation": "create",
+          "description": "Add theme utilities to get/set persisted theme (localStorage) and apply/remove the 'dark' class on the document root so Tailwind dark mode variables in frontend/src/index.css take effect globally."
+        },
+        {
+          "path": "frontend/src/hooks/useTheme.ts",
+          "operation": "create",
+          "description": "Create a small React hook wrapping the theme utilities to expose current theme and a toggle action for UI usage (e.g., in SettingsSheet)."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Apply the persisted theme on initial load before rendering the React app (using the new theme utility) so the selected theme is active across reloads and pages without a flash."
+        },
+        {
+          "path": "frontend/src/components/SettingsSheet.tsx",
+          "operation": "modify",
+          "description": "Add an English-labeled theme toggle control that uses useTheme to switch Light/Dark and updates immediately across the app (no page-specific behavior). Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-43",
+      "summary": "Expose a shareable public access link in Settings with a copy-to-clipboard action and visible success confirmation.",
+      "acceptanceCriteria": [
+        "Settings displays the share link `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` and a “Copy link” action.",
+        "Clicking “Copy link” copies the link to the clipboard and shows a visible success confirmation (toast/inline message).",
+        "The share link UI uses English user-facing text."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SettingsSheet.tsx",
+          "operation": "modify",
+          "description": "Add a 'Share link' section showing `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` as the default link text and a 'Copy link' action that uses the Clipboard API; display an inline success confirmation after copying (English text). Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-44",
+      "summary": "Add an Install app entry point in Settings that triggers the existing PWA install flow when available, otherwise shows an English add-to-home-screen hint.",
+      "acceptanceCriteria": [
+        "Settings contains an “Install app” section/action.",
+        "If installation is supported (install prompt available), the Settings “Install app” action triggers the same install prompt behavior used by `InstallPromptBanner`.",
+        "If installation is not supported, Settings shows an English hint explaining how to add to home screen via the browser menu.",
+        "No backend changes are required for this feature."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SettingsSheet.tsx",
+          "operation": "modify",
+          "description": "Add an 'Install app' section that reuses the existing usePwaInstallPrompt hook: when installable, call promptInstall; when not installable, show a short English hint guiding the user to use the browser menu 'Add to Home screen'. Keep behavior consistent with InstallPromptBanner. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-45",
+      "summary": "Update Android APK documentation to reference the production PWA URL and clarify what is and is not supported for Google Play distribution.",
+      "acceptanceCriteria": [
+        "`frontend/docs/android-apk-from-pwa.md` includes a section that references the production PWA URL `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` as an example input for Bubblewrap.",
+        "The doc includes a short, clear note (English) explaining that creating the APK is supported via TWA/Bubblewrap, but publishing to Google Play requires separate developer account steps and is not performed automatically by the app.",
+        "Documentation remains consistent with the current Vite + PWA setup (manifest + service worker) and does not introduce unsupported backend services."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/docs/android-apk-from-pwa.md",
+          "operation": "modify",
+          "description": "Update the guide to explicitly use `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` as the example Bubblewrap/TWA input URL and add a clear note that APK creation is supported, while Play Console submission/signing/publishing steps require separate developer workflows and are out of scope for the app build system."
         }
       ]
     }

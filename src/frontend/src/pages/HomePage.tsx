@@ -4,6 +4,7 @@ import { Users, BookOpen, Calendar, Heart } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { useGetAboutSections, useGetHomePageSections } from '@/hooks/useQueries';
 import InstallPromptBanner from '@/components/InstallPromptBanner';
+import HomeBottomNavMenu from '@/components/HomeBottomNavMenu';
 
 export default function HomePage() {
   const { data: aboutSections } = useGetAboutSections();
@@ -176,7 +177,7 @@ export default function HomePage() {
 
       {/* Call to Action */}
       <section className="bg-primary/5 border-y border-border/40">
-        <div className="container py-16 md:py-24">
+        <div className="container py-16 md:py-24 pb-24 md:pb-32">
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <Heart className="h-12 w-12 text-primary mx-auto" />
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
@@ -201,6 +202,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Bottom Navigation Menu (Mobile Only) */}
+      <HomeBottomNavMenu />
     </div>
   );
 }

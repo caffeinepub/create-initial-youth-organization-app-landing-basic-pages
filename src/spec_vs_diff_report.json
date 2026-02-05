@@ -1,47 +1,38 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T17:52:55.872Z",
-  "summary": "Diff implements branding/logo plumbing and a reusable admin MediaPicker, adds admin branding page and routes, updates TopNav to use backend branding logo with fallback, and extends history/about/home editors to include MediaPicker with backend model/migration changes. Two likely gaps: (1) fallback logo still hardcodes a specific filename, and (2) public rendering of video media is not evidenced and HistoryPage currently renders media only as an <img>.",
+  "generatedAt": "2026-02-05T18:55:13.867Z",
+  "summary": "Diff implements Home bottom-positioned primary navigation (via a Sheet + floating button), repurposes the mobile hamburger menu to Settings/Close/Logout with logout logic, adds a Settings Sheet with theme toggle + share-link copy UI, and updates Android APK documentation to reference the production PWA URL. Some acceptance-criteria details are not verifiable due to truncation (notably the full Install App behavior and Google Play distribution clarification text).",
   "missing_requirements": [
     {
-      "id": "REQ-33",
-      "requirement": "Fix the site-wide header logo so the same correct logo is shown consistently on all pages by removing any hardcoded/incorrect logo filename usage and using a single canonical logo source throughout the frontend; fallback to existing generated logo asset when no configured logo exists.",
-      "reason": "While TopNav now uses a shared getLogoUrl() helper, the fallback in branding config is still a hardcoded, specific logo filename/path. This appears to violate the requirement to remove hardcoded/incorrect logo filename usage and to fall back to the existing generated logo asset.",
+      "id": "REQ-44",
+      "requirement": "Improve add-to-home-screen discoverability by adding an “Install app” entry point inside Settings that triggers the existing PWA install flow when available, and otherwise shows an English message guiding the user to use the browser’s “Add to Home screen” option.",
+      "reason": "SettingsSheet includes an \"Install App\" section and uses `usePwaInstallPrompt`, but the relevant portion is truncated, so it is not possible to confirm that (1) it triggers the same install prompt behavior as `InstallPromptBanner`, and (2) it shows the required fallback guidance message when install is not supported.",
       "evidence": [
-        "frontend/src/config/branding.ts",
-        "frontend/src/components/TopNav.tsx"
+        "frontend/src/components/SettingsSheet.tsx"
       ]
     },
     {
-      "id": "REQ-37",
-      "requirement": "Public pages that render the edited content display the saved images/videos appropriately (read-only) for History, About, and Home content.",
-      "reason": "HistoryPage renders attached media using an <img> tag only; there is no evidence of conditional rendering for video (e.g., <video>) when a video is selected via the 'Add picture or video' control. Diff evidence for About/Home public rendering of media is not shown, and for History it appears incomplete for video.",
+      "id": "REQ-45",
+      "requirement": "Update the existing Android APK documentation to clarify what is and is not supported regarding Google Play distribution (publishing requires separate developer account steps and is not performed automatically by the app).",
+      "reason": "The doc update shows the production URL example, but the provided diff snippet is truncated before any explicit Google Play distribution clarification can be verified.",
       "evidence": [
-        "frontend/src/pages/HistoryPage.tsx",
-        "frontend/src/components/admin/MediaPicker.tsx"
+        "frontend/docs/android-apk-from-pwa.md"
       ]
     }
   ],
   "hallucinated_features": [],
   "confidence": 0.66,
   "changed_files": [
-    "backend/main.mo",
-    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/App.tsx",
+    "frontend/docs/android-apk-from-pwa.md",
+    "frontend/src/components/HomeBottomNavMenu.tsx",
+    "frontend/src/components/SettingsSheet.tsx",
     "frontend/src/components/TopNav.tsx",
-    "frontend/src/components/admin/MediaPicker.tsx",
-    "frontend/src/config/branding.ts",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/pages/AdminAboutPage.tsx",
-    "frontend/src/pages/AdminBrandingPage.tsx",
-    "frontend/src/pages/AdminDashboardPage.tsx",
-    "frontend/src/pages/AdminHistoryEditorPage.tsx",
-    "frontend/src/pages/AdminHomePageEditorPage.tsx",
-    "frontend/src/pages/HistoryPage.tsx",
+    "frontend/src/config/navLinks.ts",
+    "frontend/src/hooks/useTheme.ts",
     "frontend/src/pages/HomePage.tsx",
-    "frontend/src/utils/media.ts",
+    "frontend/src/utils/theme.ts",
     "project_state.json"
   ]
 }

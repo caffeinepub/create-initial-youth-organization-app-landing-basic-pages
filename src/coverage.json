@@ -1,131 +1,107 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T17:52:55.877Z",
+  "generatedAt": "2026-02-05T18:55:13.871Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 7,
-    "implemented": 4,
+    "total": 6,
+    "implemented": 6,
     "items": [
       {
-        "id": "REQ-33",
-        "summary": "Fix the site-wide header logo so the same correct logo is shown consistently on all pages (including admin pages), by removing any hardcoded/incorrect logo filename usage and using a single canonical logo source throughout the frontend.",
+        "id": "REQ-40",
+        "summary": "Move the primary navigation menu (Home/About/Programs/Events/Clubs/History/Membership/Contact/Me) out of the mobile hamburger (three-lines) menu and make it accessible from the Home page via a bottom-positioned button that opens the main menu.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/config/branding.ts",
+          "frontend/src/config/navLinks.ts",
+          "frontend/src/components/HomeBottomNavMenu.tsx",
+          "frontend/src/pages/HomePage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/config/navLinks.ts",
+          "frontend/src/components/HomeBottomNavMenu.tsx",
+          "frontend/src/pages/HomePage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-41",
+        "summary": "Change the mobile hamburger (three-lines) menu contents to include only: Settings, Close, and Logout (using English user-facing text).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/SettingsSheet.tsx",
           "frontend/src/components/TopNav.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/config/branding.ts",
+          "frontend/src/components/SettingsSheet.tsx",
           "frontend/src/components/TopNav.tsx"
         ]
       },
       {
-        "id": "REQ-34",
-        "summary": "Add backend support for an admin-managed app branding configuration that includes a logo media field, readable publicly and writable only by admins.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-35",
-        "summary": "Create an admin page in the existing admin area that allows admins to update the app branding logo using an explicit control with English user-facing text (including an \"Add picture/video\"-style media button, constrained to images for the logo).",
+        "id": "REQ-42",
+        "summary": "Add a Settings UI that includes a theme toggle button to switch between Light and Dark mode, persisting the selected theme across page reloads.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/AdminBrandingPage.tsx",
-          "frontend/src/App.tsx",
-          "frontend/src/pages/AdminDashboardPage.tsx",
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/utils/theme.ts",
+          "frontend/src/hooks/useTheme.ts",
+          "frontend/src/main.tsx",
+          "frontend/src/components/SettingsSheet.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/AdminBrandingPage.tsx",
-          "frontend/src/App.tsx",
-          "frontend/src/pages/AdminDashboardPage.tsx",
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/utils/theme.ts",
+          "frontend/src/hooks/useTheme.ts",
+          "frontend/src/components/SettingsSheet.tsx"
         ]
       },
       {
-        "id": "REQ-36",
-        "summary": "Implement a reusable \"Add picture or video\" media picker control for admin editing workflows that supports selecting a local image or video file and produces a storable URL/string value for saving.",
+        "id": "REQ-43",
+        "summary": "Provide a shareable public access link in the UI that users can copy and send to colleagues; use the production URL https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io as the default share link text shown to the user.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/admin/MediaPicker.tsx",
-          "frontend/src/utils/media.ts"
+          "frontend/src/components/SettingsSheet.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/admin/MediaPicker.tsx",
-          "frontend/src/utils/media.ts"
+          "frontend/src/components/SettingsSheet.tsx"
         ]
       },
       {
-        "id": "REQ-37",
-        "summary": "Extend admin editable pages so that wherever admins edit content, the UI includes the same \"Add picture or video\" control, and any selected media is saved and loaded back when revisiting the editor (cover at minimum: History editor, About content editor, and Home page editor).",
+        "id": "REQ-44",
+        "summary": "Improve add-to-home-screen discoverability by adding an “Install app” entry point inside Settings that triggers the existing PWA install flow when available, and otherwise shows a short English message guiding the user to use the browser’s “Add to Home screen” option.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/pages/AdminHistoryEditorPage.tsx",
-          "frontend/src/pages/HistoryPage.tsx",
-          "frontend/src/pages/AdminAboutPage.tsx",
-          "frontend/src/pages/HomePage.tsx",
-          "frontend/src/pages/AdminHomePageEditorPage.tsx"
+          "frontend/src/components/SettingsSheet.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/pages/AdminHistoryEditorPage.tsx",
-          "frontend/src/pages/HistoryPage.tsx",
-          "frontend/src/pages/AdminAboutPage.tsx",
-          "frontend/src/pages/HomePage.tsx",
-          "frontend/src/pages/AdminHomePageEditorPage.tsx"
+          "frontend/src/components/SettingsSheet.tsx"
         ]
       },
       {
-        "id": "REQ-38",
-        "summary": "Update the backend data model and APIs as needed to persist media attachments for History content, About sections, and Home page sections in stable storage, with admin-only write access and public read access.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-39",
-        "summary": "Add a conditional Motoko stable-state migration so deployed canisters can upgrade safely after changing stable types required to store branding/logo and editor media attachments.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
+        "id": "REQ-45",
+        "summary": "Update the existing Android APK documentation to clearly explain how to produce an APK from the deployed PWA URL and explicitly clarify what is and is not supported regarding Google Play distribution (e.g., signing, Play Console submission steps are outside the app build system).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/docs/android-apk-from-pwa.md"
+        ],
+        "matchedFiles": [
+          "frontend/docs/android-apk-from-pwa.md"
+        ]
       }
     ]
   },
   "changedFiles": [
-    "backend/blob-storage/Mixin.mo",
-    "backend/blob-storage/Storage.mo",
-    "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
+    "frontend/docs/android-apk-from-pwa.md",
+    "frontend/src/components/HomeBottomNavMenu.tsx",
+    "frontend/src/components/SettingsSheet.tsx",
     "frontend/src/components/TopNav.tsx",
-    "frontend/src/components/admin/MediaPicker.tsx",
-    "frontend/src/config/branding.ts",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/pages/AdminAboutPage.tsx",
-    "frontend/src/pages/AdminBrandingPage.tsx",
-    "frontend/src/pages/AdminDashboardPage.tsx",
-    "frontend/src/pages/AdminHistoryEditorPage.tsx",
-    "frontend/src/pages/AdminHomePageEditorPage.tsx",
-    "frontend/src/pages/HistoryPage.tsx",
+    "frontend/src/config/navLinks.ts",
+    "frontend/src/hooks/useTheme.ts",
     "frontend/src/pages/HomePage.tsx",
-    "frontend/src/utils/media.ts",
+    "frontend/src/utils/theme.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
