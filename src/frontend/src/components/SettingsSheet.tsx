@@ -12,9 +12,10 @@ import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useTheme } from '@/hooks/useTheme';
 import { usePwaInstallPrompt } from '@/hooks/usePwaInstallPrompt';
-import { Share2, Check, Download, Sun, Moon } from 'lucide-react';
+import { Share2, Check, Download, Sun, Moon, Smartphone } from 'lucide-react';
 import { PUBLIC_SITE_URL } from '@/config/publicSite';
 import { shareUrl } from '@/utils/share';
+import { useGetAndroidApkUrl } from '@/hooks/useQueries';
 
 interface SettingsSheetProps {
   open: boolean;
@@ -24,6 +25,7 @@ interface SettingsSheetProps {
 export default function SettingsSheet({ open, onOpenChange }: SettingsSheetProps) {
   const { theme, toggleTheme, isDark } = useTheme();
   const { isInstallable, promptInstall } = usePwaInstallPrompt();
+  const { data: apkUrl, isLoading: apkLoading } = useGetAndroidApkUrl();
   const [shareMessage, setShareMessage] = useState<string | null>(null);
 
   const handleShareLink = async () => {
@@ -35,13 +37,19 @@ export default function SettingsSheet({ open, onOpenChange }: SettingsSheetProps
     }
   };
 
-  const handleInstall = async () => {
+  const handleInstallPwa = async () => {
     await promptInstall();
+  };
+
+  const handleDownloadApk = () => {
+    if (apkUrl && apkUrl.trim() !== '') {
+      window.open(apkUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[320px] sm:w-[400px]">
+      <SheetContent side="right" className="w-[320px] sm:w-[400px] overflow-y-auto">
         <SheetHeader>
           <SheetTitle>Settings</SheetTitle>
           <SheetDescription>
@@ -75,7 +83,7 @@ export default function SettingsSheet({ open, onOpenChange }: SettingsSheetProps
 
           {/* Share Link */}
           <div className="space-y-3">
-            <Label className="text-base font-semibold">Share link</Label>
+            <Label className="text-base font-semibold">Share Link</Label>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">
                 Share this link with colleagues to invite them to the app:
@@ -106,17 +114,17 @@ export default function SettingsSheet({ open, onOpenChange }: SettingsSheetProps
 
           <Separator />
 
-          {/* Install App */}
+          {/* Install PWA */}
           <div className="space-y-3">
-            <Label className="text-base font-semibold">Install App</Label>
+            <Label className="text-base font-semibold">Install Web App</Label>
             {isInstallable ? (
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">
                   Install this app on your device for quick access and a native app experience.
                 </p>
-                <Button onClick={handleInstall} className="w-full" variant="outline">
+                <Button onClick={handleInstallPwa} className="w-full" variant="outline">
                   <Download className="mr-2 h-4 w-4" />
-                  Install App
+                  Install Web App
                 </Button>
               </div>
             ) : (
@@ -129,6 +137,34 @@ export default function SettingsSheet({ open, onOpenChange }: SettingsSheetProps
                   <li>Select "Add to Home screen"</li>
                   <li>Follow the prompts to install</li>
                 </ol>
+              </div>
+            )}
+          </div>
+
+          <Separator />
+
+          {/* Android APK */}
+          <div className="space-y-3">
+            <Label className="text-base font-semibold">Android APK</Label>
+            {apkLoading ? (
+              <div className="rounded-lg border bg-muted/30 p-4">
+                <p className="text-sm text-muted-foreground">Loading...</p>
+              </div>
+            ) : apkUrl && apkUrl.trim() !== '' ? (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  Download the Android APK version of this app for installation on Android devices.
+                </p>
+                <Button onClick={handleDownloadApk} className="w-full" variant="outline">
+                  <Smartphone className="mr-2 h-4 w-4" />
+                  Download Android APK
+                </Button>
+              </div>
+            ) : (
+              <div className="rounded-lg border bg-muted/30 p-4">
+                <p className="text-sm text-muted-foreground">
+                  Android APK is not available yet. Please check back later.
+                </p>
               </div>
             )}
           </div>

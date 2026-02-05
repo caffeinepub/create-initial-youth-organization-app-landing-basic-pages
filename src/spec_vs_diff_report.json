@@ -1,55 +1,82 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T20:41:06.516Z",
-  "summary": "Diff implements/updates production build gating for Google Search Console verification (REQ-59) and indicates enhanced Share behavior in UI components, but does not provide evidence of an actual production canister promotion/deploy (REQ-58). Diff also appears to introduce AdSense/ads.txt-related behavior not requested and disallowed by constraints.",
+  "generatedAt": "2026-02-05T21:45:25.896Z",
+  "summary": "REQ-61 share link behavior appears implemented across Settings plus (per file summaries) TopNav mobile menu and Footer using a shared Web Share API + clipboard fallback utility with English feedback. REQ-62 adds backend APK URL getters/setters and Settings integration, plus an admin configuration page/route. Events are wired end-to-end (hooks, public Events page, admin manager), but backend Events schema and persistence do not meet REQ-63 minimum fields and stable storage requirements, and the public Events page does not render the required event \"type\" field.",
   "missing_requirements": [
     {
-      "id": "REQ-58",
-      "requirement": "Promote/publish the current draft build (Draft Version 19) to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the Version 19 frontend bundle and corresponding backend canister.",
-      "reason": "The diff shows documentation and local scripts, but no evidence of changes to production deployment configuration/pipeline or canister promotion steps that would actually publish to the production canisters.",
+      "id": "REQ-62",
+      "requirement": "If the APK URL is not set, Settings shows an English message such as \"Android APK is not available yet. Please check back later.\"",
+      "reason": "SettingsSheet.tsx shows fetching apkUrl and a handler to open it, but the provided diff snippet does not show any explicit empty-state message when apkUrl is unset.",
       "evidence": [
-        "frontend/docs/production-deploy-google-search-console.md",
-        "frontend/scripts/run-prod-build-with-gsc-check.ts",
-        "frontend/scripts/verify-gsc-meta.ts"
+        "frontend/src/components/SettingsSheet.tsx"
       ]
     },
     {
-      "id": "REQ-60",
-      "requirement": "Enhanced Share on production must use Web Share API when available, otherwise copy https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io to clipboard with an English success message, and the shared/copied link must use the existing constant from frontend/src/config/publicSite.ts.",
-      "reason": "File summaries mention native share + clipboard fallback, but the diff does not include the actual component code or any reference showing the link is sourced from frontend/src/config/publicSite.ts (or that the exact production URL is used). With only summaries, this cannot be confirmed.",
+      "id": "REQ-63",
+      "requirement": "Backend defines an Event record type with a unique id and fields sufficient to render the current Events page content (title, date, time, location, description, type at minimum).",
+      "reason": "The backend Event type includes id/title/description/dateTime/location/media/organizer, but no explicit \"type\" field, and date/time are not represented as separate fields (only a combined dateTime).",
       "evidence": [
-        "frontend-file-summaries.txt"
+        "backend/main.mo",
+        "backend/migration.mo"
+      ]
+    },
+    {
+      "id": "REQ-63",
+      "requirement": "Events data persists in stable storage across upgrades (using conditional migration if required by the current stable state).",
+      "reason": "eventsMap is declared as a non-stable `let` map in backend/main.mo, and no stable variable is shown for events storage; therefore events would not persist across upgrades based on the diff snippet. A migration file is added, but main.mo does not show eventsMap being stored in stable state.",
+      "evidence": [
+        "backend/main.mo",
+        "backend/migration.mo"
+      ]
+    },
+    {
+      "id": "REQ-65",
+      "requirement": "For each event, the page renders title, description, date, time, location, and type.",
+      "reason": "EventsPage.tsx renders title, description, date, time (parsed from dateTime), location, and organizer badge, but no \"type\" field is shown in the snippet.",
+      "evidence": [
+        "frontend/src/pages/EventsPage.tsx"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "AdSense/advertising integration behavior (AdSense script injection, ads.txt considerations) introduced as part of Version 19 changes.",
-      "reason": "BuildRequest explicitly disallows new third-party integrations/analytics; AdSense script injection and ads.txt deployment guidance go beyond the requested promotion + GSC verification + existing enhanced Share deployment.",
+      "description": "Added a dedicated admin page and route for configuring the Android APK URL (/me/android-apk).",
+      "reason": "REQ-62 requires an admin-configurable APK URL and Settings exposure for users, but does not explicitly require a new admin UI page/route to manage it.",
       "evidence": [
-        "frontend-file-summaries.txt",
-        "frontend/docs/production-deploy-google-search-console.md",
-        "frontend/public/sw.js",
-        "frontend/scripts/verify-gsc-meta.ts"
+        "frontend/src/pages/AdminAndroidApkPage.tsx",
+        "frontend/src/App.tsx",
+        "frontend/src/pages/AdminDashboardPage.tsx"
       ]
     },
     {
-      "description": "New site routes/pages for /privacy and /terms.",
-      "reason": "Not requested in REQ-58/59/60 and qualifies as additional feature scope beyond deploying the already-implemented enhanced Share behavior.",
+      "description": "Added a backend query to fetch a single event by id (getEvent).",
+      "reason": "REQ-63 only calls for a public query to list events plus admin-only create/update/delete; a single-event query is extra.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Added an \"Admin Login\" button on the public Membership Registration page.",
+      "reason": "No requirement requests changes to the membership registration page or adding an admin login shortcut there.",
       "evidence": [
         "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.66,
+  "confidence": 0.72,
   "changed_files": [
     "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/docs/production-deploy-google-search-console.md",
-    "frontend/public/sw.js",
-    "frontend/scripts/run-prod-build-with-gsc-check.ts",
-    "frontend/scripts/verify-gsc-meta.ts",
+    "frontend/src/App.tsx",
+    "frontend/src/components/SettingsSheet.tsx",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/AdminAndroidApkPage.tsx",
+    "frontend/src/pages/AdminDashboardPage.tsx",
+    "frontend/src/pages/AdminEventsManagerPage.tsx",
+    "frontend/src/pages/EventsPage.tsx",
+    "frontend/src/utils/share.ts",
     "project_state.json"
   ]
 }

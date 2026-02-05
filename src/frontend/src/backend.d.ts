@@ -19,6 +19,11 @@ export interface HomePageSection {
     description: string;
     image?: ExternalBlob;
 }
+export interface Branding {
+    logo?: ExternalBlob;
+    name: string;
+    otherMedia?: ExternalBlob;
+}
 export interface AboutSection {
     media?: ExternalBlob;
     title: string;
@@ -41,6 +46,15 @@ export interface MembershipRegistration {
     address: string;
     phone: string;
 }
+export interface Event {
+    id: bigint;
+    media?: ExternalBlob;
+    organizer: string;
+    title: string;
+    description: string;
+    dateTime: string;
+    location: string;
+}
 export interface Club {
     id: bigint;
     motto: string;
@@ -53,11 +67,6 @@ export interface Club {
     profilePicture?: string;
     program: string;
 }
-export interface Branding {
-    logo?: ExternalBlob;
-    name: string;
-    otherMedia?: ExternalBlob;
-}
 export interface UserProfile {
     name: string;
 }
@@ -69,13 +78,18 @@ export enum UserRole {
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     createClub(name: string, profilePicture: string | null, aims: string, motto: string, slogan: string, achievements: string, program: string, activities: string, history: string): Promise<bigint>;
+    createOrUpdateEvent(event: Event): Promise<void>;
     deleteClub(id: bigint): Promise<void>;
+    deleteEvent(eventId: bigint): Promise<void>;
     getAboutSections(): Promise<Array<AboutSection>>;
     getAllMembershipRegistrations(): Promise<Array<MembershipRegistration>>;
+    getAndroidApkUrl(): Promise<string>;
     getBrandingMedia(): Promise<Branding | null>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getClubs(): Promise<Array<Club>>;
+    getEvent(eventId: bigint): Promise<Event | null>;
+    getEvents(): Promise<Array<Event>>;
     getHistoryContent(): Promise<{
         media?: ExternalBlob;
         content: string;
@@ -85,6 +99,7 @@ export interface backendInterface {
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
     saveCallerUserProfile(_profile: UserProfile): Promise<void>;
+    setAndroidApkUrl(url: string): Promise<void>;
     setSocialMediaLinks(links: SocialMediaLinks): Promise<void>;
     submitMembershipRegistration(registration: MembershipRegistration): Promise<void>;
     updateAboutSections(sections: Array<AboutSection>): Promise<void>;

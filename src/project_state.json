@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 47,
+  "projectStateVersion": 49,
   "summary": "Project scope includes UI/navigation refinements for the web app (move main menu to a bottom button on the main/home interface, repurpose the hamburger/three-lines menu to settings/close/logout, and add a theme toggle), plus sharing/accessibility requests (shareable link for colleagues and improved add-to-home-screen/PWA access), alongside existing deployment/SEO goals and potential APK distribution goals, with an added request to support Google Ads/AdSense readiness for monetization/advertising.",
   "architectural_notes": [
     "Frontend uses React + Vite with Tailwind CSS and shadcn/ui component primitives.",
@@ -16,9 +16,11 @@
   ],
   "known_issues": [
     "Google Search Console verification failing with \"site not found\" because the production site HTML does not currently expose the expected google-site-verification meta tag; requires publishing the latest (v9) deployment to production and re-verifying.",
-    "Production deployment is showing an incorrect logo/image (not the user-provided asset), including within the admin interface."
+    "Production deployment is showing an incorrect logo/image (not the user-provided asset), including within the admin interface.",
+    "Share link feature is reportedly not live/visible on the production site (needs verification of production deployment/version and UI entry points).",
+    "An \"Install app\" option is appearing in the Share menu; may be unintended UX placement or mislabeled entry and should be reviewed."
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "generatedImages": [
     {
       "filename": "frontend/public/assets/generated/yfo-logo.dim_512x512.png",
@@ -545,6 +547,46 @@
         "REQ-59"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-fix-and-verify-the-share-link-feature-on-the-public-production-site-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-so-that-share-actions-are-visible-and-functional-in-all-existing-entry-points-topnav-mobile-menu-settings-and-footer-using-the-existing-web-share-api-behavior-with-clipboard-fallback",
+      "title": "Fix and verify the Share link feature on the public production site (https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io) so that Share actions are visible and functional in all existing entry points (TopNav mobile menu, Settings, and Footer), using the existing Web Share API behavior with clipboard fallback.",
+      "reqIds": [
+        "REQ-61"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-share-install-ux-so-users-are-not-misled-into-thinking-the-share-menu-is-how-to-install-the-app-and-add-a-clear-non-web-android-option-by-exposing-an-android-apk-install-download-action-via-settings-and-or-a-dedicated-public-section-driven-by-an-admin-configurable-apk-url",
+      "title": "Update the Share/Install UX so users are not misled into thinking the Share menu is how to install the app, and add a clear non-web Android option by exposing an \"Android APK\" install/download action via Settings (and/or a dedicated public section), driven by an admin-configurable APK URL.",
+      "reqIds": [
+        "REQ-62"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-react-query-hooks-to-fetch-and-mutate-events-via-the-backend-actor-following-the-existing-patterns-used-for-clubs-history-about-home-social-links-hooks",
+      "title": "Add React Query hooks to fetch and mutate Events via the backend actor, following the existing patterns used for clubs/history/about/home/social links hooks.",
+      "reqIds": [
+        "REQ-64"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-current-static-events-page-content-with-events-fetched-from-the-backend-events-api-and-render-the-backend-managed-events-as-read-only-on-the-public-events-page",
+      "title": "Replace the current static Events page content with events fetched from the backend Events API, and render the backend-managed events as read-only on the public Events page.",
+      "reqIds": [
+        "REQ-65"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-new-admin-gated-events-manager-page-that-allows-admins-to-add-edit-and-delete-events-and-link-it-from-the-existing-admin-dashboard",
+      "title": "Create a new admin-gated Events Manager page that allows admins to add, edit, and delete events, and link it from the existing Admin Dashboard.",
+      "reqIds": [
+        "REQ-66"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -779,6 +821,32 @@
       "summary": "Verify that the enhanced Share behavior is live on production: using the app’s existing Share entry points should invoke the native share prompt (Web Share API) when available and fall back to copying the public URL to the clipboard when not available.",
       "reqIds": [
         "REQ-60"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-42",
+      "summary": "Fix production Share link/Share action not appearing or not working live on the public production deployment (ensure the Share entry point is available and functional on https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-43",
+      "summary": "Add an Events admin interface (CRUD) so admins can create, edit, and update Events from within the existing admin area, and have the public Events page render the admin-managed event data as read-only.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-44",
+      "summary": "Provide a non-web Android install option (APK-based) for users (e.g., packaged wrapper/TWA) and update the install/share UX so users can install an Android app version rather than only the web/PWA install flow.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-47",
+      "summary": "Add backend support for Events as admin-managed content, including stable storage and public read access with admin-only create/update/delete operations.",
+      "reqIds": [
+        "REQ-63"
       ],
       "status": "pending"
     }

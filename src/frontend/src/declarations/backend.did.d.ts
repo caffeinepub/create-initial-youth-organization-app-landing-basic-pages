@@ -33,6 +33,15 @@ export interface Club {
   'profilePicture' : [] | [string],
   'program' : string,
 }
+export interface Event {
+  'id' : bigint,
+  'media' : [] | [ExternalBlob],
+  'organizer' : string,
+  'title' : string,
+  'description' : string,
+  'dateTime' : string,
+  'location' : string,
+}
 export type ExternalBlob = Uint8Array;
 export interface HomePageSection {
   'title' : string,
@@ -102,16 +111,21 @@ export interface _SERVICE {
     ],
     bigint
   >,
+  'createOrUpdateEvent' : ActorMethod<[Event], undefined>,
   'deleteClub' : ActorMethod<[bigint], undefined>,
+  'deleteEvent' : ActorMethod<[bigint], undefined>,
   'getAboutSections' : ActorMethod<[], Array<AboutSection>>,
   'getAllMembershipRegistrations' : ActorMethod<
     [],
     Array<MembershipRegistration>
   >,
+  'getAndroidApkUrl' : ActorMethod<[], string>,
   'getBrandingMedia' : ActorMethod<[], [] | [Branding]>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getClubs' : ActorMethod<[], Array<Club>>,
+  'getEvent' : ActorMethod<[bigint], [] | [Event]>,
+  'getEvents' : ActorMethod<[], Array<Event>>,
   'getHistoryContent' : ActorMethod<
     [],
     { 'media' : [] | [ExternalBlob], 'content' : string }
@@ -121,6 +135,7 @@ export interface _SERVICE {
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'setAndroidApkUrl' : ActorMethod<[string], undefined>,
   'setSocialMediaLinks' : ActorMethod<[SocialMediaLinks], undefined>,
   'submitMembershipRegistration' : ActorMethod<
     [MembershipRegistration],

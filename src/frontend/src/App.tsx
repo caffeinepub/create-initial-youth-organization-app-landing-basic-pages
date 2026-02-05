@@ -19,6 +19,8 @@ import AdminSocialLinksPage from './pages/AdminSocialLinksPage';
 import AdminAboutPage from './pages/AdminAboutPage';
 import AdminHomePageEditorPage from './pages/AdminHomePageEditorPage';
 import AdminBrandingPage from './pages/AdminBrandingPage';
+import AdminEventsManagerPage from './pages/AdminEventsManagerPage';
+import AdminAndroidApkPage from './pages/AdminAndroidApkPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import { updateSeoUrls } from './utils/seo';
@@ -148,6 +150,18 @@ const adminHomePageEditorRoute = createRoute({
   component: AdminHomePageEditorPage,
 });
 
+const adminEventsManagerRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/me/events',
+  component: AdminEventsManagerPage,
+});
+
+const adminAndroidApkRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/me/android-apk',
+  component: AdminAndroidApkPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   aboutRoute,
@@ -169,6 +183,8 @@ const routeTree = rootRoute.addChildren([
   adminSocialLinksRoute,
   adminAboutRoute,
   adminHomePageEditorRoute,
+  adminEventsManagerRoute,
+  adminAndroidApkRoute,
 ]);
 
 const router = createRouter({ routeTree });

@@ -25,6 +25,15 @@ export const UserRole = IDL.Variant({
   'guest' : IDL.Null,
 });
 export const ExternalBlob = IDL.Vec(IDL.Nat8);
+export const Event = IDL.Record({
+  'id' : IDL.Nat,
+  'media' : IDL.Opt(ExternalBlob),
+  'organizer' : IDL.Text,
+  'title' : IDL.Text,
+  'description' : IDL.Text,
+  'dateTime' : IDL.Text,
+  'location' : IDL.Text,
+});
 export const AboutSection = IDL.Record({
   'media' : IDL.Opt(ExternalBlob),
   'title' : IDL.Text,
@@ -115,17 +124,22 @@ export const idlService = IDL.Service({
       [IDL.Nat],
       [],
     ),
+  'createOrUpdateEvent' : IDL.Func([Event], [], []),
   'deleteClub' : IDL.Func([IDL.Nat], [], []),
+  'deleteEvent' : IDL.Func([IDL.Nat], [], []),
   'getAboutSections' : IDL.Func([], [IDL.Vec(AboutSection)], ['query']),
   'getAllMembershipRegistrations' : IDL.Func(
       [],
       [IDL.Vec(MembershipRegistration)],
       ['query'],
     ),
+  'getAndroidApkUrl' : IDL.Func([], [IDL.Text], ['query']),
   'getBrandingMedia' : IDL.Func([], [IDL.Opt(Branding)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getClubs' : IDL.Func([], [IDL.Vec(Club)], ['query']),
+  'getEvent' : IDL.Func([IDL.Nat], [IDL.Opt(Event)], ['query']),
+  'getEvents' : IDL.Func([], [IDL.Vec(Event)], ['query']),
   'getHistoryContent' : IDL.Func(
       [],
       [IDL.Record({ 'media' : IDL.Opt(ExternalBlob), 'content' : IDL.Text })],
@@ -140,6 +154,7 @@ export const idlService = IDL.Service({
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'setAndroidApkUrl' : IDL.Func([IDL.Text], [], []),
   'setSocialMediaLinks' : IDL.Func([SocialMediaLinks], [], []),
   'submitMembershipRegistration' : IDL.Func([MembershipRegistration], [], []),
   'updateAboutSections' : IDL.Func([IDL.Vec(AboutSection)], [], []),
@@ -184,6 +199,15 @@ export const idlFactory = ({ IDL }) => {
     'guest' : IDL.Null,
   });
   const ExternalBlob = IDL.Vec(IDL.Nat8);
+  const Event = IDL.Record({
+    'id' : IDL.Nat,
+    'media' : IDL.Opt(ExternalBlob),
+    'organizer' : IDL.Text,
+    'title' : IDL.Text,
+    'description' : IDL.Text,
+    'dateTime' : IDL.Text,
+    'location' : IDL.Text,
+  });
   const AboutSection = IDL.Record({
     'media' : IDL.Opt(ExternalBlob),
     'title' : IDL.Text,
@@ -274,17 +298,22 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Nat],
         [],
       ),
+    'createOrUpdateEvent' : IDL.Func([Event], [], []),
     'deleteClub' : IDL.Func([IDL.Nat], [], []),
+    'deleteEvent' : IDL.Func([IDL.Nat], [], []),
     'getAboutSections' : IDL.Func([], [IDL.Vec(AboutSection)], ['query']),
     'getAllMembershipRegistrations' : IDL.Func(
         [],
         [IDL.Vec(MembershipRegistration)],
         ['query'],
       ),
+    'getAndroidApkUrl' : IDL.Func([], [IDL.Text], ['query']),
     'getBrandingMedia' : IDL.Func([], [IDL.Opt(Branding)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getClubs' : IDL.Func([], [IDL.Vec(Club)], ['query']),
+    'getEvent' : IDL.Func([IDL.Nat], [IDL.Opt(Event)], ['query']),
+    'getEvents' : IDL.Func([], [IDL.Vec(Event)], ['query']),
     'getHistoryContent' : IDL.Func(
         [],
         [IDL.Record({ 'media' : IDL.Opt(ExternalBlob), 'content' : IDL.Text })],
@@ -303,6 +332,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'setAndroidApkUrl' : IDL.Func([IDL.Text], [], []),
     'setSocialMediaLinks' : IDL.Func([SocialMediaLinks], [], []),
     'submitMembershipRegistration' : IDL.Func([MembershipRegistration], [], []),
     'updateAboutSections' : IDL.Func([IDL.Vec(AboutSection)], [], []),

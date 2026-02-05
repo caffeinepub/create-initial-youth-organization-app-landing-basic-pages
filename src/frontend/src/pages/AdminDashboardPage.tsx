@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
 import { useAdminSession } from '@/hooks/useAdminSession';
-import { BookOpen, Users, LogOut, Shield, Sparkles, Share2, Info, Home, Image as ImageIcon } from 'lucide-react';
+import { BookOpen, Users, LogOut, Shield, Sparkles, Share2, Info, Home, Image as ImageIcon, Smartphone, Calendar } from 'lucide-react';
 import { AdminGuard } from '@/components/AdminGuard';
 
 function AdminDashboardContent() {
@@ -149,6 +149,40 @@ function AdminDashboardContent() {
             <CardContent>
               <Link to="/me/social-links">
                 <Button className="w-full">Manage Links</Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 hover:border-primary/50 transition-colors">
+            <CardHeader>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
+                <Calendar className="h-6 w-6" />
+              </div>
+              <CardTitle className="text-2xl">Events Manager</CardTitle>
+              <CardDescription className="text-base">
+                Create, edit, and manage events that appear on the public Events page.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link to="/me/events">
+                <Button className="w-full">Manage Events</Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 hover:border-primary/50 transition-colors">
+            <CardHeader>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
+                <Smartphone className="h-6 w-6" />
+              </div>
+              <CardTitle className="text-2xl">Android APK</CardTitle>
+              <CardDescription className="text-base">
+                Configure the download URL for your Android APK version of the app.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link to="/me/android-apk">
+                <Button className="w-full">Manage APK</Button>
               </Link>
             </CardContent>
           </Card>

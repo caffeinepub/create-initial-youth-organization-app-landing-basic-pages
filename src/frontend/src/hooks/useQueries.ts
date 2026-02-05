@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { MembershipRegistration, Club, SocialMediaLinks, AboutSection, HomePageSection, Branding, ExternalBlob } from '../backend';
+import type { MembershipRegistration, Club, SocialMediaLinks, AboutSection, HomePageSection, Branding, ExternalBlob, Event } from '../backend';
 
 // Branding Queries
 export function useGetBrandingMedia() {
@@ -288,6 +288,79 @@ export function useUpdateHomePageSections() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['homePageSections'] });
+    },
+  });
+}
+
+// Android APK URL Queries
+export function useGetAndroidApkUrl() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<string>({
+    queryKey: ['androidApkUrl'],
+    queryFn: async () => {
+      if (!actor) return '';
+      return actor.getAndroidApkUrl();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useSetAndroidApkUrl() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (url: string) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.setAndroidApkUrl(url);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['androidApkUrl'] });
+    },
+  });
+}
+
+// Events Queries
+export function useGetEvents() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<Event[]>({
+    queryKey: ['events'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getEvents();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useCreateOrUpdateEvent() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (event: Event) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.createOrUpdateEvent(event);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+    },
+  });
+}
+
+export function useDeleteEvent() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (eventId: bigint) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.deleteEvent(eventId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
     },
   });
 }

@@ -1,70 +1,134 @@
 {
   "kind": "build_request",
-  "title": "Publish Draft Version 19 to production so enhanced Share goes live",
+  "title": "Fix production Share link behavior, add APK install/download pathway, and add admin-managed Events (CRUD)",
   "priority": "high",
   "requirements": [
     {
-      "id": "REQ-58",
-      "text": "Promote/publish the current draft build (Draft Version 19) to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the Version 19 frontend bundle and corresponding backend canister.",
+      "id": "REQ-61",
+      "text": "Fix and verify the Share link feature on the public production site (https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io) so that Share actions are visible and functional in all existing entry points (TopNav mobile menu, Settings, and Footer), using the existing Web Share API behavior with clipboard fallback.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-14"
+        ],
+        "quotes": [
+          "The share link is not live"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io, the mobile hamburger menu contains a working \"Share link\" action that triggers native sharing when supported and otherwise copies the production URL to clipboard.",
+        "On https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io, the Settings panel \"Share link\" control works the same way (native share when available, clipboard fallback).",
+        "On https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io, the Footer share control works the same way (native share when available, clipboard fallback).",
+        "User-facing feedback is in English (e.g., \"Link copied to clipboard\")."
+      ]
+    },
+    {
+      "id": "REQ-62",
+      "text": "Update the Share/Install UX so users are not misled into thinking the Share menu is how to install the app, and add a clear non-web Android option by exposing an \"Android APK\" install/download action via Settings (and/or a dedicated public section), driven by an admin-configurable APK URL.",
       "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-14"
         ],
         "quotes": [
-          "Publish it to production now to enhance share option to go live"
+          "I saw install app at the share menu can you make it in a way people can install the apk version other than web."
         ]
       },
       "acceptanceCriteria": [
-        "The production URL https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io loads successfully in a fresh browser session (no cache) and reflects the Draft Version 19 build output.",
-        "The production deployment updates the frontend canister assets (dist) and the backend canister (if the backend was changed in Draft Version 19)."
+        "The UI clearly separates sharing from installation using English user-facing text (e.g., \"Share link\" vs \"Install\"), without placing install-related actions under Share.",
+        "Backend exposes a publicly readable Android APK download URL (e.g., getAndroidApkUrl) and an admin-only update method (e.g., setAndroidApkUrl).",
+        "Settings UI displays an \"Android APK\" section with a \"Download Android APK\" button when the APK URL is set; clicking it opens the configured URL.",
+        "If the APK URL is not set, Settings shows an English message such as \"Android APK is not available yet. Please check back later.\" (or equivalent).",
+        "The existing PWA install flow remains available (do not remove PWA install)."
       ]
     },
     {
-      "id": "REQ-59",
-      "text": "Run the existing production build verification that checks for the Google Search Console verification meta tag and block production promotion if the verification meta tag is missing from the rendered HTML head.",
-      "target": "frontend",
+      "id": "REQ-63",
+      "text": "Add backend support for Events as admin-managed content, including stable storage and public read access with admin-only create/update/delete operations.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-14"
         ],
         "quotes": [
-          "Publish it to production now to enhance share option to go live"
+          "add the event to the admin interface for me to edit, add and update events at the admin interface"
         ]
       },
       "acceptanceCriteria": [
-        "The production promotion pipeline executes the existing script at frontend/scripts/run-prod-build-with-gsc-check.ts (or equivalent existing verification step) and fails the promotion if the google-site-verification meta tag is not found in the built dist/index.html.",
-        "After successful promotion, viewing page source of https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io shows the expected Google Search Console verification meta tag in the rendered <head>."
+        "Backend defines an Event record type with a unique id and fields sufficient to render the current Events page content (title, date, time, location, description, type at minimum).",
+        "Backend provides a public query to list events (e.g., getEvents : async [Event]).",
+        "Backend provides admin-only methods to create, update, and delete events.",
+        "Events data persists in stable storage across upgrades (using conditional migration if required by the current stable state).",
+        "Unauthorized callers attempting to create/update/delete events receive an Unauthorized trap message in English."
       ]
     },
     {
-      "id": "REQ-60",
-      "text": "Verify that the enhanced Share behavior is live on production: using the app’s existing Share entry points should invoke the native share prompt (Web Share API) when available and fall back to copying the public URL to the clipboard when not available.",
+      "id": "REQ-64",
+      "text": "Add React Query hooks to fetch and mutate Events via the backend actor, following the existing patterns used for clubs/history/about/home/social links hooks.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-14"
         ],
         "quotes": [
-          "Publish it to production now to enhance share option to go live"
+          "add the event to the admin interface for me to edit, add and update events at the admin interface"
         ]
       },
       "acceptanceCriteria": [
-        "On a device/browser that supports the Web Share API, triggering Share from the UI opens the native share prompt.",
-        "On a device/browser that does not support the Web Share API, triggering Share copies https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io to the clipboard and presents an English success message in the UI (existing pattern).",
-        "The shared/copied link uses the existing constant from frontend/src/config/publicSite.ts (production URL)."
+        "A query hook exists to fetch events (e.g., useGetEvents) and returns loading/error states consistent with other hooks in frontend/src/hooks/useQueries.ts.",
+        "Mutation hooks exist for create/update/delete event operations and invalidate the events query on success.",
+        "Hooks are disabled gracefully when the backend actor is not available (matching existing patterns)."
+      ]
+    },
+    {
+      "id": "REQ-65",
+      "text": "Replace the current static Events page content with events fetched from the backend Events API, and render the backend-managed events as read-only on the public Events page.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-14"
+        ],
+        "quotes": [
+          "add the event to the admin interface for me to edit, add and update events at the admin interface"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The public Events page no longer uses a hardcoded in-file upcomingEvents array as the source of truth.",
+        "The Events page displays loading and error states consistent with other public pages (e.g., Clubs/History patterns).",
+        "If there are no events, the Events page displays an English empty-state message (e.g., \"No upcoming events yet.\").",
+        "For each event, the page renders title, description, date, time, location, and type in a clear layout (matching or improving the existing card layout)."
+      ]
+    },
+    {
+      "id": "REQ-66",
+      "text": "Create a new admin-gated Events Manager page that allows admins to add, edit, and delete events, and link it from the existing Admin Dashboard.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-14"
+        ],
+        "quotes": [
+          "add the event to the admin interface for me to edit, add and update events at the admin interface"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new admin route exists under the existing admin area (e.g., /me/events) protected by the existing AdminGuard behavior.",
+        "The admin Events Manager supports: create event, edit event, delete event, with English user-facing labels and validation messages.",
+        "The Admin Dashboard includes a clear navigation entry/card to reach the Events Manager page.",
+        "After saving changes in the Events Manager, the public Events page reflects updates (after refresh or via normal React Query refetch behavior)."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files under frontend/src/components/ui (shadcn/ui sources); compose them only.",
-    "Do not edit immutable hook paths listed in SYSTEM_CONTEXT (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx).",
-    "Backend must remain single-actor; keep Motoko logic in backend/main.mo. Add backend/migration.mo only if a stable-state upgrade is required for Draft Version 19."
+    "Backend must remain a single-actor Motoko canister; keep all Motoko logic in backend/main.mo.",
+    "Generate backend/migration.mo only if required for a stable-state upgrade due to added/changed stable variables or types (conditional migration policy).",
+    "Do not edit files in frontend immutablePaths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui).",
+    "Use English for all user-facing text."
   ],
   "nonGoals": [
-    "Do not introduce new Share features beyond deploying the already-implemented enhanced Share behavior in Draft Version 19.",
-    "Do not change the production URL (must remain https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io).",
-    "Do not add new third-party integrations or analytics as part of this deployment."
+    "Automatically generating or building an Android APK inside the app or canister.",
+    "Publishing to the Google Play Store or implementing Play Store signing/submission workflows.",
+    "Adding real-time updates (e.g., WebSockets) for events changes."
   ],
   "imageRequirements": {
     "required": [],
@@ -73,9 +137,7 @@
   "userProfileUpdate": {
     "goalsToAdd": [],
     "goalsToRemove": [],
-    "preferencesToAdd": [
-      "Use English for any user-facing text."
-    ],
+    "preferencesToAdd": [],
     "preferencesToRemove": [],
     "miscToAdd": [],
     "miscToRemove": [],

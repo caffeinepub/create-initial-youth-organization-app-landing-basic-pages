@@ -2,14 +2,16 @@ import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import Array "mo:core/Array";
 import Map "mo:core/Map";
+import Text "mo:core/Text";
 import Nat "mo:core/Nat";
-import Nat32 "mo:core/Nat32";
 import Iter "mo:core/Iter";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
 import BlobStorage "blob-storage/Storage";
 import MixinStorage "blob-storage/Mixin";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
@@ -69,6 +71,17 @@ actor {
     name : Text;
   };
 
+  public type Event = {
+    id : Nat;
+    title : Text;
+    description : Text;
+    dateTime : Text;
+    location : Text;
+    media : ?BlobStorage.ExternalBlob;
+    organizer : Text;
+  };
+
+  stable var androidApkUrl : Text = "";
   stable var historyContent : Text = "";
   stable var historyMedia : ?BlobStorage.ExternalBlob = null;
   stable var membershipRegistrations : [MembershipRegistration] = [];
@@ -80,6 +93,49 @@ actor {
   stable var brandingMedia : ?Branding = null;
 
   let clubMap = Map.empty<Nat, Club>();
+  let eventsMap = Map.empty<Nat, Event>();
+
+  // Android APK management
+  public query func getAndroidApkUrl() : async Text {
+    androidApkUrl;
+  };
+
+  public shared ({ caller }) func setAndroidApkUrl(url : Text) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Admin access required to request APK URL change");
+    };
+    androidApkUrl := url;
+  };
+
+  // Events management
+  public query func getEvents() : async [Event] {
+    let iter = eventsMap.values();
+    iter.toArray();
+  };
+
+  public query func getEvent(eventId : Nat) : async ?Event {
+    eventsMap.get(eventId);
+  };
+
+  // Admin event management
+  public shared ({ caller }) func createOrUpdateEvent(event : Event) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can create or update events");
+    };
+    eventsMap.add(event.id, event);
+  };
+
+  public shared ({ caller }) func deleteEvent(eventId : Nat) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can delete events");
+    };
+
+    if (not eventsMap.containsKey(eventId)) {
+      Runtime.trap("Event not found");
+    };
+
+    eventsMap.remove(eventId);
+  };
 
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
@@ -265,4 +321,3 @@ actor {
     brandingMedia := ?branding;
   };
 };
-

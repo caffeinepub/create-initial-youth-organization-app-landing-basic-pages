@@ -1,69 +1,114 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T20:41:06.520Z",
+  "generatedAt": "2026-02-05T21:45:25.901Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 2,
+    "total": 6,
+    "implemented": 5,
     "items": [
       {
-        "id": "REQ-58",
-        "summary": "Promote/publish the current draft build (Draft Version 19) to the production Internet Computer canisters so the public site at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io serves the Version 19 frontend bundle and corresponding backend canister.",
+        "id": "REQ-61",
+        "summary": "Fix and verify the Share link feature on the public production site (https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io) so that Share actions are visible and functional in all existing entry points (TopNav mobile menu, Settings, and Footer), using the existing Web Share API behavior with clipboard fallback.",
         "status": "implemented",
-        "plannedFiles": [
-          "frontend/public/sw.js",
-          "frontend/docs/production-deploy-google-search-console.md"
-        ],
-        "matchedFiles": [
-          "frontend/public/sw.js",
-          "frontend/docs/production-deploy-google-search-console.md"
-        ]
-      },
-      {
-        "id": "REQ-59",
-        "summary": "Run the existing production build verification that checks for the Google Search Console verification meta tag and block production promotion if the verification meta tag is missing from the rendered HTML head.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/scripts/run-prod-build-with-gsc-check.ts",
-          "frontend/scripts/verify-gsc-meta.ts",
-          "frontend/index.html",
-          "frontend/docs/production-deploy-google-search-console.md"
-        ],
-        "matchedFiles": [
-          "frontend/scripts/run-prod-build-with-gsc-check.ts",
-          "frontend/scripts/verify-gsc-meta.ts",
-          "frontend/docs/production-deploy-google-search-console.md"
-        ]
-      },
-      {
-        "id": "REQ-60",
-        "summary": "Verify that the enhanced Share behavior is live on production: using the app’s existing Share entry points should invoke the native share prompt (Web Share API) when available and fall back to copying the public URL to the clipboard when not available.",
-        "status": "missing",
         "plannedFiles": [
           "frontend/src/utils/share.ts",
           "frontend/src/components/TopNav.tsx",
           "frontend/src/components/SettingsSheet.tsx",
-          "frontend/src/components/Footer.tsx",
-          "frontend/src/config/publicSite.ts"
+          "frontend/src/components/Footer.tsx"
         ],
+        "matchedFiles": [
+          "frontend/src/utils/share.ts",
+          "frontend/src/components/SettingsSheet.tsx"
+        ]
+      },
+      {
+        "id": "REQ-62",
+        "summary": "Update the Share/Install UX so users are not misled into thinking the Share menu is how to install the app, and add a clear non-web Android option by exposing an \"Android APK\" install/download action via Settings (and/or a dedicated public section), driven by an admin-configurable APK URL.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/SettingsSheet.tsx",
+          "frontend/src/pages/AdminDashboardPage.tsx",
+          "frontend/src/pages/AdminAndroidApkPage.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/SettingsSheet.tsx",
+          "frontend/src/pages/AdminDashboardPage.tsx",
+          "frontend/src/pages/AdminAndroidApkPage.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-63",
+        "summary": "Add backend support for Events as admin-managed content, including stable storage and public read access with admin-only create/update/delete operations.",
+        "status": "unknown",
+        "plannedFiles": [],
         "matchedFiles": []
+      },
+      {
+        "id": "REQ-64",
+        "summary": "Add React Query hooks to fetch and mutate Events via the backend actor, following the existing patterns used for clubs/history/about/home/social links hooks.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts"
+        ]
+      },
+      {
+        "id": "REQ-65",
+        "summary": "Replace the current static Events page content with events fetched from the backend Events API, and render the backend-managed events as read-only on the public Events page.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/EventsPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/EventsPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-66",
+        "summary": "Create a new admin-gated Events Manager page that allows admins to add, edit, and delete events, and link it from the existing Admin Dashboard.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/AdminEventsManagerPage.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/pages/AdminDashboardPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/AdminEventsManagerPage.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/pages/AdminDashboardPage.tsx"
+        ]
       }
     ]
   },
   "changedFiles": [
     "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/docs/production-deploy-google-search-console.md",
-    "frontend/public/sw.js",
-    "frontend/scripts/run-prod-build-with-gsc-check.ts",
-    "frontend/scripts/verify-gsc-meta.ts",
+    "frontend/src/App.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/SettingsSheet.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/AdminAndroidApkPage.tsx",
+    "frontend/src/pages/AdminDashboardPage.tsx",
+    "frontend/src/pages/AdminEventsManagerPage.tsx",
+    "frontend/src/pages/EventsPage.tsx",
+    "frontend/src/utils/share.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
