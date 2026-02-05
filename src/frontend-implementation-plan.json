@@ -1,135 +1,56 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Bottom home navigation menu, simplified hamburger actions, and Settings (theme, share link, install)",
+  "title": "Production deploy readiness: ensure latest bundle served + enforce Google Search Console meta verification",
   "requirements": [
     {
-      "id": "REQ-40",
-      "summary": "Move primary site navigation into a Home-only bottom-positioned menu button that opens a navigable menu/sheet.",
+      "id": "REQ-46",
+      "summary": "Ensure the production site serves the latest frontend bundle (avoid stale/cached UI after deployment) and document the production deploy flow for the public URL.",
       "acceptanceCriteria": [
-        "On mobile, the TopNav hamburger menu no longer contains the full site navigation links.",
-        "On the Home page, a bottom-positioned button is visible that opens a menu/sheet containing the primary navigation links.",
-        "Selecting any navigation item from the Home bottom menu navigates to the selected route and closes the menu.",
-        "The Home bottom menu is keyboard accessible (can be opened via keyboard and items can be focused/activated)."
+        "Visiting https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io loads the latest frontend UI (not an older cached bundle).",
+        "The backend canister deployed corresponds to the same latest release intended for production."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/config/navLinks.ts",
-          "operation": "create",
-          "description": "Create a shared definition for primary navigation items (Home/About/Programs/Events/Clubs/History/Membership/Contact) plus a computed 'Me' destination to keep navigation consistent across TopNav and the Home bottom menu."
-        },
-        {
-          "path": "frontend/src/components/HomeBottomNavMenu.tsx",
-          "operation": "create",
-          "description": "Add a Home-only bottom-positioned menu trigger that opens a shadcn-ui Sheet containing the primary navigation links, with keyboard-accessible Button/SheetTrigger, and closing behavior on selection. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HomePage.tsx",
+          "path": "frontend/public/sw.js",
           "operation": "modify",
-          "description": "Render the new HomeBottomNavMenu on the Home page (mobile-only) and ensure the page layout allows the bottom button to be visible without covering content (e.g., add appropriate bottom padding when the menu button is present)."
+          "description": "Adjust service worker caching behavior to reduce risk of serving stale HTML/app shell after a production deployment (e.g., avoid caching navigation/index.html responses and/or force network no-store for navigations), while keeping offline support for static assets."
+        },
+        {
+          "path": "frontend/docs/production-deploy-google-search-console.md",
+          "operation": "modify",
+          "description": "Complete and update the production deployment guide to explicitly include steps that help ensure the latest build is what users see at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io (e.g., rebuild, redeploy, verify new bundle is served, and note service worker update considerations)."
         }
       ]
     },
     {
-      "id": "REQ-41",
-      "summary": "Replace the mobile hamburger menu contents with only Settings, Close, and Logout actions (English), and implement logout behavior.",
+      "id": "REQ-47",
+      "summary": "Guarantee the Google Search Console verification meta tag is present in the deployed HTML <head> and enforce a failing build when it’s missing using the existing verification script.",
       "acceptanceCriteria": [
-        "Opening the hamburger menu shows only three actions labeled “Settings”, “Close”, and “Logout”.",
-        "“Close” closes the hamburger menu without navigating.",
-        "“Settings” opens a Settings UI (sheet/modal/page) and closes the hamburger menu.",
-        "“Logout” logs the user out of the current session (Internet Identity logout if logged in; and clears admin session if active), then returns the user to a public route (e.g., Home)."
+        "The deployed site’s page source for https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io includes the google-site-verification meta tag inside the <head>.",
+        "The existing check script (frontend/scripts/verify-gsc-meta.ts) runs as part of the production build/deploy pipeline and causes a non-zero exit if the meta tag is missing.",
+        "After deployment, Google Search Console can reach the site (no “site not found” due to the site not being live)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/SettingsSheet.tsx",
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Ensure the Google Search Console verification meta tag is present in the <head> exactly as required by the existing build-time check (do not change the token value)."
+        },
+        {
+          "path": "frontend/scripts/verify-gsc-meta.ts",
+          "operation": "modify",
+          "description": "Harden the existing build-time verification so it reliably fails with a non-zero exit when the required meta tag is missing in the built dist/index.html, and keep messaging aligned with production deploy usage."
+        },
+        {
+          "path": "frontend/scripts/run-prod-build-with-gsc-check.ts",
           "operation": "create",
-          "description": "Create a reusable Settings UI presented in a shadcn-ui Sheet, designed to be opened from TopNav hamburger. This file will later host theme toggle, share link, and install app sections. Verify the component's usage instructions before implementing."
+          "description": "Add a small production build orchestrator script that runs the frontend production build and then executes frontend/scripts/verify-gsc-meta.ts, exiting non-zero on failure, so CI/deploy can invoke a single command for enforcement."
         },
         {
-          "path": "frontend/src/components/TopNav.tsx",
+          "path": "frontend/docs/production-deploy-google-search-console.md",
           "operation": "modify",
-          "description": "Update mobile navigation to use the hamburger Sheet for only three actions (Settings/Close/Logout). Wire 'Settings' to open SettingsSheet and close the hamburger; wire 'Close' to close the hamburger; wire 'Logout' to call Internet Identity logout (useInternetIdentity.clear when authenticated) and clear admin session (useAdminSession.logout), then navigate to '/'. Use shadcn-ui Sheet/Button primitives without editing components under frontend/src/components/ui. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-42",
-      "summary": "Add a Settings theme toggle that switches Light/Dark via the existing Tailwind .dark variables and persists across reloads for the whole app.",
-      "acceptanceCriteria": [
-        "Settings includes a clear theme control labeled in English (e.g., “Theme: Light / Dark” or “Switch to Dark Mode”).",
-        "Toggling the theme updates the UI immediately by switching Tailwind theme styles (using the existing `.dark` theme variables in `frontend/src/index.css`).",
-        "The selected theme persists across reloads (e.g., stored in localStorage) and is applied on initial load.",
-        "The theme toggle works on all pages (not just Home)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/utils/theme.ts",
-          "operation": "create",
-          "description": "Add theme utilities to get/set persisted theme (localStorage) and apply/remove the 'dark' class on the document root so Tailwind dark mode variables in frontend/src/index.css take effect globally."
-        },
-        {
-          "path": "frontend/src/hooks/useTheme.ts",
-          "operation": "create",
-          "description": "Create a small React hook wrapping the theme utilities to expose current theme and a toggle action for UI usage (e.g., in SettingsSheet)."
-        },
-        {
-          "path": "frontend/src/main.tsx",
-          "operation": "modify",
-          "description": "Apply the persisted theme on initial load before rendering the React app (using the new theme utility) so the selected theme is active across reloads and pages without a flash."
-        },
-        {
-          "path": "frontend/src/components/SettingsSheet.tsx",
-          "operation": "modify",
-          "description": "Add an English-labeled theme toggle control that uses useTheme to switch Light/Dark and updates immediately across the app (no page-specific behavior). Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-43",
-      "summary": "Expose a shareable public access link in Settings with a copy-to-clipboard action and visible success confirmation.",
-      "acceptanceCriteria": [
-        "Settings displays the share link `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` and a “Copy link” action.",
-        "Clicking “Copy link” copies the link to the clipboard and shows a visible success confirmation (toast/inline message).",
-        "The share link UI uses English user-facing text."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/SettingsSheet.tsx",
-          "operation": "modify",
-          "description": "Add a 'Share link' section showing `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` as the default link text and a 'Copy link' action that uses the Clipboard API; display an inline success confirmation after copying (English text). Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-44",
-      "summary": "Add an Install app entry point in Settings that triggers the existing PWA install flow when available, otherwise shows an English add-to-home-screen hint.",
-      "acceptanceCriteria": [
-        "Settings contains an “Install app” section/action.",
-        "If installation is supported (install prompt available), the Settings “Install app” action triggers the same install prompt behavior used by `InstallPromptBanner`.",
-        "If installation is not supported, Settings shows an English hint explaining how to add to home screen via the browser menu.",
-        "No backend changes are required for this feature."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/SettingsSheet.tsx",
-          "operation": "modify",
-          "description": "Add an 'Install app' section that reuses the existing usePwaInstallPrompt hook: when installable, call promptInstall; when not installable, show a short English hint guiding the user to use the browser menu 'Add to Home screen'. Keep behavior consistent with InstallPromptBanner. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-45",
-      "summary": "Update Android APK documentation to reference the production PWA URL and clarify what is and is not supported for Google Play distribution.",
-      "acceptanceCriteria": [
-        "`frontend/docs/android-apk-from-pwa.md` includes a section that references the production PWA URL `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` as an example input for Bubblewrap.",
-        "The doc includes a short, clear note (English) explaining that creating the APK is supported via TWA/Bubblewrap, but publishing to Google Play requires separate developer account steps and is not performed automatically by the app.",
-        "Documentation remains consistent with the current Vite + PWA setup (manifest + service worker) and does not introduce unsupported backend services."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/docs/android-apk-from-pwa.md",
-          "operation": "modify",
-          "description": "Update the guide to explicitly use `https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io` as the example Bubblewrap/TWA input URL and add a clear note that APK creation is supported, while Play Console submission/signing/publishing steps require separate developer workflows and are out of scope for the app build system."
+          "description": "Update the guide to require running the existing verification script (or the new wrapper script) as part of the production build/deploy process, and include a post-deploy check instruction to confirm the meta tag is present in the live page source at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io."
         }
       ]
     }

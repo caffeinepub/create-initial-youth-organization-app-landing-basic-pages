@@ -1,8 +1,6 @@
-// Service Worker for PWA support - Version 10
-const CACHE_NAME = 'yfo-cache-v10';
+// Service Worker for PWA support - Version 14
+const CACHE_NAME = 'yfo-cache-v14';
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
   '/manifest.webmanifest',
   '/assets/generated/yfo-logo.dim_512x512.png',
   '/assets/generated/youth-hero.dim_1600x900.png',
@@ -10,7 +8,7 @@ const STATIC_ASSETS = [
   '/assets/generated/yfo-pwa-icon.dim_512x512.png',
 ];
 
-// Install event - cache static assets
+// Install event - cache static assets (excluding HTML to ensure fresh content)
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -38,7 +36,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event - network first, fallback to cache
+// Fetch event - network first, fallback to cache (never cache HTML/navigation)
 self.addEventListener('fetch', (event) => {
   // Skip non-GET requests
   if (event.request.method !== 'GET') {
@@ -50,14 +48,33 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // For navigation requests (HTML pages), always fetch from network
+  // This ensures users always get the latest version after deployment
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+        .catch(() => {
+          // Only on network failure, try cache as last resort
+          return caches.match('/index.html').then((cachedResponse) => {
+            return cachedResponse || new Response('Offline', {
+              status: 503,
+              statusText: 'Service Unavailable',
+            });
+          });
+        })
+    );
+    return;
+  }
+
+  // For all other resources (JS, CSS, images, etc.), use network-first with cache fallback
   event.respondWith(
     fetch(event.request)
       .then((response) => {
         // Clone the response before caching
         const responseToCache = response.clone();
         
-        // Cache successful responses
-        if (response.status === 200) {
+        // Cache successful responses (but not HTML)
+        if (response.status === 200 && !event.request.url.includes('.html')) {
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
@@ -68,16 +85,7 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         // Network failed, try cache
         return caches.match(event.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          
-          // Return a basic offline page for navigation requests
-          if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
-          }
-          
-          return new Response('Offline', {
+          return cachedResponse || new Response('Offline', {
             status: 503,
             statusText: 'Service Unavailable',
           });

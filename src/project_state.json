@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 35,
+  "projectStateVersion": 37,
   "summary": "Project scope includes UI/navigation refinements for the web app (move main menu to a bottom button on the main/home interface, repurpose the hamburger/three-lines menu to settings/close/logout, and add a theme toggle), plus sharing/accessibility requests (shareable link for colleagues and improved add-to-home-screen/PWA access), alongside existing deployment/SEO and potential APK distribution goals.",
   "architectural_notes": [
     "Frontend uses React + Vite with Tailwind CSS and shadcn/ui component primitives.",
@@ -18,7 +18,7 @@
     "Google Search Console verification failing with \"site not found\" because the production site HTML does not currently expose the expected google-site-verification meta tag; requires publishing the latest (v9) deployment to production and re-verifying.",
     "Production deployment is showing an incorrect logo/image (not the user-provided asset), including within the admin interface."
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "generatedImages": [
     {
       "filename": "frontend/public/assets/generated/yfo-logo.dim_512x512.png",
@@ -431,6 +431,22 @@
       "title": "Update the existing Android APK documentation to clearly explain how to produce an APK from the deployed PWA URL and explicitly clarify what is and is not supported regarding Google Play distribution (e.g., signing, Play Console submission steps are outside the app build system).",
       "reqIds": [
         "REQ-45"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-deploy-the-latest-application-build-current-latest-version-to-the-production-internet-computer-canisters-so-the-public-site-is-served-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io",
+      "title": "Deploy the latest application build (current latest version) to the production Internet Computer canisters so the public site is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
+      "reqIds": [
+        "REQ-46"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-deployed-production-html-contains-the-google-search-console-verification-meta-tag-in-the-rendered-head-on-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-and-fail-the-build-deploy-process-if-the-meta-tag-is-missing-using-the-existing-build-time-verification-script",
+      "title": "Ensure the deployed production HTML contains the Google Search Console verification meta tag in the rendered <head> on https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0-io, and fail the build/deploy process if the meta tag is missing (using the existing build-time verification script).",
+      "reqIds": [
+        "REQ-47"
       ],
       "version": 1
     }

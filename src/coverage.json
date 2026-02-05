@@ -1,90 +1,42 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T18:55:13.871Z",
+  "generatedAt": "2026-02-05T19:08:28.376Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 6,
-    "implemented": 6,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-40",
-        "summary": "Move the primary navigation menu (Home/About/Programs/Events/Clubs/History/Membership/Contact/Me) out of the mobile hamburger (three-lines) menu and make it accessible from the Home page via a bottom-positioned button that opens the main menu.",
+        "id": "REQ-46",
+        "summary": "Deploy the latest application build (current latest version) to the production Internet Computer canisters so the public site is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/config/navLinks.ts",
-          "frontend/src/components/HomeBottomNavMenu.tsx",
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/public/sw.js",
+          "frontend/docs/production-deploy-google-search-console.md"
         ],
         "matchedFiles": [
-          "frontend/src/config/navLinks.ts",
-          "frontend/src/components/HomeBottomNavMenu.tsx",
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/public/sw.js",
+          "frontend/docs/production-deploy-google-search-console.md"
         ]
       },
       {
-        "id": "REQ-41",
-        "summary": "Change the mobile hamburger (three-lines) menu contents to include only: Settings, Close, and Logout (using English user-facing text).",
+        "id": "REQ-47",
+        "summary": "Ensure the deployed production HTML contains the Google Search Console verification meta tag in the rendered <head> on https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0-io, and fail the build/deploy process if the meta tag is missing (using the existing build-time verification script).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/SettingsSheet.tsx",
-          "frontend/src/components/TopNav.tsx"
+          "frontend/index.html",
+          "frontend/scripts/verify-gsc-meta.ts",
+          "frontend/scripts/run-prod-build-with-gsc-check.ts",
+          "frontend/docs/production-deploy-google-search-console.md"
         ],
         "matchedFiles": [
-          "frontend/src/components/SettingsSheet.tsx",
-          "frontend/src/components/TopNav.tsx"
-        ]
-      },
-      {
-        "id": "REQ-42",
-        "summary": "Add a Settings UI that includes a theme toggle button to switch between Light and Dark mode, persisting the selected theme across page reloads.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/utils/theme.ts",
-          "frontend/src/hooks/useTheme.ts",
-          "frontend/src/main.tsx",
-          "frontend/src/components/SettingsSheet.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/utils/theme.ts",
-          "frontend/src/hooks/useTheme.ts",
-          "frontend/src/components/SettingsSheet.tsx"
-        ]
-      },
-      {
-        "id": "REQ-43",
-        "summary": "Provide a shareable public access link in the UI that users can copy and send to colleagues; use the production URL https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io as the default share link text shown to the user.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/SettingsSheet.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/SettingsSheet.tsx"
-        ]
-      },
-      {
-        "id": "REQ-44",
-        "summary": "Improve add-to-home-screen discoverability by adding an “Install app” entry point inside Settings that triggers the existing PWA install flow when available, and otherwise shows a short English message guiding the user to use the browser’s “Add to Home screen” option.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/SettingsSheet.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/SettingsSheet.tsx"
-        ]
-      },
-      {
-        "id": "REQ-45",
-        "summary": "Update the existing Android APK documentation to clearly explain how to produce an APK from the deployed PWA URL and explicitly clarify what is and is not supported regarding Google Play distribution (e.g., signing, Play Console submission steps are outside the app build system).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/docs/android-apk-from-pwa.md"
-        ],
-        "matchedFiles": [
-          "frontend/docs/android-apk-from-pwa.md"
+          "frontend/scripts/verify-gsc-meta.ts",
+          "frontend/scripts/run-prod-build-with-gsc-check.ts",
+          "frontend/docs/production-deploy-google-search-console.md"
         ]
       }
     ]
@@ -94,14 +46,10 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/docs/android-apk-from-pwa.md",
-    "frontend/src/components/HomeBottomNavMenu.tsx",
-    "frontend/src/components/SettingsSheet.tsx",
-    "frontend/src/components/TopNav.tsx",
-    "frontend/src/config/navLinks.ts",
-    "frontend/src/hooks/useTheme.ts",
-    "frontend/src/pages/HomePage.tsx",
-    "frontend/src/utils/theme.ts",
+    "frontend/docs/production-deploy-google-search-console.md",
+    "frontend/public/sw.js",
+    "frontend/scripts/run-prod-build-with-gsc-check.ts",
+    "frontend/scripts/verify-gsc-meta.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

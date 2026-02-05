@@ -1,38 +1,51 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T18:55:13.867Z",
-  "summary": "Diff implements Home bottom-positioned primary navigation (via a Sheet + floating button), repurposes the mobile hamburger menu to Settings/Close/Logout with logout logic, adds a Settings Sheet with theme toggle + share-link copy UI, and updates Android APK documentation to reference the production PWA URL. Some acceptance-criteria details are not verifiable due to truncation (notably the full Install App behavior and Google Play distribution clarification text).",
+  "generatedAt": "2026-02-05T19:08:28.371Z",
+  "summary": "Diff adds a new production build orchestrator script and enhances the existing GSC meta verification script; it also updates the service worker cache strategy/versioning and adds/updates deployment documentation. However, the diff does not show actual production deployment changes, nor does it show the verification script being wired into the production build/deploy pipeline or the meta tag being added/confirmed in the source HTML.",
   "missing_requirements": [
     {
-      "id": "REQ-44",
-      "requirement": "Improve add-to-home-screen discoverability by adding an “Install app” entry point inside Settings that triggers the existing PWA install flow when available, and otherwise shows an English message guiding the user to use the browser’s “Add to Home screen” option.",
-      "reason": "SettingsSheet includes an \"Install App\" section and uses `usePwaInstallPrompt`, but the relevant portion is truncated, so it is not possible to confirm that (1) it triggers the same install prompt behavior as `InstallPromptBanner`, and (2) it shows the required fallback guidance message when install is not supported.",
+      "id": "REQ-46",
+      "requirement": "Deploy the latest application build (current latest version) to the production Internet Computer canisters so the public site is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
+      "reason": "The diff only shows scripts/docs/service-worker changes; it does not include any canister deployment configuration or automation changes (e.g., dfx deploy pipeline updates) that would evidence a production deployment of both frontend and backend to the specified canisters.",
       "evidence": [
-        "frontend/src/components/SettingsSheet.tsx"
+        "frontend/docs/production-deploy-google-search-console.md",
+        "project_state.json"
       ]
     },
     {
-      "id": "REQ-45",
-      "requirement": "Update the existing Android APK documentation to clarify what is and is not supported regarding Google Play distribution (publishing requires separate developer account steps and is not performed automatically by the app).",
-      "reason": "The doc update shows the production URL example, but the provided diff snippet is truncated before any explicit Google Play distribution clarification can be verified.",
+      "id": "REQ-47",
+      "requirement": "Ensure the deployed production HTML contains the Google Search Console verification meta tag in the rendered <head> on https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io, and fail the build/deploy process if the meta tag is missing (using the existing build-time verification script).",
+      "reason": "While the verification script exists/was modified and a new wrapper script was added, the diff does not show (1) the meta tag being present in the HTML source template (e.g., frontend/index.html) nor (2) any change that ensures the check runs as part of the actual production build/deploy pipeline (e.g., package.json scripts/CI config).",
       "evidence": [
-        "frontend/docs/android-apk-from-pwa.md"
+        "frontend/scripts/verify-gsc-meta.ts",
+        "frontend/scripts/run-prod-build-with-gsc-check.ts"
       ]
     }
   ],
-  "hallucinated_features": [],
-  "confidence": 0.66,
+  "hallucinated_features": [
+    {
+      "description": "Service worker cache version bump to v14 and a new fetch strategy (network-first for navigation with no-store; cache behavior changes).",
+      "reason": "Not requested explicitly; REQ-46 is about deploying latest build and avoiding an older cached bundle, but this is an additional PWA/service-worker feature change beyond ensuring the GSC verification meta tag is present and deployed.",
+      "evidence": [
+        "frontend/public/sw.js"
+      ]
+    },
+    {
+      "description": "New/updated production deployment documentation referring to “Version 14”, service worker version updates, and a detailed manual checklist.",
+      "reason": "BuildRequest focuses on deploying latest build and ensuring the existing GSC verification meta tag check is enforced; this doc content (versioning details, extra checklist items) is not explicitly requested.",
+      "evidence": [
+        "frontend/docs/production-deploy-google-search-console.md"
+      ]
+    }
+  ],
+  "confidence": 0.74,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/docs/android-apk-from-pwa.md",
-    "frontend/src/components/HomeBottomNavMenu.tsx",
-    "frontend/src/components/SettingsSheet.tsx",
-    "frontend/src/components/TopNav.tsx",
-    "frontend/src/config/navLinks.ts",
-    "frontend/src/hooks/useTheme.ts",
-    "frontend/src/pages/HomePage.tsx",
-    "frontend/src/utils/theme.ts",
+    "frontend/docs/production-deploy-google-search-console.md",
+    "frontend/public/sw.js",
+    "frontend/scripts/run-prod-build-with-gsc-check.ts",
+    "frontend/scripts/verify-gsc-meta.ts",
     "project_state.json"
   ]
 }

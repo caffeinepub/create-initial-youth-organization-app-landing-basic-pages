@@ -2,12 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-move-the-primary-navigation-menu-home-about-programs-events-clubs-history-membership-contact-me-out-of-the-mobile-hamburger-three-lines-menu-and-make-it-accessible-from-the-home-page-via-a-bottom-positioned-button-that-opens-the-main-menu",
-      "featureTitle": "Move the primary navigation menu (Home/About/Programs/Events/Clubs/History/Membership/Contact/Me) out of the mobile hamburger (three-lines) menu and make it accessible from the Home page via a bottom-positioned button that opens the main menu.",
+      "featureId": "feature-deploy-the-latest-application-build-current-latest-version-to-the-production-internet-computer-canisters-so-the-public-site-is-served-at-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io",
+      "featureTitle": "Deploy the latest application build (current latest version) to the production Internet Computer canisters so the public site is served at https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io.",
       "files": [
-        "frontend/src/components/HomeBottomNavMenu.tsx",
-        "frontend/src/config/navLinks.ts",
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/docs/production-deploy-google-search-console.md",
+        "frontend/public/sw.js"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -19,16 +18,17 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-40"
+        "REQ-46"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-change-the-mobile-hamburger-three-lines-menu-contents-to-include-only-settings-close-and-logout-using-english-user-facing-text",
-      "featureTitle": "Change the mobile hamburger (three-lines) menu contents to include only: Settings, Close, and Logout (using English user-facing text).",
+      "featureId": "feature-ensure-the-deployed-production-html-contains-the-google-search-console-verification-meta-tag-in-the-rendered-head-on-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-and-fail-the-build-deploy-process-if-the-meta-tag-is-missing-using-the-existing-build-time-verification-script",
+      "featureTitle": "Ensure the deployed production HTML contains the Google Search Console verification meta tag in the rendered <head> on https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0-io, and fail the build/deploy process if the meta tag is missing (using the existing build-time verification script).",
       "files": [
-        "frontend/src/components/SettingsSheet.tsx",
-        "frontend/src/components/TopNav.tsx"
+        "frontend/docs/production-deploy-google-search-console.md",
+        "frontend/scripts/run-prod-build-with-gsc-check.ts",
+        "frontend/scripts/verify-gsc-meta.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -40,89 +40,7 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-41"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-settings-ui-that-includes-a-theme-toggle-button-to-switch-between-light-and-dark-mode-persisting-the-selected-theme-across-page-reloads",
-      "featureTitle": "Add a Settings UI that includes a theme toggle button to switch between Light and Dark mode, persisting the selected theme across page reloads.",
-      "files": [
-        "frontend/src/components/SettingsSheet.tsx",
-        "frontend/src/hooks/useTheme.ts",
-        "frontend/src/utils/theme.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-42"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-provide-a-shareable-public-access-link-in-the-ui-that-users-can-copy-and-send-to-colleagues-use-the-production-url-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-as-the-default-share-link-text-shown-to-the-user",
-      "featureTitle": "Provide a shareable public access link in the UI that users can copy and send to colleagues; use the production URL https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io as the default share link text shown to the user.",
-      "files": [
-        "frontend/src/components/SettingsSheet.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-43"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-improve-add-to-home-screen-discoverability-by-adding-an-install-app-entry-point-inside-settings-that-triggers-the-existing-pwa-install-flow-when-available-and-otherwise-shows-a-short-english-message-guiding-the-user-to-use-the-browser-s-add-to-home-screen-option",
-      "featureTitle": "Improve add-to-home-screen discoverability by adding an “Install app” entry point inside Settings that triggers the existing PWA install flow when available, and otherwise shows a short English message guiding the user to use the browser’s “Add to Home screen” option.",
-      "files": [
-        "frontend/src/components/SettingsSheet.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-44"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-existing-android-apk-documentation-to-clearly-explain-how-to-produce-an-apk-from-the-deployed-pwa-url-and-explicitly-clarify-what-is-and-is-not-supported-regarding-google-play-distribution-e-g-signing-play-console-submission-steps-are-outside-the-app-build-system",
-      "featureTitle": "Update the existing Android APK documentation to clearly explain how to produce an APK from the deployed PWA URL and explicitly clarify what is and is not supported regarding Google Play distribution (e.g., signing, Play Console submission steps are outside the app build system).",
-      "files": [
-        "frontend/docs/android-apk-from-pwa.md"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-45"
+        "REQ-47"
       ],
       "confidence": "high"
     }
