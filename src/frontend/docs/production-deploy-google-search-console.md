@@ -1,6 +1,6 @@
 # Production Deployment & Google Search Console Verification
 
-This guide covers deploying Version 19 of your application to production on the Internet Computer and verifying ownership with Google Search Console.
+This guide covers deploying your application to production on the Internet Computer and verifying ownership with Google Search Console.
 
 ## Prerequisites
 
@@ -9,9 +9,10 @@ This guide covers deploying Version 19 of your application to production on the 
 - Google Search Console account
 - Production canister ID: `pd5nf-fqaaa-aaaan-qetaq-cai`
 
-## Production URL
+## Production URLs
 
-Your live site: **https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io**
+- **IC Canister URL (backup):** https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io
+- **Custom Domain (when configured):** https://yfo.org
 
 ---
 
@@ -24,12 +25,14 @@ Before deploying to production, verify:
 - [ ] Google Search Console meta tag is present in `frontend/index.html`
 - [ ] All code changes are committed
 - [ ] Local build succeeds without errors
-- [ ] Service worker version is updated to v19
+- [ ] Service worker version is updated
 - [ ] ads.txt file is configured (if using AdSense)
 - [ ] You have sufficient cycles in your wallet
 - [ ] Enhanced share functionality (native Web Share API + clipboard fallback) is working
+- [ ] `VITE_PUBLIC_SITE_URL` is set if using custom domain
 
-### Step 1: Build with Verification
+### Step 1: Configure Public Site URL (Optional)
 
-From the `frontend/` directory, run the production build with automatic GSC verification:
+If you have configured a custom domain (e.g., **yfo.org**), set the environment variable before building:
 
+**Linux/macOS:**

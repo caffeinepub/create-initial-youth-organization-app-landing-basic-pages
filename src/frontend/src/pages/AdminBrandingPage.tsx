@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { AdminGuard } from '@/components/AdminGuard';
 import { useGetBrandingMedia, useUpdateBrandingMedia } from '@/hooks/useQueries';
 import { Loader2, Save, Image as ImageIcon } from 'lucide-react';
@@ -15,11 +17,17 @@ function AdminBrandingContent() {
   const updateMutation = useUpdateBrandingMedia();
 
   const [logo, setLogo] = useState<ExternalBlob | null>(null);
+  const [organizationName, setOrganizationName] = useState<string>('The Youth And Friends Organization');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (branding?.logo) {
-      setLogo(branding.logo);
+    if (branding) {
+      if (branding.logo) {
+        setLogo(branding.logo);
+      }
+      if (branding.name) {
+        setOrganizationName(branding.name);
+      }
     }
   }, [branding]);
 
@@ -27,7 +35,7 @@ function AdminBrandingContent() {
     try {
       await updateMutation.mutateAsync({
         logo: logo || undefined,
-        name: 'The Youth And Friends Organization',
+        name: organizationName,
         otherMedia: undefined,
       });
       setSuccessMessage('Branding updated successfully!');
@@ -61,7 +69,7 @@ function AdminBrandingContent() {
             </h1>
           </div>
           <p className="text-lg text-muted-foreground">
-            Update your organization's logo and branding
+            Update your organization's name, logo and branding
           </p>
         </div>
 
@@ -103,6 +111,28 @@ function AdminBrandingContent() {
           <div className="space-y-6">
             <Card className="border-2">
               <CardHeader>
+                <CardTitle className="text-xl">Organization Name</CardTitle>
+                <CardDescription>
+                  Enter your organization's name that will appear throughout the site
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <Label htmlFor="org-name">Organization Name *</Label>
+                  <Input
+                    id="org-name"
+                    value={organizationName}
+                    onChange={(e) => setOrganizationName(e.target.value)}
+                    placeholder="e.g., The Youth And Friends Organization"
+                    disabled={isSaving}
+                    required
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2">
+              <CardHeader>
                 <CardTitle className="text-xl">Organization Logo</CardTitle>
                 <CardDescription>
                   Upload a logo image that will appear in the header navigation
@@ -123,7 +153,7 @@ function AdminBrandingContent() {
               <CardContent className="pt-6">
                 <Button
                   onClick={handleSave}
-                  disabled={isSaving}
+                  disabled={isSaving || !organizationName.trim()}
                   className="w-full"
                   size="lg"
                 >

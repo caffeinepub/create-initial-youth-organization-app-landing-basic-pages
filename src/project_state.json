@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 57,
-  "summary": "Project scope includes UI/navigation refinements for the web app (move main menu to a bottom button on the main/home interface, repurpose the hamburger/three-lines menu to settings/close/logout, and add a theme toggle), plus sharing/accessibility requests (shareable link for colleagues and improved add-to-home-screen/PWA access), alongside existing deployment/SEO goals and potential APK distribution goals, with an added request to support Google Ads/AdSense readiness for monetization/advertising.",
+  "projectStateVersion": 65,
+  "summary": "Project scope remains focused on UI/navigation refinements, sharing/accessibility, deployment/SEO goals and AdSense readiness; however, the custom domain (yfo.org) setup and Google Search Console verification work is explicitly paused/deferred while the team continues updating the app.",
   "architectural_notes": [
     "Frontend uses React + Vite with Tailwind CSS and shadcn/ui component primitives.",
     "ICP backend is a Motoko canister with Candid bindings generated for the frontend.",
@@ -19,9 +19,10 @@
     "Production deployment is showing an incorrect logo/image (not the user-provided asset), including within the admin interface.",
     "Share link feature is reportedly not live/visible on the production site (needs verification of production deployment/version and UI entry points).",
     "An \"Install app\" option is appearing in the Share menu; may be unintended UX placement or mislabeled entry and should be reviewed.",
-    "On Version 21 production, the user cannot find the “Me” feature/button that should provide access to the admin login interface (admin entry point appears missing or not discoverable)."
+    "On Version 21 production, the user cannot find the “Me” feature/button that should provide access to the admin login interface (admin entry point appears missing or not discoverable).",
+    "Admin interface is missing the About content editor page/control (user cannot edit/update About content from the admin area on the deployed build)."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "generatedImages": [
     {
       "filename": "frontend/public/assets/generated/yfo-logo.dim_512x512.png",
@@ -620,6 +621,38 @@
         "REQ-73"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-project-documentation-that-explains-how-to-connect-a-user-owned-custom-domain-requested-yfo-to-the-existing-internet-computer-production-site-currently-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-using-dns-and-how-to-complete-google-search-console-verification-using-the-dns-txt-method-for-that-custom-domain",
+      "title": "Add project documentation that explains how to connect a user-owned custom domain (requested: \"yfo\") to the existing Internet Computer production site (currently https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io) using DNS, and how to complete Google Search Console verification using the DNS (TXT) method for that custom domain.",
+      "reqIds": [
+        "REQ-74"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-app-s-public-site-url-used-for-sharing-configurable-so-it-can-switch-from-the-hardcoded-production-url-https-pd5nf-fqaaa-aaaan-qetaq-cai-icp0-io-to-the-custom-domain-once-it-is-live-without-requiring-code-edits-for-future-domain-changes",
+      "title": "Make the app’s “public site URL” used for sharing configurable so it can switch from the hardcoded production URL (https://pd5nf-fqaaa-aaaan-qetaq-cai.icp0.io) to the custom domain once it is live, without requiring code edits for future domain changes.",
+      "reqIds": [
+        "REQ-75"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-custom-domain-documentation-to-use-the-selected-domain-yfo-org-including-https-yfo-org-and-www-yfo-org-examples-instead-of-the-placeholder-yfo-without-a-tld-and-ensure-all-user-facing-text-in-that-document-is-in-english",
+      "title": "Update the custom-domain documentation to use the selected domain yfo.org (including https://yfo.org and www.yfo.org examples) instead of the placeholder “yfo” without a TLD, and ensure all user-facing text in that document is in English.",
+      "reqIds": [
+        "REQ-77"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-app-s-public-share-url-configuration-can-be-set-to-https-yfo-org-via-vite-environment-configuration-and-update-the-relevant-documentation-to-instruct-setting-vite-public-site-url-https-yfo-org-for-production-builds-when-the-custom-domain-is-live",
+      "title": "Ensure the app’s public share URL configuration can be set to https://yfo.org via Vite environment configuration, and update the relevant documentation to instruct setting VITE_PUBLIC_SITE_URL=https://yfo.org for production builds when the custom domain is live.",
+      "reqIds": [
+        "REQ-78"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -917,6 +950,26 @@
       "reqIds": [
         "REQ-72"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-56",
+      "summary": "Set up a custom domain for the site using “yfo” (user-managed DNS) so Google Search Console can use DNS (TXT) verification instead of HTML/meta verification; configure the ICP deployment to serve on the custom domain.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-59",
+      "summary": "Update the existing production deployment + Google Search Console documentation to include an alternate “DNS verification with a custom domain” path (requested: yfo) in addition to the current HTML meta-tag verification flow.",
+      "reqIds": [
+        "REQ-76"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-60",
+      "summary": "Proceed with custom domain setup using the selected domain yfo.org (DNS records + ICP custom domain configuration) and complete Google Search Console DNS (TXT) verification for yfo.org.",
+      "reqIds": [],
       "status": "pending"
     }
   ],
